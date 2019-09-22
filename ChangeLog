@@ -1,0 +1,93 @@
+Version 0.9995, (
+=======================
+Sound gets more features
+New sound effects, including mysterious Finnish slang
+Option settings are saving in a config file
+High scores are remembered
+Game win screen altered
+Warp depends on time left
+Substantial performance improvements
+Instacrates and barricades kill things caught underneath
+Instacrate pattern has been changed to be more useful
+Window close button now responds
+Monsters face the right way
+Keypad works in Windows
+Droids absorb bullets
+Fixed crash on fruit pick up (2 player, Windows)
+
+Version 0.995, (3/12/01)
+========================
+Control axis pairs swapped around
+Powerups made more eyecatching
+Added panning effects
+Overhaul of sound
+Subtle acceleration on level start
+Help Bonus
+Demo recording/playback
+New Gameover
+Nethack style keys added
+Keypad keys added
+Controls configurable from menu
+Intro revised
+Demo mode added
+In-game options added
+
+Version 0.95, (30/9/01)
+=======================
+Added skill settings
+Fixed option menu
+Machine gun tweaked
+Lasers made easier
+Centipede respawn fixed
+Collision event code rewritten
+Crate physics altered
+Performance improvements
+Removed last references to CL_ResourceManager::create, snprintf
+Source compiles on Windows (I think)
+Animation speed throttled
+Fixed crashing bug in generation of Monster Repellent bonus
+
+Version 0.9, (17/6/01)
+======================
+Music support
+Fixed crash on victory
+Added option menu
+Further gameplay tweaks
+
+Version 0.8shoddy2, (7/6/01)
+============================
+Bug fixes
+Explosions
+Snazzy fruit display
+Fixed framerate dependancy in Asteroid AI
+Altered 2-Player to use communal lives
+New UI graphics
+Changed res.scr format for ease of modification
+
+Version 0.8shoddy1, (2/2/01)
+============================
+2-Player mode
+Centipedes
+Grunts with escape pods
+Cellphones
+Spirals
+Lasers
+Machine gun powerup
+Shrink powerup
+Ram Droid powerup
+InstaCrate!
+
+Version 0.7, (25/1/01)
+======================
+Redefinable controls
+Joystick support (untested)
+'Awards' at game end
+Levels of verbosity
+Different res.scr available from cmdline
+No double trigger of bonuses
+Level display
+Source ClanLib 0.4 compatible (untested)
+
+Version 0.6
+===========
+Initial release

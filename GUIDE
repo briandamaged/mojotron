@@ -1,0 +1,185 @@
+MOJOTRON SOURCE GUIDE
+This source code is rated 'M', contains offensive language.
+
+This is my first substantial piece of work, and was started with the aim of
+learning C++, so let's just say I have 'Worse is Better' on my side. I'm
+receptive to suggestions/patches though. :)
+
+SOURCE FILES:
+
+Main		Master initialisation.
+World		Contains game loop, and level loading code.
+Thing		Represents a screen object, has basic AI for derived classes.
+Globals		Manages all graphics resources.
+Sound		Sound and music system.
+Sprite		Provides drawing code to Thing class.
+InputState	Handles game controls.
+ObjectList	Class to manage herds of Things.
+SkillLevel	Small class to manage game difficulty
+
+Hazards		Lots of Thing subclasses. The monster programming is in here.
+Player		Derived from Thing. Represents a player.
+Bullet		Lots of Thing subclasses. Projectiles are in here.
+Bonus		Class Bonus, and lots of Bonus subclasses for powerups.
+Barricade	Derived from Thing. Various obstacles.
+Explosion	Derived from Thing. For explosions.
+
+ScoreBoard	Draws the scoreboard along the bottom of the screen.
+PlayerStats	Logs player performance.
+MiscDisplay	Draws in-game messages.
+Intro		The game's introduction screens.
+Menu		The configuration menu.
+Demo		Runs or records a demo of game play.
+
+GENERAL
+
+The game uses the well-known idiom of a World class with a container of screen
+objects derived from a common class. This way the game loop, (see
+World::run()) can iterate through the base class pointers, calling virtual
+move and draw methods. The screen object base class here is Thing, it has the
+interface and default implementation for move/draw, as well as a series of 
+common behavior methods.
+
+
+EVENT SYSTEM
+
+The main loop also maintains an event system to trigger the results of
+collisions. Every loop it builds ObjectLists of eventlisteners and potential 
+event senders. There are three kinds of events, PLAYER, OBSTACLE, and ENEMY. 
+What an object sends is based on a call to Thing::getType().
+
+Some examples:
+ 	Bullets listen for objects with type ENEMY because their
+	listenEnemy() methods return true, and kill them in their
+	tookEnemy(Thing*) method.
+  	Enemies listen for objects with type PLAYER, killing them in the
+	tookPlayer(Thing*) method.
+	Enemies and Bullets both listen for type OBSTACLE in addition. If they
+	try to move past one, they bounce back. (see Thing::tookObstacle())
+
+
+GAME STATES
+
+The World class has enum GameState for describing whether the game is
+paused, waiting for the player to get ready, or whatever. You can change it
+directly, or by calling World::gameDelay, passing the state you want it to 
+change to, for how long, and what to go back to afterwards.
+
+
+RESOURCE FILE
+
+The game mostly uses one resource file, res.scr. This contains image paths,
+levels, game constants, information about monsters, players, and extras. 
+Another resource file, sound.scr was split off because ClanLib failed to parse 
+sample resources when it hadn't had sound initialised, and tried to get a lock 
+on audio if sound was initialised.
+
+
+GLOBALS
+
+The new (as of 0.7) Globals system for graphics uses an enum, an array of 
+resource name strings, and an array of Sprite* (named 'spr'). At loading time, 
+the string array is iterated through, loading the specified resource into the 
+sprite array at the same position.
+
+These can be accessed by using the appropriate enum member as an index to the
+sprite array, as the enum's shorthand names for the resources are in the same 
+order.
+e.g. for the flame sprite: globals->spr[Globals::FLAME]
+
+In addition the Globals class has a load<Type>() static method for loading
+constants out of the datafile (and World has a loadlev<Type>() family of
+methods for loading stuff out of level sections). It isn't implemented using 
+templates, but it could be.
+
+
+SPRITES
+
+Sprite is a class to house in-game graphics, as opposed to presentation
+eye-candy. It generates collision maps automatically for pixel-perfect
+collision detection, and handles conversion between the 1/256 of a pixel units
+I use everywhere, and the ordinary pixels Clanlib likes. Also it caches a 
+horizontally flipped image, so enemies can turn around (currently disabled at 
+the moment, SP->flip_horizontal() is in the ClanLib API but isn't implemented).
+
+The ClanLib graphics API shouldn't need to be directly used for actors and
+such, this class is supposed to wrap around that.
+
+This is the journey a graphics file makes when it's used for a screen object:
+
+Resource Definition in res.scr keyed by a resource name (e.g. Surfaces/flame)
+Same resource name is listed in the part of Globals that initialises resname[]
+Resname is iterated through constructing Sprites, 
+	which are put in the spr array of Globals
+The sprite pointer in question is fed to a Thing constructor
+The Thing instance now has a sprite that it can draw with
+
+
+POWERUPS
+
+The Bonus class provides (most importantly) a tookPlayer implementation for
+loading itself into the player's inventory and virtual methods activated() and
+deactivated(). activated() is called every Player::move when your bonus is
+turned on, deactivated() is called only once.
+
+When subclassing Bonus to make new powerups, remember to register it in
+give() and randGen() (called to randomly generate bonuses when monsters are 
+killed). Order is important in bonusGen, things first on the list will be 
+favoured with high luck values. 
+
+I'm considering redesigning this so it doesn't need so many subclasses, and
+so much coupling.
+
+
+MONSTERS
+
+Every distinctly behaving monster has it's own subclass of Thing in
+Hazards.cpp/.hh. Most monsters will want to:
+  * listen for players, and define a tookPlayer to hurt the player
+  * return ENEMY when asked about their type so they can be hurt by bullets
+  * define a move method
+
+The move method will receive a parameter 'delta', the number of milliseconds
+since it was last called. Most of the basic behavior methods in Thing will
+want delta passed to them. 
+
+The constructor will usually take a Sprite pointer, pass it on to the
+Thing constructor, and set things like speed and health. If the player
+shouldn't need to kill the monster to exit the level, set optionalkill to true.
+
+The constructor is not the place to set the initial position of the monster,
+override startPos() if you don't want your monster randomly placed. I've made
+this distinction because a monster instance will only get constructed once, but
+will have it's position initialised every time the player dies.
+
+Also, use the getSpeed() method to find out the speed of the creature in
+move, it might have been modified by a Monster Slowdown powerup or something.
+
+
+PLAYERS
+
+Things wanting to interact with players (but without a collision event) can
+call World::getNearestPlayer(xpos, ypos), and mess with the Player pointer it
+returns.
+
+
+ON PERFORMANCE
+
+The typical game loop on my machine might take 35 milliseconds (being loaded 
+down with all sorts of heinous debugging). Game logic spends about 3-9 ms of
+this, sound/music occasionally grabs 5-10ms now and then. 
+
+However, the bulk is spent doing graphics - 25-30ms - with about 1-2ms for the
+sprites, and the rest for the background fill. A 'fast' (I use the term in a
+very relative sense) X Windows display will make a big difference in this 
+department.
+
+(BTW, commenting out drawBG() in World.cpp is a fun thing to do, all the moving
+objects leave pretty shimmering trails behind them)
+
+
+Authors:
+Craig Timpany
+timcr038@student.otago.ac.nz
+
+

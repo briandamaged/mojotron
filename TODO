@@ -1,0 +1,99 @@
+For 1.0
+Music is only 2 min long. It needs to be twice that.
+Replace sfx
+Replace C I/O, especially sprintf
+Use CL_DisplayCard::get_videomodes() to check before opening a window
+
+I saw a segfault, several minutes into the game while flamethrowing an eyeball
+	Happened twice now, both times on the dalek level. After a couple of long games?
+	Happened a third time, long into a game in a level with cellphones when I was kiling an eyeball (normally)
+	Happened another two times, on the laser level. GDB crashes too. :-(
+	Fourth time happened when I threw a bomb onto an eyeball with sound turned on
+	Got a crash on exit while playing with sound with verbosity
+	How do I narrow this down?
+		Turn off sound and see if it still happens
+		Make a grunts-only fruitless res.scr and see if it happens
+
+Once Windows crashed when it'd been running mojotron fullscreen and paused for several minutes.
+When fullscreen is turned on in Windows, you need to press return once before it listens to input
+Turning on fullscreen on my parent's computer makes it vanish
+
+Once I mined a monster and it left a stationary pod on the start position. Ran out of lives.
+Can't read KP enter as a use key from menus!
+
+When ClanLib gets them fixed:
+Get END working
+Font deletion is broken
+Occasional massive time deltas in windows (not fixed, hardware bug/get_time() interaction)
+
+Minor things:
+Record another demo
+screen corruption after game, on title screen
+Levload test is broken
+Snails don't face right way
+That starry bg corruption is a bit alarming.
+
+
+
+Future ideas:
+
+PERFORMANCE STUFF
+Could pack 32 bits into ints for use as a bitmask, instead of chars. What about bools?
+Playerstats scrolltext shouldn't redraw the text every frame.
+
+FEATURES
+Different player classes
+Bonus levels
+Fortress enemies like in Xkobo
+Use joystick (gamepad) buttons as axes
+
+USABILITY
+Intro is too cluttered
+Levskip notice should count up lives indicator at bottom etc.
+Mushrooms don't look deadly
+need a sparkly anim for when invincibles get shot
+key number -> ascii mapping is kinda broken
+Attention needs to be directed to the powerups list when one is taken
+
+BUGS
+Timing stats are wrong at high difficulties
+Abovecursors aren't displayed properly in intro
+Keypad keys give none of the above when I try to read them
+Very minor memory leak in SFX init
+Instacrate twice on the same spot was always broken
+
+GAMEPLAY
+People hate pixel perfect collision detection on the player sprite
+Fruit multiplier in difficulty levels
+
+INELEGANCES
+Make an enemy class to reduce redundancy amongst the nasties
+My sprite system doesn't need that big enum
+How grunt sprites are handled right now is quite nasty
+Break game state into two variables, one for the screen display in miscdisplay
+Duplication of event dispatch methods in World
+Recode centipede AI with Thing's methods
+Fewer headers should #include Globals, getting conflicts
+Explosion type should be based on the enemy graphic used
+The menu code needs refactored
+
+World class is way too big, it contains:
+Game State (.5) \__ easy split
+Misc input (.5) /
+
+Run (3)
+Load (3)
+Class maint (1)
+Accessors (0.4)
+tot (11)
+
+Rightangler AI would be cleaner with attackdim etc. being references
+
+Could merge a lot of bonus classes through parameterisation of which bool to switch on. 
+Parameter would be subset of bonus enum.
+
+GRAPHICAL
+fix frogs
+fix rabbits
+player sprite animation really needs work
+Multiple player sprites

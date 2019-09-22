@@ -1,0 +1,149 @@
+
+           MOJOTRON
+http://mojotron.sourceforge.net
+
+Author: craigtimpany@w3.to
+
+System Requirements
+===================
+Pentium 166 ish
+16 bit colour
+X Windows or MS Windows
+DirectX 8 (for Sound in Windows)
+glibc 2.1 or higher (for Linux binary version)
+
+Installation (Linux, Binary)
+============================
+To unpack a tar.gz file, type:
+$ tar -xzf name_of_archive.tar.gz
+(or use a graphical archive tool like WinZip, GnoZip, etc.)
+
+Mojotron packages will unpack themselves into a new subdirectory off the 
+current directory named 'mojotron'.
+
+Then, simply unpack it somewhere tidy, change to it's directory, and run
+the executable:
+$ cd mojotron
+$ ./mojotron
+
+If you run into any trouble, please let me know, I want to make installation
+as straight-forward as possible.
+
+
+Installation (Source)
+=====================
+To compile mojotron you'll need ClanLib-0.6 installed with headers. Version
+0.6.5 will work, but getting a recent CVS checkout of the 0.6 branch is better
+because then frequency and volume settings on sound effects will work.
+
+Compilation on Linux should just be a case of unpacking the source tarball
+and typing 'make'.
+
+There's a Visual C++ project file if you're on Windows, but I don't have that
+compiler so I can't test it. I've added source files since the last port was
+done, but it shouldn't be too difficult to get up to date.
+
+
+Installation (Windows)
+======================
+Unzip the zip archive. Then go into the mojotron folder, and run
+mojotron.exe.
+
+
+Status
+======
+The game is being polished for a 1.0 release. If you find any bugs, please
+tell the mailing list.
+
+Known problems:
+Sound effects and music still need work.
+In Windows with some PCI chipsets, after several minutes of play all the 
+sprites may vanish off the screen, due to a system function giving Mojotron
+a time far in the future:
+(http://support.microsoft.com/default.aspx?scid=kb;en-us;Q274323)
+
+Ideas and patches are very welcome. There's a mailing list at SourceForge.
+
+
+Command-line options
+====================
+--fullscreen
+Show the game filling the whole screen, rather than the default window.
+Note: Many Linux window managers get confused if you switch to another task 
+      with alt-tab while fullscreened, so try to avoid that.
+      In Windows you may have to press return once to get the controls to
+      work. It's probably something to do with window focus.
+
+--enable-sound
+--disable-sound
+--enable-music
+--disable-music
+--record-demo
+
+-f <filename>
+Specify a custom resource file, for alternate graphics or game constants.
+
+-v
+Prints verbose messages to standard out.
+
+Gameplay
+========
+The game is a descendant of the arcade classic Robotron, with many
+enhancements. Kill all the monsters on the screen to advance a level.
+
+Controls
+========
+Like Robotron, movement is independant of which direction you're firing in. 
+If you're not using twin joysticks like in the arcades you can aim using the
+cursor keys, and use the following to move around: 
+W - aim up
+A - aim left
+S - aim down
+D - aim right
+
+This is just the same shape as the cursor keys, except shifted to the top left
+of the keyboard (a convention from the First Person Shooter genre). Firing is 
+automatic.
+
+The other important key is the spacebar. Use this to activate any of the
+diamond shaped powerups you collect.
+
+You can pause the game by pressing 'p'.
+
+Bonuses
+=======
+Each level has a time limit, if you don't finish it in time that's OK, but if
+you do, you'll skip 3 levels and get an extra life. 
+
+As you travel through the game, you'll find lots of fruit scattered through the
+levels. If you take 3 of a kind, 3 of the same colour, or 3 with colours in
+the order of a rainbow, you'll receive powerups and extra lives.
+
+Just some of the powerups in the game:
+
+Flamethrower
+(Very good for killing large enemies, but doesn't have much range)
+
+Machine Gun
+(Does a lot of damage but isn't very accurate)
+
+Shrinker
+(Shrinks everything on the screen. Good for getting out of cramped places)
+
+Extra Time
+(Gives you 5 extra seconds of warp time)
+
+Teleport
+(Puts you in a random position, hopefully away from danger)
+
+Bomb
+(Powerful explosion in the direction that you're firing)
+
+Instacrate
+(Surrounds you with a barricade of 8 pushable crates)
+
+Ram Droid
+(Covers you in the direction you're firing, and can be used to squish monsters)
+
+
+
