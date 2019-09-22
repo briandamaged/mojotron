@@ -20,6 +20,7 @@
 #define INPUTSTATE_HH
 
 #include <ClanLib/display.h>
+using namespace std;
 
 struct Config;
 

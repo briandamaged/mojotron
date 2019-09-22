@@ -41,7 +41,8 @@ void InputState::initControls(Config conf) {
 void InputState::readGroups() {
 	numkeygroups = globals->loadInt("Controls/numkeygroups");
 	keygroups = new std::string[numkeygroups];
-	const char* groups = globals->loadString("Controls/keygroups").c_str();
+	std::string groups_str = globals->loadString("Controls/keygroups");
+	const char* groups = groups_str.c_str();
 
 	// interpret keygroup list. man strtok says I shouldn't use strtok(). :(
 	int i = 0, j = 0;

@@ -22,6 +22,7 @@
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 #include <string>
+using namespace std;
 
 #define MAX_LOADSTATE 4
 #define GLOBALSRESFILE "res.scr"

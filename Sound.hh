@@ -22,6 +22,7 @@
 #include <ClanLib/core.h>
 #include <ClanLib/sound.h>
 #include <string>
+using namespace std;
 
 #ifdef HAVEMIKMOD
 #include <ClanLib/mikmod.h>
