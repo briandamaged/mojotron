@@ -537,7 +537,7 @@ int World::run(bool recorddemo) {
 	else 	gameDelay(	globals->loadInt("Constants/readypause"),
 				READY, PLAYING );
 	
-	char levchars[10];
+	char levchars[20];
 	sprintf(levchars, "Level %d: ", num_lev);
 	std::string levstring = std::string(levchars);
 	miscdisplay->setConsole(levstring.append(lev_name), globals->loadInt("Constants/levelinfotimeout"));
