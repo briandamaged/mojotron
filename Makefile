@@ -25,12 +25,12 @@ REQUIREDLIBS = -lclanCore -lclanDisplay -lclanApp
 CPPFLAGS = -Wall -O3 $(DEFS)
 
 # Compile with clanMikMod
-#DEFS = -DHAVEMIKMOD
-#SOUNDLIBS = -lclanSound -lclanMikMod
+DEFS = -DHAVEMIKMOD
+SOUNDLIBS = -lclanSound -lclanMikMod
 
 # Compile without clanMikMod
-DEFS = -UHAVEMIKMOD
-SOUNDLIBS = -lclanSound
+#DEFS = -UHAVEMIKMOD
+#SOUNDLIBS = -lclanSound
 
 all: $(OBJS)
 	$(CXX) -o mojotron $(OBJS) $(REQUIREDLIBS) $(SOUNDLIBS)
