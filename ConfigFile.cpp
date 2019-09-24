@@ -22,7 +22,6 @@
 #include "Globals.hh"
 #include "PlayerStats.hh"
 #include "SkillLevel.hh"
-#include <strstream>
 
 using namespace std;
 
