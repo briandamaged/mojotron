@@ -16,6 +16,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <SDL.h>
 #include "Intro.hh"
 #include "Thing.hh"
 #include "Sprite.hh" 
@@ -23,6 +24,7 @@
 #include "Menu.hh"
 #include "Display.hh"
 #include "Demo.hh"
+#include "InputState.hh"
 
 int Intro::timer = 0;
 int Intro::restarttime = 0;
@@ -53,21 +55,22 @@ bool Intro::show() {
 
 	Sound::playMusic(Sound::TITLE);
 
-	introstarttime = CL_System::get_time();
+	introstarttime = SDL_GetTicks();
 	restarttime = introstarttime;
 	prevtime = introstarttime;
 
 	Menu m = Menu(Menu::MAIN);
 	do {
-		int currenttime = CL_System::get_time();
+		int currenttime = SDL_GetTicks();
 		delta = currenttime - prevtime;
 		prevtime = currenttime;
 
 		timer += delta;
 
 		if (timer < STORYTIME) {
-			if (	CL_Keyboard::get_keycode(CL_KEY_SPACE) ||
-				CL_Keyboard::get_keycode(CL_KEY_ESCAPE)) {
+			const Uint8 *state = SDL_GetKeyboardState(NULL);
+			if (state[SDL_SCANCODE_SPACE] ||
+				state[SDL_SCANCODE_ESCAPE]) {
 				timer = STORYTIME;
 			}
 
@@ -84,16 +87,16 @@ bool Intro::show() {
 			else if (ret == Menu::EXIT)	return false;
 		}
 
-		CL_Display::flip_display();
-		CL_System::keep_alive();
+		InputState::process();
+		SDL_RenderPresent(game_renderer);
 
 	} while(true);
 }
 
 // starfield, before menu
 void Intro::drawBg() {
-	int t = CL_System::get_time();
-	CL_Display::fill_rect(0, 0, XWINSIZE>>8, YWINSIZE>>8, sur_starfield, t/50, t/100);
+	int t = SDL_GetTicks();
+	SDL_fill_rect(0, 0, XWINSIZE>>8, YWINSIZE>>8, sur_starfield, t/50, t/100);
 }
 
 // main menu background stuff
@@ -130,7 +133,7 @@ void Intro::demoBg() {
 }
 
 void Intro::restart() {
-	introstarttime = CL_System::get_time();
+	introstarttime = SDL_GetTicks();
 	timer = STORYTIME;
 }
 
@@ -145,9 +148,9 @@ void Intro::story() {
 						timer % (globals->spr[Globals::PLAYERONE]->getFrames()), false);
 	globals->spr[Globals::PLAYERTWO]->draw(	XWINSIZE - (100<<8), YWINSIZE/2, 
 						timer % (globals->spr[Globals::PLAYERTWO]->getFrames()), true);
-	sur_bubble->put_screen(90, (YWINSIZE>>9)-15, 1.0f, 1.0f,
+	sur_bubble->put_screen(90, (YWINSIZE>>9)-15,
 				(timer%600) > 300);
-	sur_bubble->put_screen((XWINSIZE>>8)-110, (YWINSIZE>>9)-15, 1.0f, 1.0f,
+	sur_bubble->put_screen((XWINSIZE>>8)-110, (YWINSIZE>>9)-15,
 				(timer%600) > 300);
 }
 
@@ -172,12 +175,6 @@ void Intro::controlsDemo() {
 	//demo->drawBonus();
 }
 
-void Intro::fade(int start, int end) {
-	if (timer > start)
-		CL_Display::fill_rect(	0, 0, XWINSIZE>>8, YWINSIZE>>8, 0.9f, 0.95f, 1.0f, 
-					1.0f*(timer-start)/(end-start));
-}
-
 void Intro::enemies() {
 	slomoval = 0;	// pause demo movement
 	int ii = 0;
@@ -193,7 +190,7 @@ void Intro::enemies() {
 void Intro::drawEnemyLine(int line, int s, std::string name, std::string info) {
 	int ypos = 200 + line * 50;
 	globals->spr[s]->draw(	(100)<<8, (ypos)<<8, 
-				(CL_System::get_time()/100) % globals->spr[s]->getFrames(), false);
+				(SDL_GetTicks()/100) % globals->spr[s]->getFrames(), false);
 	globals->mediumfont->print_left(150, ypos - 10, name.c_str());
 	globals->mediumfont->print_left(150, ypos + 10, info.c_str());
 }
@@ -243,7 +240,7 @@ void Intro::powerups() {
 
 	globals->mediumfont->print_left(160, 200, "Grab items:");
 
-	int i = (CL_System::get_time()) / 500;
+	int i = (SDL_GetTicks()) / 500;
 	int powerups = Globals::SPREND - Globals::BONUSXLIFE;
 	i %= powerups;
 	i += Globals::BONUSXLIFE;

@@ -16,8 +16,10 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <ClanLib/core.h>
+//#include <ClanLib/core.h>
+#include <SDL.h>
 #include <cstdio>
+#include <iostream>
 #include "World.hh"
 #include "Thing.hh"
 #include "Player.hh"
@@ -102,8 +104,8 @@ World::~World() {
  ****************/
 
 void World::load_level(int l) {
-	try {
-		int loadstarttime = CL_System::get_time();
+//	try {
+		int loadstarttime = SDL_GetTicks();
 		globals->loadingScreen(loadstarttime);
 
 		num_lev = l;
@@ -322,9 +324,9 @@ void World::load_level(int l) {
 		}
 		globals->loadingScreen(loadstarttime);
 
-	} catch(CL_Error err) {
+/*	} catch(CL_Error err) {
 		cout << "CL_Error: " << err.message.c_str() << std::endl;
-	}
+	}*/
 }
 
 // templates would probably be the good thing here
@@ -361,17 +363,23 @@ void World::drawBG(int delta) {
 		flashing -= (delta/4);
 		if (flashing < 0) flashing = 0;
 	}
-	CL_Display::fill_rect(	0, 0,
-				(ARENAWIDTH>>8), (ARENAHEIGHT>>8)+PAD,
-				getBGRed(), getBGGreen(), getBGBlue(), 1.0f);
+	SDL_Rect r;
+	SDL_SetRenderDrawColor(game_renderer, getBGRed() * 255, getBGGreen() * 255, getBGBlue() * 255, 255);
+	r.x = 0;
+	r.y = 0;
+	r.w = ARENAWIDTH>>8;
+	r.h = (ARENAHEIGHT>>8)+PAD;
+	SDL_RenderFillRect(game_renderer, &r);
 }
 
 void World::drawScoreBG() {
-		CL_Display::fill_rect(	0, (ARENAHEIGHT>>8) + PAD,
-					(XWINSIZE>>8), (YWINSIZE>>8),
-					worldobj->getBGRed()/1.3f, 
-					worldobj->getBGGreen()/1.3f, 
-					worldobj->getBGBlue()/1.3f, 1.0f);
+	SDL_Rect r;
+	SDL_SetRenderDrawColor(game_renderer, (getBGRed() / 1.3f) * 255, (getBGGreen() / 1.3f) * 255, (getBGBlue() / 1.3f) * 255, 255);
+	r.x = 0;
+	r.y = (ARENAHEIGHT>>8) + PAD;
+	r.w = (XWINSIZE>>8);
+	r.h = (YWINSIZE>>8);
+	SDL_RenderFillRect(game_renderer, &r);
 }
 
 float World::getBGRed() {
@@ -433,14 +441,14 @@ void World::updateDisplay() {
 			case PAUSED: {
 				globals->largefont->print_center(XWINSIZE>>9, YWINSIZE>>9, "Paused");
 
-				int pausedelta = CL_System::get_time() - pausetimer;
-				pausetimer = CL_System::get_time();
+				int pausedelta = SDL_GetTicks() - pausetimer;
+				pausetimer = SDL_GetTicks();
 
 				Menu::menustatus ret = pausemenu->run(pausedelta);
 				if (ret == Menu::STARTGAME) {
 					state = PLAYING;
 					// resync time
-					cltime = CL_System::get_time();
+					cltime = SDL_GetTicks();
 					readyforkey = false;
 					pausemenu->readyforkey = false;
 				} else if (ret == Menu::EXIT) {
@@ -465,7 +473,8 @@ void World::updateDisplay() {
 
 	} else {
 		if (statetime > 3000) {	// scrolling
-			CL_Display::clear_display(0, 0, 0, 1.0f);
+			SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
+			SDL_RenderClear(game_renderer);
 			globals->smallfont->print_right((XWINSIZE>>8) - 10, 10, 
 				PlayerStats::getHighScoreStr());
 
@@ -488,9 +497,15 @@ void World::updateDisplay() {
 								(playerlist[i]->stats->rating()).c_str());
 
 				if (alpha < 0.99f) {
-					CL_Display::fill_rect(	0, textbegin + textheight*i,
-								(XWINSIZE>>8), textbegin + textheight*(i+1),
-								0.0, 0.0, 0.0, 1-alpha);
+					SDL_SetRenderDrawBlendMode(game_renderer, SDL_BLENDMODE_BLEND);
+					SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, (1 - alpha) * 255);
+					SDL_Rect r;
+					r.x = 0;
+					r.y = textbegin + textheight*i;
+					r.w = (XWINSIZE >> 8);
+					r.h = textheight;
+					SDL_RenderFillRect(game_renderer, &r);
+					SDL_SetRenderDrawBlendMode(game_renderer, SDL_BLENDMODE_NONE);
 				}
 				if (statetime > 7000) {
 					globals->mediumfont->print_center((XWINSIZE>>9), (YWINSIZE>>8) - 25, 
@@ -498,8 +513,16 @@ void World::updateDisplay() {
 				}
 			}
 		} else {
+			SDL_SetRenderDrawBlendMode(game_renderer, SDL_BLENDMODE_BLEND);
 			float alpha = (float)(statetime)/3000;
-			CL_Display::clear_display(0, 0, 0, alpha);
+			SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, alpha * 255);
+			SDL_Rect r;
+			r.x = 0;
+			r.y = 0;
+			r.w = (XWINSIZE >> 8);
+			r.h = (YWINSIZE >> 8);
+			SDL_RenderFillRect(game_renderer, &r);
+			SDL_SetRenderDrawBlendMode(game_renderer, SDL_BLENDMODE_NONE);
 		}
 		if (lev_name == "")
 			globals->largefont->print_center(XWINSIZE>>9, 110, "Congratulations!");
@@ -508,7 +531,8 @@ void World::updateDisplay() {
 				
 	}
 
-	CL_Display::flip_display();
+	InputState::process();
+	SDL_RenderPresent(game_renderer);
 }
 
 /*
@@ -520,8 +544,8 @@ int World::run(bool recorddemo) {
 	Demo demo = Demo();
 	globals->unfade();
 
-	cltime = CL_System::get_time();	// don't get the time directly, use this
-	oldtime = CL_System::get_time();
+	cltime = SDL_GetTicks();	// don't get the time directly, use this
+	oldtime = SDL_GetTicks();
 	inittime = oldtime;
 	int maxdelta = globals->loadInt("Constants/maxdelta");
 	int mindelta = globals->loadInt("Constants/mindelta");
@@ -543,7 +567,7 @@ int World::run(bool recorddemo) {
 	miscdisplay->setConsole(levstring.append(lev_name), globals->loadInt("Constants/levelinfotimeout"));
 	Sound::playSound("beginlevel");
 
-	int framedone = CL_System::get_time();
+	int framedone = SDL_GetTicks();
 	while 	(true) 
 	{
 		delta = 0;
@@ -551,7 +575,7 @@ int World::run(bool recorddemo) {
 		switch(state) {
 			case PLAYING: {
 				// don't want time updated while paused
-				cltime = CL_System::get_time();
+				cltime = SDL_GetTicks();
 				delta = cltime - oldtime;
 
 				// time since ready is in real millisecs, not game millisecs
@@ -624,7 +648,7 @@ int World::run(bool recorddemo) {
 			case EXIT: {
 				//if (globals->verbosity > 0)
 					cout << endl << endl << "Average rate: " << 
-						1000 * framenum / (CL_System::get_time() - inittime) << "fps" << endl;
+						1000 * framenum / (SDL_GetTicks() - inittime) << "fps" << endl;
 				return 0;
 			}
 
@@ -668,12 +692,12 @@ int World::run(bool recorddemo) {
 		
 		//int graphicstime = (CL_System::get_time() - cltime) - gamelogictime;
 		
-		CL_System::keep_alive();
+//		CL_System::keep_alive();
 
-		int frametime = CL_System::get_time() - framedone;
+		int frametime = SDL_GetTicks() - framedone;
 		if (frametime < mindelta)
-			CL_System::sleep(mindelta - frametime);
-		framedone = CL_System::get_time();
+			SDL_Delay(mindelta - frametime);
+		framedone = SDL_GetTicks();
 
 		levelage += delta;
 		oldtime = cltime;
@@ -699,19 +723,19 @@ void World::gameDelay(int duration, World::GameState stateduring, World::GameSta
 }
 
 void World::maintainDelay() {
-	statetime = (int)(CL_System::get_time() - cltime);
+	statetime = (int)(SDL_GetTicks() - cltime);
 
 	if (delay) {
 		if (statetime > delay) {
 			state = oldstate;
-			cltime = CL_System::get_time();
+			cltime = SDL_GetTicks();
 			statetime = 0;
 		}
 	} // if delay is zero, this state goes on forever
 }
 
 void World::restart() {
-	oldtime = CL_System::get_time(); // avoid a large delta being made
+	oldtime = SDL_GetTicks(); // avoid a large delta being made
 	
 	all->toListStart();	Thing* x;
 	while ((x = all->getNext())) {
@@ -883,18 +907,19 @@ void World::makePlayer(int i) {
  *******************/
 
 void World::listenPauseToggle() {
-	bool pause = 	CL_Keyboard::get_keycode(CL_KEY_P) || 
-			CL_Keyboard::get_keycode(CL_KEY_ESCAPE); 
+	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+	bool pause = 	keystate[SDL_SCANCODE_P] || 
+			keystate[SDL_SCANCODE_ESCAPE];
 
 	if (readyforkey && pause) {
 		if (state == PAUSED && pausemenu->type == Menu::INGAME) {
 			state = PLAYING;
-			cltime = CL_System::get_time();
+			cltime = SDL_GetTicks();
 			if (globals->verbosity < 0)
 				cout << "Resynced time: " << cltime << endl;
 		} else { 
 			state = PAUSED;
-			pausetimer = CL_System::get_time();
+			pausetimer = SDL_GetTicks();
 			delay = 0;	// doesn't timeout
 			pausemenu->status = Menu::NONE;
 		}
@@ -903,8 +928,7 @@ void World::listenPauseToggle() {
 }
 
 bool World::listenAnyKey() {
-	if (globals->buffer->keys_left()) {
-		globals->buffer->clear();
+	if (InputState::anyKeyPress()) {
 		return true;
 	}
 	return false;

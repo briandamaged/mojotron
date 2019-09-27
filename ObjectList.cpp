@@ -17,9 +17,10 @@
 */
 
 #include <stdio.h>
-#include <ClanLib/core.h>
+//#include <ClanLib/core.h>
 #include "ObjectList.hh"
 #include "World.hh"
+#include <iostream>
 
 using namespace std;
 extern World* worldobj;

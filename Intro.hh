@@ -19,8 +19,10 @@
 #ifndef INTRO_HH
 #define INTRO_HH
 
-#include <ClanLib/core.h>
-#include <ClanLib/display.h>
+//#include <ClanLib/core.h>
+//#include <ClanLib/display.h>
+#include "SDL_CL_Surface.h"
+#include <string>
 
 #define XKEYCENT 20
 #define YKEYCENT 12
@@ -53,7 +55,6 @@ private:
 					std::string name, std::string info);
 	static void controlsDemo();
 	static void restart();
-	static void fade(int start, int end);
 
 	static int timer;
 	static int delta;

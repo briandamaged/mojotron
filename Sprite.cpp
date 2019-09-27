@@ -16,6 +16,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <iostream>
 #include "Sprite.hh"
 #include "Globals.hh"
 
@@ -23,35 +24,22 @@ using namespace std;
 extern Globals* globals;
 
 Sprite::Sprite(std::string resname, CL_ResourceManager* manager) {
-	CL_SurfaceProvider* sp = 0;
-	try {
-		sp = CL_SurfaceProvider::load(resname.c_str(), manager);
-	} catch(CL_Error err) {
-		//if (globals->verbosity > 0)
-			cout << err.message.c_str() << " Defaulting to test." << endl;
-		// FIXME: Uhoh this will make lots of sprites with exactly the same SP
-		sp = CL_SurfaceProvider::load("Testing/test", manager);
-	}
-
+	anim = new CL_Surface(resname, manager);
 	// that globals obj better be fully constructed...
 	hasorientation = (bool)globals->loadInt(resname + "flip");
-	anim = CL_Surface::create(sp, false);
 
-	pitch = sp->get_pitch();
+//	pitch = anim->get_pitch();
 
-	if (sp->get_depth() != 8) {
+/*	if (sp->get_depth() != 8) {
 		cout << "Resource " << resname << ": Collsion checking for colour depths >1 byte not implemented!!" << endl;
 		cancolcheck = false;
 		mask = 0;
-	} else {
+	} else*/ {
 		cancolcheck = true;
-		sp->lock();			// allocate a buffer of image data
-		mask = (char*)sp->get_data();	// get the pointer to it
-		transcol = sp->get_src_colorkey();
+//		sp->lock();			// allocate a buffer of image data
+/*		mask = (char*)anim->get_data();	// get the pointer to it
+		transcol = anim->get_src_colorkey();*/
 	}
-	
-	// Shouldn't need to refer to the sp from this point, by any name
-	animp = sp;
 
 	width = anim->get_width() << 8;
 	height = anim->get_height() << 8;
@@ -65,21 +53,21 @@ Sprite::~Sprite() {
 	 * I guess I'll just stop trying to deinit them
 	 */
 	
-	if (globals->verbosity > 1) {
+/*	if (globals->verbosity > 1) {
 		cout << "animp " << animp << "    ";
 		cout << "anim " << anim << "    ";
 		cout << "mask " << (void*)mask << endl;
 	}
-	if (cancolcheck)	animp->unlock();
-	mask = 0;	// mask is no longer valid!
+	if (cancolcheck)	animp->unlock();*/
+//	mask = 0;	// mask is no longer valid!
 	
 	//delete animp;
 	delete anim;
 }
 
-char* Sprite::getData() {
+/*char* Sprite::getData() {
 	return mask;
-}
+}*/
 
 unsigned int Sprite::getFrames() {
 	if (hasorientation)
@@ -105,6 +93,7 @@ int Sprite::getCLFrameNum(int thingframenum, bool facingleft) {
 		return thingframenum + anim->get_num_frames()/2;
 	else
 		return thingframenum;
+	return 0;
 }
 
 int Sprite::findLowEnd(int sizea, int offset) {
@@ -128,8 +117,8 @@ bool Sprite::andcheck(	int ax, int ay,
 	int bheight = spr2->height;
 
 	// find out which frames each sprite is on
-	int framea = getCLFrameNum(thingframea, afacingleft);
-	int frameb = spr2->getCLFrameNum(thingframeb, bfacingleft);
+	char *maska = anim->get_data(getCLFrameNum(thingframea, afacingleft));
+	char *maskb = spr2->anim->get_data(spr2->getCLFrameNum(thingframeb, bfacingleft));
 
 	int xoffset = bx - ax;
 	int yoffset = by - ay;
@@ -152,19 +141,15 @@ bool Sprite::andcheck(	int ax, int ay,
 	int top = findLowEnd(height, yoffset);	// because low coords are at the top of the screen
 	int down = findHighEnd(height, bheight, yoffset);
 
-	int zerorowa = height * framea;
-	int zerorowb = bheight * frameb;
-
 	// all calculations so far have been in 1/256ths of pixels
 	top >>= 8; down >>= 8; left >>= 8; right >>= 8;
 	xoffset >>= 8;	yoffset >>= 8;
-	zerorowa >>= 8; zerorowb >>= 8;
 		
 	if (globals->verbosity > 2) {
 		cout << "Printing x data, " << left << " to " << right << endl;
 		cout << "Printing y data, " << top << " to " << down << endl;
-		cout << "Transcol: " << transcol << "   Frame:" << framea << endl;
-		cout << "Transcol: " << spr2->transcol << "   Frame:" << frameb << endl;
+//		cout << "Transcol: " << transcol << "   Frame:" << framea << endl;
+//		cout << "Transcol: " << spr2->transcol << "   Frame:" << frameb << endl;
 	}
 
 	int pixa, pixb;
@@ -175,15 +160,15 @@ bool Sprite::andcheck(	int ax, int ay,
                	for(int j = left; j < right; j++) {
 			// addr of sprite + rows down + x coord
 			pixa = (*
-				( mask + pitch * (zerorowa + i) + j));
+				( maska + anim->get_width() * i + j));
 
 			// sprite addr + rows down + x coord - offset relative to thinga  
 			pixb = (*( 
-				spr2->mask + spr2->pitch * (zerorowb - yoffset + i) 
+				maskb + spr2->anim->get_width() * (i - yoffset)
 					+ j - xoffset
 				));
 		
-			if (pixa!=transcol && pixb!=spr2->transcol) {
+			if (pixa!=0 && pixb!=0) {
 				return true;
 			}
 				

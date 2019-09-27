@@ -16,8 +16,9 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <ClanLib/core.h>
-#include <ClanLib/application.h>
+//#include <ClanLib/core.h>
+//#include <ClanLib/application.h>
+#include <SDL.h>
 #include "World.hh"
 #include "Intro.hh"
 #include "Sound.hh"
@@ -27,6 +28,7 @@
 #include "InputState.hh"
 #include "ConfigFile.hh"
 #include "PlayerStats.hh"
+#include <iostream>
 
 #ifdef HAVEMIKMOD
 #include <ClanLib/mikmod.h>
@@ -35,10 +37,13 @@
 extern World* worldobj;
 extern Globals* globals;
 
-class MojoApp : public CL_ClanApplication {
+SDL_Renderer *game_renderer;
+
+class MojoApp {
 	private:
 		ConfigFile* configf;
 		Config conf;
+		SDL_Window *game_window;
 	public:
 
 	char* get_title() {
@@ -59,8 +64,8 @@ class MojoApp : public CL_ClanApplication {
 		delete globals;
 		globals = NULL;
 
-		CL_SetupCore::deinit();
-		CL_SetupDisplay::deinit();
+//		CL_SetupCore::deinit();
+//		CL_SetupDisplay::deinit();
 		exit(EXIT_SUCCESS);
 	}
 	
@@ -69,7 +74,7 @@ class MojoApp : public CL_ClanApplication {
 		bool fullscreen, sound, music, cmdlineoptsset;
 		demotest = recorddemo = false;
 		fullscreen = sound = music = cmdlineoptsset = false;
-		std::string resourcefile = "res.scr";
+		std::string resourcefile = "res.xml";
 		std::string demofile = "";
 		int verbosity = 0;
 
@@ -112,8 +117,8 @@ class MojoApp : public CL_ClanApplication {
 			}
 		}
 
-		try {
-			CL_SetupCore::init();
+//		try {
+/*			CL_SetupCore::init();
 			CL_SetupDisplay::init();
 
 #ifdef WIN32
@@ -122,7 +127,7 @@ class MojoApp : public CL_ClanApplication {
 				console.redirect_stdio();
 				cout << "Debug console up" << endl;
 			}
-#endif
+#endif*/
 
 			configf = new ConfigFile();
 			conf = configf->getFileSettings();
@@ -136,8 +141,24 @@ class MojoApp : public CL_ClanApplication {
 			Sound::setSFX(sound);
 			PlayerStats::enterScore(conf.highscore);
 
-			CL_Display::set_videomode(XWINSIZE >> 8, YWINSIZE >> 8, 16, fullscreen);
-			CL_Slot windowclose = CL_System::sig_quit().connect(this, &MojoApp::quit);
+			game_window = SDL_CreateWindow(get_title(),
+				SDL_WINDOWPOS_UNDEFINED,
+				SDL_WINDOWPOS_UNDEFINED,
+				XWINSIZE >> 8, YWINSIZE >> 8,
+				(fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
+			if (game_window == NULL)
+			{
+				std::cout << "Failed - SDL_CreateWindow" << std::endl;
+				exit(0);
+			}
+
+			game_renderer = SDL_CreateRenderer(game_window, -1, 0);
+			if (game_renderer == NULL)
+			{
+				std::cout << "Failed - SDL_CreateRenderer" << std::endl;
+				exit(0);
+			}
+			SDL_RenderSetLogicalSize(game_renderer, XWINSIZE >> 8, YWINSIZE >> 8);
 
 			globals = new Globals(resourcefile);
 			globals->loadSprites();
@@ -147,7 +168,7 @@ class MojoApp : public CL_ClanApplication {
 			globals->fullscreen = fullscreen;
 			globals->verbosity = verbosity;
 
-			srand((int)CL_System::get_time());
+			srand((int)SDL_GetTicks());
 	
 			if (demotest) {
 				Demo d = Demo(demofile);
@@ -174,11 +195,15 @@ class MojoApp : public CL_ClanApplication {
 				} while (play);
 			}
 			quit();
-		} catch (CL_Error err) {
+/*		} catch (CL_Error err) {
 			cout << err.message.c_str() << endl;
-		}
+		}*/
 		// we caught something, otherwise we'd left through quit
 		return (EXIT_FAILURE);
 	}
 } app;
 
+int main(int argc, char *argv[])
+{
+	return app.main(argc, argv);
+}

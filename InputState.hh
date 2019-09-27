@@ -19,10 +19,34 @@
 #ifndef INPUTSTATE_HH
 #define INPUTSTATE_HH
 
-#include <ClanLib/display.h>
+//#include <ClanLib/display.h>
+#include <string>
+#include <iostream>
 using namespace std;
 
 struct Config;
+
+class InputAxis
+{
+public:
+	InputAxis(int minus_k, int plus_k);
+
+	int get_pos();
+
+private:
+	int minus_key, plus_key;
+};
+
+class InputButton
+{
+public:
+	InputButton(int b);
+
+	int is_pressed();
+
+private:
+	int button;
+};
 
 class InputState {
 public:
@@ -34,11 +58,11 @@ public:
 	static void deinitControls();
 	static void readGroups();
 
-	CL_InputAxis_Group* movex;
-	CL_InputAxis_Group* movey;
-	CL_InputAxis_Group* firex;
-	CL_InputAxis_Group* firey;
-	CL_InputButton_Group* use;
+	InputAxis* movex;
+	InputAxis* movey;
+	InputAxis* firex;
+	InputAxis* firey;
+	InputButton* use;
 
 	enum direction {	UPLEFT, UP, UPRIGHT,
 				LEFT, NONE, RIGHT,
@@ -63,12 +87,18 @@ public:
 
 	std::string serialiseKeys();
 
+	static void process();
+	static bool anyKeyPress();
+	static int convert_clanlib(int k);
+
 private:
 	InputState(	int _playernumber, string movegroup,
 			string aimgroup, int use);
 	~InputState();
 
 	int getKeygroupNumber(std::string name);
+
+	static bool anyKey;
 };
 
 #endif

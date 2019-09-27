@@ -16,7 +16,8 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <ClanLib/core.h>
+//#include <ClanLib/core.h>
+#include <SDL.h>
 #include "Globals.hh"
 #include "Sprite.hh"
 #include "Sound.hh"
@@ -24,12 +25,15 @@
 #include "Display.hh"
 #include <string>
 #include <algorithm>
+#include <locale>
+#include <list>
+#include <iostream>
 
 using namespace std;
 Globals* globals;
 
 Globals::Globals(std::string resfile) {
-	int loadstart = CL_System::get_time();
+	int loadstart = SDL_GetTicks();
 
 	// misc graphics
 		smallfont = 0;
@@ -45,30 +49,20 @@ Globals::Globals(std::string resfile) {
 	num_players = 1;
 	loadstate = 0;
 
-	buffer = 0;
+//	buffer = 0;
 
-	manager = new CL_ResourceManager(resfile, false);
-	buffer = new CL_InputBuffer();
-
-	// loading integer constants
-	list<string>* ints = manager->get_resources_of_type("integer");
-	list<string>::iterator iter = ints->begin();
-	list<string>::iterator end = ints->end();
-	for (; iter != end; iter++) {
-		int val = CL_Integer(*iter, manager);
-		loadedints.insert(pair<string, int>(*iter, val));
-	}
-	delete ints;	
+	manager = new CL_ResourceManager(resfile);
+//	buffer = new CL_InputBuffer();
 
 	// misc graphics
-	try {
-		smallfont = CL_Font::load("Fonts/smallfont", manager);
-		largefont = CL_Font::load("Fonts/largefont", manager);
-		mediumfont = CL_Font::load("Fonts/mediumfont", manager);
-		sur_testing = CL_Surface::load("Testing/test", manager);
-	} catch	(CL_Error x) {
+//	try {
+		smallfont = new CL_Font("Fonts/smallfont", manager);
+		largefont = new CL_Font("Fonts/largefont", manager);
+		mediumfont = new CL_Font("Fonts/mediumfont", manager);
+		sur_testing = new CL_Surface("Testing/test", manager);
+/*	} catch	(CL_Error x) {
 		cout << x.message.c_str() << endl;
-	}
+	}*/
 	loadingScreen(loadstart);
 }
 
@@ -78,7 +72,7 @@ Globals::Globals(std::string resfile) {
 	mention in res.scr
 */
 void Globals::loadSprites() {
-	int loadstart = CL_System::get_time();
+	int loadstart = SDL_GetTicks();
 
 	/* DO NOT PUT DUPLICATE ENTRIES IN HERE,
 	 * Clanlib will give the same SurfaceProvider* each time the same resource is 
@@ -182,7 +176,7 @@ void Globals::loadingScreen(int loadstarttime) {
 				break;
 		}
 		CL_Display::flip_display();*/
-		CL_System::keep_alive();
+//		CL_System::keep_alive();
 	}
 }
 
@@ -198,16 +192,16 @@ void Globals::fadeScreen(int timetotransition, int length) {
 	int verticalmove = (yh - pixelsmoved)/2;
 
 	int lowerclip = min(pixelsmoved + yh/2, yh);
-	CL_ClipRect cr = CL_ClipRect(0, verticalmove, (XWINSIZE>>8), lowerclip);
+/*	CL_ClipRect cr = CL_ClipRect(0, verticalmove, (XWINSIZE>>8), lowerclip);
 
 	CL_Display::set_translate_offset(0, verticalmove);
-	CL_Display::set_clip_rect(cr);
+	CL_Display::set_clip_rect(cr);*/
 }
 
 void Globals::unfade() {
-	CL_ClipRect cr = CL_ClipRect(0, 0, (XWINSIZE>>8), (XWINSIZE>>8));
+/*	CL_ClipRect cr = CL_ClipRect(0, 0, (XWINSIZE>>8), (XWINSIZE>>8));
 	CL_Display::set_clip_rect(cr);
-	CL_Display::set_translate_offset(0, 0);
+	CL_Display::set_translate_offset(0, 0);*/
 }
 
 Globals::~Globals() {
@@ -224,7 +218,7 @@ Globals::~Globals() {
 	*/
 	delete sur_testing;
 	
-	delete buffer;
+//	delete buffer;
 	delete manager;
 	globals = NULL;
 }
@@ -236,45 +230,34 @@ void Globals::debugPrint(std::string message, int threshold) {
 }
 
 int Globals::loadInt(std::string dname) {
-	/*transform(dataname.begin(), dataname.end(), dataname.begin(), tolower);*/
-	CL_String dataname = CL_String(dname);
-	dataname.to_lower();
-
-	if (loadedints.count(dataname) == 0) {
-		if (verbosity > 0)
-			cout << "No constant " << dataname << 
-				", defaulting to zero." << endl;
-		return 0;
-	}
-	int x = (*loadedints.find(dataname)).second;
+	int x = manager->get_integer_resource(dname, 0);
 	if (verbosity > 1)
-		cout << dataname << " = " << x << endl;
+		cout << dname << " = " << x << endl;
 	return x;
 }
 
 std::string Globals::loadString(std::string dataname) {
-	try { 
+//	try { 
 		// x is automatic!?
-		std::string x = CL_String(dataname, manager);
+		std::string x = manager->get_string_resource(dataname, "");
 		if (verbosity > 0)
-			cout << dataname.c_str() << " = " << x << endl;
+			cout << dataname << " = " << x << endl;
 		// must be a deep copy I guess
 		return x;
-	} catch(CL_Error err) {
+/*	} catch(CL_Error err) {
 		if (verbosity > 0)
 			cout << err.message.c_str() << " Defaulting to empty." << endl;
 		return "";
-	}
+	}*/
 }
 
 CL_Surface* Globals::loadSurface(std::string dataname) {
-	try {
-		CL_SurfaceProvider *sp = CL_SurfaceProvider::load(dataname.c_str(), manager);
-		CL_Surface* s = CL_Surface::create(sp, false);
+//	try {
+		CL_Surface* s = new CL_Surface(dataname, manager);
 		return s;
-	} catch(CL_Error err) {
+/*	} catch(CL_Error err) {
 		if (verbosity > 0)
 			cout << err.message.c_str() << " Defaulting to test." << endl;
 		return sur_testing;
-	}
+	}*/
 }

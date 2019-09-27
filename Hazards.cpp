@@ -16,6 +16,8 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <cmath>
+#include <iostream>
 #include "Thing.hh"
 #include "Hazards.hh"
 #include "Sprite.hh"
@@ -231,7 +233,7 @@ void Asteroid::move(int delta) {
 		recoiltimer -= delta;
 	 }
 	
-	if (circletime > 2*PI) circletime = 0;
+	if (circletime > 2*M_PI) circletime = 0;
 	
 	if (animframe < (int)(spr->getFrames()/3)-1)
 		animframe++;
@@ -895,12 +897,16 @@ void Laser::draw() {
 		int position;
 		if (vertical) {
 			position = (spr->width/2 + xpos)>>8;
-			CL_Display::draw_line(	position, 0, position, ARENAHEIGHT>>8,
-						1.0f, (float)brightness/10, (float)brightness/10, 0.8f );
+			SDL_SetRenderDrawColor(game_renderer, 255, ((float)brightness/10) * 255, ((float)brightness/10) * 255, 0.8f * 255);
+			SDL_RenderDrawLine(game_renderer,position, 0, position, ARENAHEIGHT>>8);
+/*			CL_Display::draw_line(	position, 0, position, ARENAHEIGHT>>8,
+						1.0f, (float)brightness/10, (float)brightness/10, 0.8f );*/
 		} else {
 			position = (spr->height/2 + ypos)>>8;
-			CL_Display::draw_line(	0, position, ARENAWIDTH>>8, position,
-						1.0f, (float)brightness/10, (float)brightness/10, 0.8f );
+			SDL_SetRenderDrawColor(game_renderer, 255, ((float)brightness/10) * 255, ((float)brightness/10) * 255, 0.8f * 255);
+			SDL_RenderDrawLine(game_renderer, 0, position, ARENAWIDTH>>8, position);
+/*			CL_Display::draw_line(	0, position, ARENAWIDTH>>8, position,
+						1.0f, (float)brightness/10, (float)brightness/10, 0.8f );*/
 		}
 	}
 	Thing::draw();

@@ -16,6 +16,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <SDL.h>
 #include "Menu.hh"
 #include "Intro.hh"
 #include "Sprite.hh"
@@ -33,7 +34,7 @@ Menu::Menu(menutype t) {
 	prevtype = NOMENU;
 
 	choosingkey = false;
-	keyidpicked = CL_NO_KEY;
+//	keyidpicked = CL_NO_KEY;
 }
 
 void Menu::changeType(menutype t) {
@@ -133,12 +134,13 @@ void Menu::changeType(menutype t) {
 }
 
 Menu::menustatus Menu::run(int delta) {
-	bool moveup = CL_Keyboard::get_keycode(CL_KEY_UP);
-	bool movedown = CL_Keyboard::get_keycode(CL_KEY_DOWN);
-	bool select = 	CL_Keyboard::get_keycode(CL_KEY_SPACE) ||
-			CL_Keyboard::get_keycode(CL_KEY_ENTER) ||
-			CL_Keyboard::get_keycode(CL_KEY_RIGHT);
-	bool back = CL_Keyboard::get_keycode(CL_KEY_LEFT);
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	bool moveup = state[SDL_SCANCODE_UP];
+	bool movedown = state[SDL_SCANCODE_DOWN];
+	bool select = 	state[SDL_SCANCODE_SPACE] ||
+			state[SDL_SCANCODE_RETURN] ||
+			state[SDL_SCANCODE_RIGHT];
+	bool back = state[SDL_SCANCODE_LEFT];
 
 	if (!choosingkey) {
 		if (readyforkey) {
@@ -149,23 +151,23 @@ Menu::menustatus Menu::run(int delta) {
 				currententry++;
 				currententry %= maxentries;
 			} else {
-				try {
+//				try {
 					if (select)
 						slots[currententry]->activate(true);
 					else if (back)
 						slots[currententry]->activate(false);
-				} catch (CL_Error err) {
+/*				} catch (CL_Error err) {
 					msgline = err.message;
-				}
+				}*/
 			}
 		}
 		readyforkey = !(moveup || movedown || select || back);
 	} else {
 		if (!(select || back) && !readyforkey) {
 			readyforkey = true;
-			buffer.get_key();	// trash first key
+//			buffer.get_key();	// trash first key
 		}
-		if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE)) {
+/*		if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE)) {
 			buffer.clear();
 			choosingkey = false;
 
@@ -173,17 +175,15 @@ Menu::menustatus Menu::run(int delta) {
 			if (buffer.keys_left() == 1) {
 				CL_Key in = buffer.get_key();
 				keyidpicked = in.id;
-				/*cout << "Got key " << in.id << endl;
-				cout << "Whereas none of the above is " << CL_KEY_NONE_OF_THE_ABOVE << endl;*/
         
 				buffer.clear();
 				slots[currententry]->activate(true);
 				readyforkey = false;
 			}
-		}
+		}*/
 	}
 
-	lasttime = CL_System::get_time();
+	lasttime = SDL_GetTicks();
 	draw();
 
 	return status;
@@ -200,9 +200,13 @@ void Menu::draw() {
 		case INGAME:
 			starty = 30;
 			offset = 300;
-			CL_Display::fill_rect(	(XWINSIZE>>9) + offset - NAMEWIDTH - border, starty - border,
-						(XWINSIZE>>9) + offset + border, starty + LINESPACE * maxentries + border,
-						0.0f, 0.0f, 0.0f, 1.0f);
+			SDL_Rect r;
+			SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
+			r.x = (XWINSIZE>>9) + offset - NAMEWIDTH - border;
+			r.y = starty - border;
+			r.w = NAMEWIDTH + 2 * border;
+			r.h = LINESPACE * maxentries + 2 * border;
+			SDL_RenderFillRect(game_renderer, &r);
 			break;
 		case CONTROLS:
 		case OPTIONS:
@@ -244,14 +248,14 @@ void Menu::toggleMusic() {
 
 void Menu::toggleFullscreen() {
 	globals->fullscreen = !globals->fullscreen;
-	try {
+/*	try {
 		CL_Display::set_videomode(XWINSIZE >> 8, YWINSIZE >> 8, 16, globals->fullscreen);
 	} catch (CL_Error err) {
 		globals->fullscreen = false;
 		CL_Display::set_videomode(XWINSIZE >> 8, YWINSIZE >> 8, 16, false);
 		cout << "Got error while trying to switch modes: " << err.message << endl;
 		throw err;
-	}
+	}*/
 }
 
 void Menu::exitMenu(Menu* m) {
@@ -298,7 +302,7 @@ void MenuSlot::draw(int* xpos, int* ypos, bool selected) {
 	// draw the name of the variable
 	globals->smallfont->print_right(*xpos, *ypos, name.c_str());
 
-	if (selected && (CL_System::get_time()%500) > 200) {
+	if (selected && (SDL_GetTicks()%500) > 200) {
 		globals->smallfont->print_left(*xpos - NAMEWIDTH, *ypos, ">");
 	}
 }
@@ -398,7 +402,7 @@ void UseKeySlot::activate(bool forward) {
 		// going to read a new key from user
 		owner->choosingkey = true;
 		owner->readyforkey = false;	// don't read the enter they just pressed
-		owner->buffer.clear();
+//		owner->buffer.clear();
 		owner->msgline = "Press a key to use";
 	}
 }

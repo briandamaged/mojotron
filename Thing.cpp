@@ -16,7 +16,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <ClanLib/core.h>
+//#include <ClanLib/core.h>
 #include "Thing.hh"
 #include "Sprite.hh"
 #include "Sound.hh"
@@ -25,6 +25,8 @@
 #include "Barricade.hh"
 #include "Explosion.hh"
 #include "Display.hh"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 extern World* worldobj;

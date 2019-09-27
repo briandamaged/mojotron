@@ -17,13 +17,43 @@
 */
 
 #include <stdio.h>
-#include <ClanLib/core.h>
+//#include <ClanLib/core.h>
 #include "InputState.hh"
 #include "Globals.hh"
 #include "ConfigFile.hh"
 
 using namespace std;
 extern Globals* globals;
+
+bool InputState::anyKey(false);
+
+InputAxis::InputAxis(int minus_k, int plus_k)
+{
+	minus_key = InputState::convert_clanlib(minus_k);
+	plus_key = InputState::convert_clanlib(plus_k);
+}
+
+int InputAxis::get_pos()
+{
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	if (state[minus_key])
+		return -1;
+	else if (state[plus_key])
+		return 1;
+	else
+		return 0;
+}
+
+InputButton::InputButton(int b)
+: button(b)
+{
+}
+
+int InputButton::is_pressed()
+{
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	return state[button];
+}
 
 InputState* InputState::playercontrols[2] = { NULL, NULL };
 std::string* InputState::keygroups = NULL;
@@ -75,12 +105,12 @@ InputState::InputState(int _playernumber, string movegroup,
 		cout << "Assigning keys to Input groups" << std::endl;
 
 	// read the keys
-	setUseKey(usek);
+	setUseKey(convert_clanlib(usek));
 	setupKeyAxisPair(getKeygroupNumber(movegroup), true);
 	setupKeyAxisPair(getKeygroupNumber(aimgroup), false);
 	
 	// detect joysticks
-	unsigned int joy = playernumber*2;	// players get two joysticks each
+/*	unsigned int joy = playernumber*2;	// players get two joysticks each
 	if (CL_Input::joysticks.size() > joy) {
 		movex->add(CL_Input::joysticks[joy]->get_axis(0));
 		movey->add(CL_Input::joysticks[joy]->get_axis(1));
@@ -90,7 +120,7 @@ InputState::InputState(int _playernumber, string movegroup,
 			firex->add(CL_Input::joysticks[joy]->get_axis(0));
 			firey->add(CL_Input::joysticks[joy]->get_axis(1));
 		}
-	}
+	}*/
 
 	if (globals->verbosity > 0)
 		cout << "All assigned." << endl;
@@ -101,16 +131,15 @@ void InputState::setUseKey(int k) {
 
 	usekey = k;
 
-	if (k > CL_NUM_KEYS || k == CL_NO_KEY || k == CL_KEY_NONE_OF_THE_ABOVE) {
+/*	if (k > CL_NUM_KEYS || k == CL_NO_KEY || k == CL_KEY_NONE_OF_THE_ABOVE) {
 		cout << "Bad use key set, using SPACE instead." << endl;
 		k = CL_KEY_SPACE;
-	}
-	use = new CL_InputButton_Group;
-	use->add(CL_Input::keyboards[keyboardnumber]->get_button(k));
+	}*/
+	use = new InputButton(k);
 }
 
 std::string InputState::getUseKey() {
-	switch (usekey) {
+/*	switch (usekey) {
 		// special cases, whitespace
 		case CL_KEY_SPACE:	return "space";
 		case CL_KEY_ENTER:	return "return";
@@ -138,49 +167,44 @@ std::string InputState::getUseKey() {
 			}
 			return std::string(c);
 		}
-	}
+	}*/
+	return "";
 }
 
 void InputState::setupKeyAxisPair(int keygroup, bool ismovegroup) {
-	if (keygroup >= numkeygroups || keygroup < 0)
-		throw CL_Error("Keygroup out of range.");
+//	if (keygroup >= numkeygroups || keygroup < 0)
+//		throw CL_Error("Keygroup out of range.");
 	std::string name = "Controls/" + keygroups[keygroup];
 
-	CL_InputAxis_Group* x = new CL_InputAxis_Group;
-	CL_InputAxis_Group* y = new CL_InputAxis_Group;
+
+	// Normal direction keys
+	InputAxis *x = new InputAxis(globals->loadInt(name + "/left"), globals->loadInt(name + "/right"));
+	InputAxis *y = new InputAxis(globals->loadInt(name + "/up"), globals->loadInt(name + "/down"));
 	if (ismovegroup) {
 		//x = movex;	y = movey;
 		/* Memory leak?
 		 * Will the axes stored inside get freed?
 		 */
-		delete movex;	delete movey;
+		if (movex)
+		{
+			delete movex;	delete movey;
+		}
 		movex = x;	movey = y;
 		movekeygroup = keygroup;
 		movekeys = globals->loadString(name + "/keys").c_str();
 	} else {
 		//x = firex;	y = firey;
-		delete firex;	delete firey;
+		if (firex)
+		{
+			delete firex;	delete firey;
+		}
 		firex = x;	firey = y;
 		firekeygroup = keygroup;
 		firekeys = globals->loadString(name + "/keys").c_str();
 	}
 
-	// Normal direction keys
-	CL_InputButton *left, *right, *up, *down;
-	left = right = up = down = NULL;
-	int i = keyboardnumber;
-
-	left = CL_Input::keyboards[i]->get_button(globals->loadInt(name + "/left"));
-	right = CL_Input::keyboards[i]->get_button(globals->loadInt(name + "/right"));
-	up = CL_Input::keyboards[i]->get_button(globals->loadInt(name + "/up"));
-	down = CL_Input::keyboards[i]->get_button(globals->loadInt(name + "/down"));
-
-	if (!(left && right && up && down))	throw CL_Error("Couldn't assign keys in " + name);
-	x->add(new CL_InputButtonToAxis_Digital(left, right));
-	y->add(new CL_InputButtonToAxis_Digital(up, down));
-
 	// Diagonal movement key numbers
-	int uprighti, uplefti, downrighti, downlefti;
+/*	int uprighti, uplefti, downrighti, downlefti;
 	uprighti = uplefti = downrighti = downlefti = 0;
 
 	uprighti = globals->loadInt(name + "/upright");
@@ -206,7 +230,7 @@ void InputState::setupKeyAxisPair(int keygroup, bool ismovegroup) {
 		//delete upleft;
 		//delete downright;
 		//delete downleft;
-	}
+	}*/
 }
 
 std::string InputState::serialiseKeys() {
@@ -248,7 +272,9 @@ int InputState::getKeygroupNumber(std::string name) {
 			return i;
 		}
 	}
-	throw CL_Error("No defined keygroup named " + name);
+			SDL_Quit();
+			exit(0);
+//	throw CL_Error("No defined keygroup named " + name);
 }
 
 InputState::~InputState() {
@@ -259,3 +285,92 @@ InputState::~InputState() {
 	delete use;
 }
 
+void InputState::process()
+{
+	SDL_Event sdlevent;
+	int avail = 0;
+	for (avail = SDL_PollEvent(&sdlevent); avail; avail = SDL_PollEvent(&sdlevent))
+	{
+		if ((sdlevent.type == SDL_QUIT)/* || (_p_common_resources->key.num1.get() && _p_common_resources->key.num2.get())*/)
+		{
+//			Mix_Quit();
+			SDL_Quit();
+			exit(0);
+		}
+		else if (sdlevent.type == SDL_KEYDOWN)
+		{
+			anyKey = true;
+		}
+	}
+}
+
+bool InputState::anyKeyPress()
+{
+	bool ans = anyKey;
+	anyKey = false;
+	return ans;
+}
+
+int InputState::convert_clanlib(int k)
+{
+	switch (k)
+	{
+		case 23:
+			return SDL_SCANCODE_W;
+			break;
+		case 1:
+			return SDL_SCANCODE_A;
+			break;
+		case 19:
+			return SDL_SCANCODE_S;
+			break;
+		case 4:
+			return SDL_SCANCODE_D;
+			break;
+		case 52:
+			return SDL_SCANCODE_UP;
+			break;
+		case 50:
+			return SDL_SCANCODE_LEFT;
+			break;
+		case 53:
+			return SDL_SCANCODE_DOWN;
+			break;
+		case 51:
+			return SDL_SCANCODE_RIGHT;
+			break;
+		case 63:
+			return SDL_SCANCODE_SPACE;
+			break;
+		case 79:
+			return SDL_SCANCODE_KP_ENTER;
+			break;
+		case 9:
+			return SDL_SCANCODE_I;
+			break;
+		case 10:
+			return SDL_SCANCODE_J;
+			break;
+		case 11:
+			return SDL_SCANCODE_K;
+			break;
+		case 12:
+			return SDL_SCANCODE_L;
+			break;
+		case 83:
+			return SDL_SCANCODE_KP_2;
+			break;
+		case 85:
+			return SDL_SCANCODE_KP_4;
+			break;
+		case 87:
+			return SDL_SCANCODE_KP_6;
+			break;
+		case 89:
+			return SDL_SCANCODE_KP_8;
+			break;
+		default:
+			break;
+	}
+	return SDL_SCANCODE_O;
+}

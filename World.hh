@@ -115,7 +115,7 @@ private:
 
 	int loadlevInt(std::string dataname);
 	std::string loadlevString(std::string dataname);
-	CL_SurfaceProvider* loadlevSurface(std::string dataname);
+//	CL_SurfaceProvider* loadlevSurface(std::string dataname);
 	std::string *base;
 	
 	ObjectList* all;

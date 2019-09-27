@@ -19,13 +19,14 @@
 #ifndef SOUND_HH
 #define SOUND_HH
 
-#include <ClanLib/core.h>
-#include <ClanLib/sound.h>
+//#include <ClanLib/core.h>
+//#include <ClanLib/sound.h>
 #include <string>
+#include <map>
 using namespace std;
 
 #ifdef HAVEMIKMOD
-#include <ClanLib/mikmod.h>
+//#include <ClanLib/mikmod.h>
 #endif
 
 #define SNDRESFILE "sound.scr"
@@ -60,17 +61,17 @@ private:
 
 	Sound(string resfile = SNDRESFILE);
 	~Sound();
-	void initSFXParams(string resname, CL_SoundBuffer sb);
+//	void initSFXParams(string resname, CL_SoundBuffer sb);
 	void initPolyphony(string resname, string basename);
 	bool canPlaySound(string resname);
 
 	// look these up by effect name, e.g. "explode"
-	std::multimap<std::string, CL_SoundBuffer> sfx;
-	std::map<std::string, CL_SoundBuffer_Session> playing;
+/*	std::multimap<std::string, CL_SoundBuffer> sfx;
+	std::map<std::string, CL_SoundBuffer_Session> playing;*/
 	std::map<std::string, bool> polyphony;
 
-	CL_SoundBuffer* mus[MUSEND];
-	CL_ResourceManager* sndmanager;
+//	CL_SoundBuffer* mus[MUSEND];
+//	CL_ResourceManager* sndmanager;
 };
 
 #endif

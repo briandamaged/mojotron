@@ -19,8 +19,10 @@
 #ifndef SPRITE_HH
 #define SPRITE_HH
 
-#include <ClanLib/core.h>
-#include <ClanLib/display.h>
+//#include <ClanLib/core.h>
+//#include <ClanLib/display.h>
+#include "SDL_CL_ResourceManager.h"
+#include "SDL_CL_Surface.h"
 
 class Sprite {
 private:
@@ -29,8 +31,6 @@ private:
 	int getCLFrameNum(int thingframenum, bool facingleft);
 
 	//long* mask;
-	char* mask;
-	CL_SurfaceProvider* animp;
 	bool cancolcheck;
 
 public:
@@ -39,7 +39,7 @@ public:
 	virtual ~Sprite();
 
 	//long* getData();
-	char* getData();
+//	char* getData();
 	unsigned int getFrames();
 	void draw(int x, int y, int frame, bool facingleft);
 	void draw(int x, int y, int frame, bool facingleft, int xscale, int yscale);
@@ -50,7 +50,7 @@ public:
 	CL_Surface* anim;
 
 	// colcheck info
-	int width, height, pitch, transcol;
+	int width, height;
 	bool hasorientation;
 };
 

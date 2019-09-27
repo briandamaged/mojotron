@@ -18,6 +18,7 @@
 
 #include "Sound.hh"
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -31,7 +32,7 @@ Sound::Sound(string resfile) {
 		"Music/game0"
 	};
 
-	sndmanager = new CL_ResourceManager(resfile, false);
+/*	sndmanager = new CL_ResourceManager(resfile, false);
 	int namestart = strlen("Sounds/");
         
 	// For each sample
@@ -58,7 +59,7 @@ Sound::Sound(string resfile) {
 			(name, sb.prepare()));
 		first++;
 	}
-	delete samps;
+	delete samps;*/
 
 #ifdef HAVEMIKMOD
 	int i;
@@ -70,7 +71,7 @@ Sound::Sound(string resfile) {
 
 }
 
-void Sound::initSFXParams(string resname, CL_SoundBuffer sb) {
+/*void Sound::initSFXParams(string resname, CL_SoundBuffer sb) {
 	try {
 		int volume = CL_Integer(resname + "vol", sndmanager);
 		bool status = sb.set_volume((float)volume/100);
@@ -84,16 +85,16 @@ void Sound::initSFXParams(string resname, CL_SoundBuffer sb) {
 		if (!status)
 			cout <<"Couldn't set sample parameter"<< endl;
 	} catch (CL_Error err) { }
-}
+}*/
 
 void Sound::initPolyphony(string resname, string basename) {
-	bool poly = false;
+/*	bool poly = false;
 	try {
 		poly = (bool)CL_Integer(
 			resname + "polyphony", sndmanager);
 	} catch (CL_Error err) { }
 
-	polyphony.insert(pair<string, bool>(basename, poly));
+	polyphony.insert(pair<string, bool>(basename, poly));*/
 }
 
 Sound::~Sound() {
@@ -105,7 +106,7 @@ Sound::~Sound() {
 	}
 #endif
 
-	delete sndmanager;
+//	delete sndmanager;
 }
 
 /* Static interface methods */
@@ -133,8 +134,8 @@ void Sound::initAudio() {
 	// check if we've already ran initAudio
 	if (soundobj)		return;
 
-	try {
-		CL_SetupSound::init();
+/*	try {
+		CL_SetupSound::init();*/
 		/* n.b. mikmod doesn't like it if I init it, deinit
 		 * it and reinit it again. It only works once.
 		 */
@@ -143,12 +144,12 @@ void Sound::initAudio() {
 #endif
 
 		soundobj = new Sound();
-	} catch (CL_Error err) {
+/*	} catch (CL_Error err) {
 		cout << "Initialising audio failed: " << err.message << endl;
 		sound = music = false;
 		deinitAudio();
 		throw err;
-	}
+	}*/
 }
 
 void Sound::deinitAudio() {
@@ -160,14 +161,14 @@ void Sound::deinitAudio() {
 		CL_SetupMikMod::deinit();
 #endif
 
-		CL_SetupSound::deinit();
+//		CL_SetupSound::deinit();
 	}
 }
 
 void Sound::playSound(string resname, float pan) {
 	if (sound) {
 		// Figure out which variant of the sound effect to play
-		int variants = soundobj->sfx.count(resname);
+/*		int variants = soundobj->sfx.count(resname);
 		int number = (int)(variants * ((float)rand() / RAND_MAX));
 		if (!variants) cout << "Error: Sample " << 
 			resname << " not found." << endl;
@@ -197,17 +198,18 @@ void Sound::playSound(string resname, float pan) {
 			(*soundobj->playing.find(resname)).second = s;
 		} catch(CL_Error err) {
 			cout << err.message.c_str() << endl;
-		}
+		}*/
 	}
 }
 
 bool Sound::canPlaySound(string resname) {
-	bool playmany = (*soundobj->polyphony.find(resname)).second;
+/*	bool playmany = (*soundobj->polyphony.find(resname)).second;
 	if (playmany)	return true; // polyphony's on, play another instance
 
 	bool isplaying = (*soundobj->playing.find(resname))
 			.second.is_playing();
-	return !isplaying;
+	return !isplaying;*/
+	return false;
 }
 
 void Sound::playMusic(musindex number) {

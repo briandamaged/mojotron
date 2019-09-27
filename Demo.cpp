@@ -16,7 +16,9 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <ClanLib/core.h>
+//#include <ClanLib/core.h>
+#include <SDL.h>
+#include <iostream>
 #include "Thing.hh"
 #include "Sprite.hh"
 #include "Demo.hh"
@@ -78,10 +80,11 @@ void Demo::restart(int timeoffset) {
 
 void Demo::test() {
 	bool ismore = true;
-	while (!(CL_Keyboard::get_keycode(CL_KEY_ESCAPE) || !ismore)) {
-		ismore = play(CL_System::get_time());
-		CL_Display::flip_display();
-		CL_System::keep_alive();
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	while (!(state[SDL_SCANCODE_ESCAPE] || !ismore)) {
+		ismore = play(SDL_GetTicks());
+		InputState::process();
+		SDL_RenderPresent(game_renderer);
 	}
 }
 
@@ -126,6 +129,7 @@ bool Demo::play(int time) {
 		} while (readThing(str));
 		obj--;	// last loop returned false, but incremented anyway
 	} else {
+		SDL_Delay(snaptime - time);
 		// no frame read yet
 		if (obj == -1)	return true;
 
@@ -187,9 +191,8 @@ void Demo::drawThing() {
 }
 
 void Demo::drawWorld() {
-	CL_Display::fill_rect(	0, 0,
-				XWINSIZE>>8, YWINSIZE>>8,
-				(float)r/100, (float)g/100, (float)b/100, 1.0f);
+	SDL_SetRenderDrawColor(game_renderer, ((float)r/100) * 255, ((float)g/100) * 255, ((float)b/100) * 255, 255);
+	SDL_RenderClear(game_renderer);
 }
 
 void Demo::drawAxisPair(int player, bool moveaxispair,
@@ -215,7 +218,8 @@ void Demo::drawAxisPair(int player, bool moveaxispair,
 				highkeyx = xpos + KEYWIDTH;	highkeyy = ypos + KEYHEIGHT;
 				break;
 			default:
-				throw CL_Error("Stark raving insanity in Demo::drawAxisPair");
+//				throw CL_Error("Stark raving insanity in Demo::drawAxisPair");
+				break;
 		}
 
 		// draw key for low direction of axis
@@ -228,7 +232,7 @@ void Demo::drawAxisPair(int player, bool moveaxispair,
 
 		// draw key for high direction
 		if (axis == 2)	sur_key_select->put_screen(highkeyx, highkeyy);
-		else		sur_key->put_screen(highkeyx, highkeyy);	
+		else		sur_key->put_screen(highkeyx, highkeyy);
 
 		char highchar[] = "z";
 		highchar[0] = InputState::playercontrols[player]->getKeyChar(moveaxispair, axisnum, 1);

@@ -1,7 +1,8 @@
 OBJS = main.o World.o ScoreBoard.o Thing.o Globals.o Sound.o Intro.o ObjectList.o\
 	Player.o PlayerStats.o InputState.o MiscDisplay.o Bonus.o SkillLevel.o\
 	Hazards.o Sprite.o Bullet.o Barricade.o Explosion.o Menu.o\
-	Demo.o ConfigFile.o
+	Demo.o ConfigFile.o expatcpp.o SDL_CL_ResourceManager.o SDL_CL_Surface.o\
+	IniFile.o
 
 KILLTESTOBJS = main.o killtest.o ScoreBoard.o Thing.o Globals.o Intro.o ObjectList.o\
 	Player.o PlayerStats.o InputState.o MiscDisplay.o Bonus.o\
@@ -19,17 +20,17 @@ LEVLOADTESTOBJS = levloadtest.o World.o ScoreBoard.o Thing.o Globals.o Sound.o I
 	Player.o PlayerStats.o InputState.o MiscDisplay.o Bonus.o SkillLevel.o\
 	Hazards.o Sprite.o Bullet.o Barricade.o Explosion.o Menu.o Demo.o
 
-REQUIREDLIBS = -lclanCore -lclanDisplay -lclanApp
+REQUIREDLIBS =  `pkg-config --libs sdl2 SDL2_image expat`
 
 #CPPFLAGS = -g -pg -Wall $(DEFS)
-CPPFLAGS = -Wall -O3 $(DEFS)
+CPPFLAGS = -g -Wall -O3 $(DEFS) `pkg-config --cflags sdl2 SDL2_image expat`
 
 # Compile with clanMikMod
-DEFS = -DHAVEMIKMOD
-SOUNDLIBS = -lclanSound -lclanMikMod
+#DEFS = -DHAVEMIKMOD
+#SOUNDLIBS = -lclanSound -lclanMikMod
 
 # Compile without clanMikMod
-#DEFS = -UHAVEMIKMOD
+DEFS = -UHAVEMIKMOD
 #SOUNDLIBS = -lclanSound
 
 all: $(OBJS)

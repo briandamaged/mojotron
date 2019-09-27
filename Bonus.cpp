@@ -23,6 +23,9 @@
 	Write instantiating code in give()
 */
 
+#include <cmath>
+#include <iostream>
+#include <SDL.h>
 #include "Bonus.hh"
 #include "Player.hh"
 #include "Sprite.hh"
@@ -207,7 +210,7 @@ void Fruit::move(int delta) {
 }
 
 void Fruit::draw() {
-	if (!blinking || (CL_System::get_time()%400) > 200)
+	if (!blinking || (SDL_GetTicks()%400) > 200)
 		Thing::draw();
 }
 

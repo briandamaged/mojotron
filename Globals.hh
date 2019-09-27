@@ -19,13 +19,16 @@
 #ifndef GLOBALS_HH
 #define GLOABLS_HH
 
-#include <ClanLib/core.h>
-#include <ClanLib/display.h>
+//#include <ClanLib/core.h>
+//#include <ClanLib/display.h>
+#include "SDL_CL_ResourceManager.h"
+#include "SDL_CL_Surface.h"
 #include <string>
+#include <map>
 using namespace std;
 
 #define MAX_LOADSTATE 4
-#define GLOBALSRESFILE "res.scr"
+#define GLOBALSRESFILE "res.xml"
 /*	To add a new sprite requires:
 	Adding the resource path to resname
 	Adding it to the index enum in Globals.hh
@@ -111,17 +114,17 @@ public:
 	bool showloadscreens;
 	int verbosity;
 	int num_players;
-	CL_InputBuffer* buffer;
+/*	CL_InputBuffer* buffer;*/
 	CL_ResourceManager* manager;
 	
 	// game-wide surfaces
 	Sprite* spr[SPREND];
 
 	// misc graphics
-		CL_Font* smallfont;
-		CL_Font* largefont;
-		CL_Font* mediumfont;
-		CL_Surface* sur_testing;
+	CL_Font* smallfont;
+	CL_Font* largefont;
+	CL_Font* mediumfont;
+	CL_Surface* sur_testing;
 
 	Globals(string resfile = GLOBALSRESFILE);
 	~Globals();
@@ -139,7 +142,6 @@ public:
 
 	private:
 	int loadstate;
-	std::map<std::string, int> loadedints;
 };
 
 #endif

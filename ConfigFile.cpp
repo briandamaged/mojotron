@@ -17,11 +17,14 @@
 */
 
 #include "ConfigFile.hh"
+#include "IniFile.h"
 #include "InputState.hh"
 #include "Sound.hh"
 #include "Globals.hh"
 #include "PlayerStats.hh"
 #include "SkillLevel.hh"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -65,68 +68,58 @@ Config ConfigFile::getDefaultSettings() {
 	c.highscore = c.skilllevel = 0;
 	c.movegroup[0] = "wasd";
 	c.aimgroup[0] = "cursorkeys";
-	c.usekey[0] = CL_KEY_SPACE;
+	c.usekey[0] = 63;
 	c.movegroup[1] = "ijkl";
 	c.aimgroup[1] = "keypad";
-	c.usekey[1] = CL_KEY_KP_ENTER;
+	c.usekey[1] = 79;
 
 	return c;
 }
 
 ConfigFile::ConfigFile() {
-	CL_ResourceManager resman;
-	try {
-		resman = CL_ResourceManager(getFilename(), false);
-	} catch (CL_Error) {
-		cout << "Couldn't find configuration file." <<
-			" Using default settings" << endl;
-		config = getDefaultSettings();
-	}
-	try {
-		config.fullscreen = CL_Integer("FullscreenOn", &resman);
-		config.music = CL_Integer("MusicOn", &resman);
-		config.sound = CL_Integer("SoundOn", &resman);
-		config.highscore = CL_Integer("HSLog", &resman);
-		config.skilllevel = CL_Integer("SkillLevel", &resman);
+	FILE *f = fopen(getFilename().c_str(), "rb");
+	config = getDefaultSettings();
+	if (f != NULL)
+	{
+		IniFile iniFile;
+		iniFile.read(f);
+		fclose(f);
+		config.fullscreen = iniFile.get("FullscreenOn", 0);
+		config.music = iniFile.get("MusicOn", 0);
+		config.sound = iniFile.get("SoundOn", 0);
+		config.highscore = iniFile.get("HSLog", 0);
+		config.skilllevel = iniFile.get("SkillLevel", 0);
         
 		for (int p=0; p < 2; p++) {
 			string base = "Controls/PlayerX";
 			base[15] = p + '1'; 
-			string mv = CL_String(base + "/movement", &resman);
-			string am = CL_String(base + "/aiming", &resman);
+			string mv = iniFile.get(base + "/movement", config.movegroup[p]);
+			string am = iniFile.get(base + "/aiming", config.aimgroup[p]);
 			config.movegroup[p] = mv;
 			config.aimgroup[p] = am;
-			config.usekey[p] = CL_Integer(base + "/usekey",&resman);
+			config.usekey[p] = iniFile.get(base + "/usekey", config.usekey[p]);
 		}
-	} catch (CL_Error err) {
-		cout << "Couldn't read configuration file. " <<
-			err.message.c_str() <<
-			" Using default settings" << endl;
-		config = getDefaultSettings();
 	}
 }
 
 void ConfigFile::saveSettings(Config newconf) {
-	ofstream out(getFilename().c_str());
-	//assure(out, "Strfile.out");
+	FILE *f = fopen(getFilename().c_str(), "wb");
+	IniFile iniFile;
+	iniFile.add("FullscreenOn", (int)config.fullscreen);
+	iniFile.add("MusicOn", (int)config.music);
+	iniFile.add("SoundOn", (int)config.sound);
+	iniFile.add("HSLog", config.highscore);
+	iniFile.add("SkillLevel", config.skilllevel);
 	
-	string tint = " (type=integer);\n";
-	string tstr = " (type=string);\n";
-	out << "FullscreenOn = " << (int)newconf.fullscreen << tint;
-	out << "MusicOn = " << (int)newconf.music << tint;
-	out << "SoundOn = " << (int)newconf.sound << tint;
-	out << "HSLog = " << newconf.highscore << tint;
-	out << "SkillLevel = " << newconf.skilllevel << tint << endl;
-
-	out << "section Controls" << " {" << endl;
 	for (int p=0; p < 2; p++) {
-		out << "\tsection Player" << (p+1) << " {" << endl;
-		out << "\t\tusekey = " << newconf.usekey[p] << tint;
-		out << "\t\tmovement = " << newconf.movegroup[p] << tstr;
-		out << "\t\taiming = " << newconf.aimgroup[p] << tstr;
-		out << "\t}" << endl;
+		string base = "Controls/PlayerX";
+		base[15] = p + '1'; 
+		iniFile.add(base + "/movement", config.movegroup[p]);
+		iniFile.add(base + "/aiming", config.aimgroup[p]);
+		iniFile.add(base + "/usekey", config.usekey[p]);
 	}
-	out << "}" << endl;
+	iniFile.write(f);
+	fclose(f);
 }
 
 ConfigFile::~ConfigFile() { }

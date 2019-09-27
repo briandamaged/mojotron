@@ -16,7 +16,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <ClanLib/core.h>
+//#include <ClanLib/core.h>
 #include <stdio.h>
 #include "ScoreBoard.hh"
 #include "World.hh"
@@ -58,13 +58,16 @@ void ScoreBoard::drawReels(int xsofar, int yorigin) {
 	int width = 3*reelsurf->get_width() + 4;
 	int height = reelsurf->get_height();
 
-	/*CL_Display::fill_rect(	xsofar - 3, 1+yorigin,
-				xsofar + width + 3, yorigin + height + 3,
-				0.0f, 0.0f, 0.0f, 1.0f);*/
-
 	// Window over the fruit display
-	CL_Display::push_clip_rect(CL_ClipRect(	xsofar, 4+yorigin, 
-						xsofar + width, yorigin + height));
+	SDL_Rect old, r;
+	bool clipEnabled = SDL_RenderIsClipEnabled(game_renderer);
+	if (clipEnabled)
+		SDL_RenderGetClipRect(game_renderer, &old);
+	r.x = xsofar;
+	r.y = 4 + yorigin;
+	r.w = width;
+	r.h = height;
+	SDL_RenderSetClipRect(game_renderer, &r);
 	for (int i=0; i < 3; i++) {
 		reelsurf->put_screen(xsofar, yorigin);
 		if (!highlightfruitflashing) {
@@ -77,7 +80,10 @@ void ScoreBoard::drawReels(int xsofar, int yorigin) {
 		xsofar += reelsurf->get_width() + 2;
 	}
 	// prepare for drawing outside the window
-	CL_Display::pop_clip_rect();	
+	if (clipEnabled)
+		SDL_RenderSetClipRect(game_renderer, &old);
+	else
+		SDL_RenderSetClipRect(game_renderer, NULL);
 }
 
 void ScoreBoard::drawScoreBoard(int xorigin, int yorigin) {
@@ -87,16 +93,20 @@ void ScoreBoard::drawScoreBoard(int xorigin, int yorigin) {
 			if (highlightinventorytimer < 0) highlightinventorytimer = 0;
 		}
 		float bg = (float)highlightinventorytimer / 2000;
-		CL_Display::fill_rect(	xorigin + 20, yorigin + 3,
-					xorigin + 80, yorigin + BOARDHEIGHT + 1,
-					bg, bg, bg, 1.0f);
+		SDL_Rect r;
+		SDL_SetRenderDrawColor(game_renderer, bg * 255, bg * 255, bg * 255, 255);
+		r.x = xorigin + 20;
+		r.y = yorigin + 3;
+		r.w = 60;
+		r.h = BOARDHEIGHT + 1 - 3;
+		SDL_RenderFillRect(game_renderer, &r);
 
 		p->spr->draw((xorigin + PAD) << 8, (yorigin) << 8, 0, false);
 
 		// shuffle over and start drawing powerups
 		int xsofar = xorigin + 40;
 
-              	for (int i=3; i>0; i--) {
+		for (int i=3; i>0; i--) {
 			if (p->inventory[i]) 
 				p->inventory[i]->spr->draw((xsofar + 8*i)<<8, 
 							(yorigin + 5)<<8, (unsigned int)0, false); 
@@ -107,12 +117,18 @@ void ScoreBoard::drawScoreBoard(int xorigin, int yorigin) {
 							(yorigin + 5)<<8, (unsigned int)0, false); 
 			if (p->inventory[0]->switchedon) {
 				int length = p->inventory[0]->health >> 8;
-				CL_Display::fill_rect(	xsofar-2, yorigin+BOARDHEIGHT - 2*PAD - 7, 
-							xsofar+2+length, yorigin+BOARDHEIGHT - 2*PAD + 2,
-							0.0f, 0.0f, 0.0f, 1.0f	);			
-				CL_Display::fill_rect(	xsofar, yorigin+BOARDHEIGHT - 2*PAD - 5, 
-							xsofar+length, yorigin+BOARDHEIGHT - 2*PAD,
-							1.0f, 1.0f, 1.0f, 1.0f	);
+				SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
+				r.x = xsofar-2;
+				r.y = yorigin+BOARDHEIGHT - 2*PAD - 7;
+				r.w = length + 2;
+				r.h = 9;
+				SDL_RenderFillRect(game_renderer, &r);
+				SDL_SetRenderDrawColor(game_renderer, 255, 255, 255, 255);
+				r.x = xsofar;
+				r.y = yorigin+BOARDHEIGHT - 2*PAD - 5;
+				r.w = length;
+				r.h = 5;
+				SDL_RenderFillRect(game_renderer, &r);
 			}
 		}	
 		if (highlightfruittimer) {

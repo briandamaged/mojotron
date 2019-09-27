@@ -22,8 +22,9 @@
 #define LINESPACE 20
 #define NAMEWIDTH 150
 
-#include <ClanLib/core.h>
-#include <ClanLib/display.h>
+//#include <ClanLib/core.h>
+//#include <ClanLib/display.h>
+#include <string>
 
 class Menu;
 
@@ -81,7 +82,7 @@ public:
 	// for when a new use key is being chosen
 	bool choosingkey;	// which player is choosing a use key?
 	std::string msgline;
-	CL_InputBuffer buffer;
+//	CL_InputBuffer buffer;
 	int keyidpicked;
 
 private:

@@ -17,6 +17,8 @@
 */
 
 #include <stdio.h>
+#include <iostream>
+#include <SDL.h>
 #include "Bullet.hh"
 #include "Player.hh"
 #include "World.hh"
@@ -103,7 +105,7 @@ void Player::hurt(int injury, int xdir, int ydir) {
 
 			if (worldobj->lives < 0) {
 				Sound::playSound("gameover");
-				globals->buffer->clear();
+				InputState::anyKeyPress();
 				worldobj->gameDelay(	globals->loadInt("Constants/deathpause"), 
 							World::DELAY, World::GAMEOVER);
 				stats->totaltime += worldobj->getLevelAge()/1000;
@@ -247,7 +249,7 @@ void Player::addToFruit(Fruit::flavour newfruit) {
 void Player::draw() {
 	Thing::draw();
 	if (invincible) {
-		if ((CL_System::get_time() % 100) > 50)
+		if ((SDL_GetTicks() % 100) > 50)
 			globals->spr[Globals::FORCEFIELD]->draw(xpos, ypos, 0, false);
 	}
 }
@@ -256,7 +258,7 @@ void Player::move(int delta) {
 	Thing::move(delta);
 
 	// iterate through calling the methods on activated bonuses
-	for(int i=0; inventory[i] != NULL && i < MAXINV; i++) {
+	for(int i=0; i < MAXINV && inventory[i] != NULL; i++) {
 	
 		if (inventory[i]->switchedon) {
 			inventory[i]->activated();

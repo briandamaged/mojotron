@@ -16,7 +16,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <ClanLib/core.h>
+//#include <ClanLib/core.h>
 #include "MiscDisplay.hh"
 #include "World.hh"
 #include "Display.hh"
@@ -96,8 +96,6 @@ void MiscDisplay::drawHelpBonus(int time) {
 
 void MiscDisplay::drawWonGame() {
 	globals->largefont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-150, "404 No More Game!!");
-	//globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-100, "This is the file not found message of GLORY.");
-	//globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-75, "Mojotron can't find another level, so you win!");
 	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-75, "Mojo the monkey lived happily ever after, and was");
 	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-50, "thanked by everyone for clearing the land of monsters.");
 	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9), "Everyone except those stone head things, who still");
