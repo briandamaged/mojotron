@@ -70,9 +70,12 @@ void IniFile::read(FILE* p_file)
 		std::string line = read_ln(p_file);
 
 		// Parse line
-		if(line.length() >1)
+		if(line.length() >0)
 		{
-			int separator = line.find(" = ", 0);
+			int separator = line.find("//", 0);
+			if(std::string::npos != separator)
+				continue;
+			separator = line.find(" = ", 0);
 			if(std::string::npos != separator)
 			{
 				IniElement* e = new IniElement();
@@ -80,7 +83,7 @@ void IniFile::read(FILE* p_file)
 				int start = 0;
 				while (isspace(line[start]))
 					start++;
-				e -> name = line.substr(start, separator);
+				e -> name = line.substr(start, separator - start);
 				if (!section.empty())
 				{
 					std::string path;
@@ -92,9 +95,11 @@ void IniFile::read(FILE* p_file)
 				}
 				e -> value = line.substr(separator + 3, separatorType - separator - 3);
 				if (std::string::npos != line.find("string", separatorType))
-					e->isString = true;
+					e->etype = IniElement::words;
+				else if (std::string::npos != line.find("sample", separatorType))
+					e->etype = IniElement::sample;
 				else
-					e->isString = false;
+					e->etype = IniElement::number;
 				_list.insert(_list.end(), e);
 			}
 			else
@@ -168,7 +173,7 @@ void IniFile::write(FILE* p_file)
 			curSecItr++;
 		}
 		std::string line = tabs + nm + " = " + e -> value;
-		if (e->isString)
+		if (e->etype == IniElement::words)
 			line += " (type=string);";
 		else
 			line += " (type=integer);";
@@ -218,7 +223,7 @@ void IniFile::add(std::string name, std::string value)
 	IniElement* e = new IniElement();
 	e -> name = name;
 	e -> value = value;
-	e->isString = true;
+	e->etype = IniElement::words;
 	_list.insert(_list.end(), e);
 }
 
@@ -249,7 +254,7 @@ void IniFile::add(std::string name, bool value)
 		e -> value = "True";
 	else
 		e -> value = "False";
-	e->isString = true;
+	e->etype = IniElement::words;
 
 	_list.insert(_list.end(), e);
 }
@@ -275,7 +280,7 @@ void IniFile::add(std::string name, int value)
 	IniElement* e = new IniElement();
 	e -> name = name;
 	e->value = tmp;
-	e->isString = false;
+	e->etype = IniElement::number;
 
 	_list.insert(_list.end(), e);
 }
@@ -335,4 +340,17 @@ int IniFile::get(std::string name, int default_value)
 		it++;
 	}
 	return default_value;
+}
+
+std::unique_ptr<std::list<std::string> > IniFile::get_resources_of_type(IniElement::eType etype)
+{
+	std::unique_ptr<std::list<std::string> > ans(new std::list<std::string>);
+	for (auto it : _list)
+	{
+		if (it->etype == etype)
+		{
+			ans->push_back(it->name);
+		}
+	}
+	return ans;
 }

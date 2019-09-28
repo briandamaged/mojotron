@@ -14,18 +14,21 @@
 
 #include <list>
 #include <string>
+#include <memory>
 
 /** Ini variable */
 class IniElement{
 
 public:
+	enum eType { number, words, sample };
+
 	/** Variable name */
 	std::string name;
 
 	/** Variable value */
 	std::string value;
 
-	bool isString;
+	eType etype;
 };
 
 
@@ -66,6 +69,8 @@ public:
 
 	/** Get an integer variable value */
 	int get(std::string name, int default_value);
+
+	std::unique_ptr<std::list<std::string> > get_resources_of_type(IniElement::eType etype);
 
 private:
 	

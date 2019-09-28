@@ -21,6 +21,7 @@
 
 //#include <ClanLib/core.h>
 //#include <ClanLib/sound.h>
+#include <SDL_mixer.h>
 #include <string>
 #include <map>
 using namespace std;
@@ -70,7 +71,7 @@ private:
 	std::map<std::string, CL_SoundBuffer_Session> playing;*/
 	std::map<std::string, bool> polyphony;
 
-//	CL_SoundBuffer* mus[MUSEND];
+	Mix_Music* mus[MUSEND];
 //	CL_ResourceManager* sndmanager;
 };
 

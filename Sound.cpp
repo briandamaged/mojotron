@@ -18,7 +18,9 @@
 
 #include "Sound.hh"
 #include <string>
+#include <cstring>
 #include <iostream>
+#include "IniFile.h"
 
 using namespace std;
 
@@ -32,11 +34,14 @@ Sound::Sound(string resfile) {
 		"Music/game0"
 	};
 
-/*	sndmanager = new CL_ResourceManager(resfile, false);
+	FILE *f = fopen(resfile.c_str(), "rb");
+	IniFile sndmanager;
 	int namestart = strlen("Sounds/");
-        
+
+	sndmanager.read(f);
+	fclose(f);
 	// For each sample
-	list<string>* samps = sndmanager->get_resources_of_type("sample");
+	std::unique_ptr<list<string> > samps = sndmanager.get_resources_of_type(IniElement::sample);
         list<string>::iterator first = samps->begin();
         list<string>::iterator last = samps->end();
 	while (first != last) {
@@ -45,8 +50,8 @@ Sound::Sound(string resfile) {
 		string resname = *first;
 		int nameend = resname.size()-1;
 		string name = resname.substr(namestart, nameend-namestart);
-		
-		CL_SoundBuffer sb = CL_SoundBuffer((*first).c_str(),
+
+/*		CL_SoundBuffer sb = CL_SoundBuffer((*first).c_str(),
 			sndmanager);
 
 		// do these sfx have polyphony?
@@ -56,18 +61,14 @@ Sound::Sound(string resfile) {
 
 		sfx.insert(pair<string, CL_SoundBuffer>(name, sb));
 		playing.insert(pair<string, CL_SoundBuffer_Session>
-			(name, sb.prepare()));
+			(name, sb.prepare()));*/
 		first++;
 	}
-	delete samps;*/
 
-#ifdef HAVEMIKMOD
 	int i;
 	for(i=0; i < Sound::MUSEND; i++) {
-		mus[i] = CL_Streamed_MikModSample::load(mus_resname[i].c_str(), sndmanager, true);
-		//mus[i]->set_volume(1.0f);
+		mus[i] = Mix_LoadMUS(sndmanager.get(mus_resname[i].c_str(), std::string("")).c_str());
 	}
-#endif
 
 }
 
@@ -134,22 +135,10 @@ void Sound::initAudio() {
 	// check if we've already ran initAudio
 	if (soundobj)		return;
 
-/*	try {
-		CL_SetupSound::init();*/
-		/* n.b. mikmod doesn't like it if I init it, deinit
-		 * it and reinit it again. It only works once.
-		 */
-#ifdef HAVEMIKMOD
-		CL_SetupMikMod::init();
-#endif
+	Mix_Init(MIX_INIT_FLAC | MIX_INIT_OGG | MIX_INIT_MOD);
+	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024);
 
-		soundobj = new Sound();
-/*	} catch (CL_Error err) {
-		cout << "Initialising audio failed: " << err.message << endl;
-		sound = music = false;
-		deinitAudio();
-		throw err;
-	}*/
+	soundobj = new Sound();
 }
 
 void Sound::deinitAudio() {
@@ -157,11 +146,7 @@ void Sound::deinitAudio() {
 		delete soundobj;
 		soundobj = NULL;
 
-#ifdef HAVEMIKMOD
-		CL_SetupMikMod::deinit();
-#endif
-
-//		CL_SetupSound::deinit();
+		Mix_Quit();
 	}
 }
 
@@ -213,25 +198,14 @@ bool Sound::canPlaySound(string resname) {
 }
 
 void Sound::playMusic(musindex number) {
-#ifdef HAVEMIKMOD
 	if (music) {
-		try {
-			soundobj->stopMusic();
-			//mus[number]->set_position(0);
-			soundobj->mus[number]->play();
-		} catch(CL_Error err) {
-			cout << err.message.c_str() << endl;
-		}
+		Mix_HaltMusic();
+		Mix_PlayMusic(soundobj->mus[number], -1);
 	}
-#endif
 }
 
 void Sound::stopMusic() {
-#ifdef HAVEMIKMOD
 	if (soundobj) {
-		for (int i=0; i < MUSEND; i++) {
-			soundobj->mus[i]->stop();
-		}
+		Mix_HaltMusic();
 	}
-#endif
 }

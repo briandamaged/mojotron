@@ -105,18 +105,18 @@ ConfigFile::ConfigFile() {
 void ConfigFile::saveSettings(Config newconf) {
 	FILE *f = fopen(getFilename().c_str(), "wb");
 	IniFile iniFile;
-	iniFile.add("FullscreenOn", (int)config.fullscreen);
-	iniFile.add("MusicOn", (int)config.music);
-	iniFile.add("SoundOn", (int)config.sound);
-	iniFile.add("HSLog", config.highscore);
-	iniFile.add("SkillLevel", config.skilllevel);
+	iniFile.add("FullscreenOn", (int)newconf.fullscreen);
+	iniFile.add("MusicOn", (int)newconf.music);
+	iniFile.add("SoundOn", (int)newconf.sound);
+	iniFile.add("HSLog", newconf.highscore);
+	iniFile.add("SkillLevel", newconf.skilllevel);
 	
 	for (int p=0; p < 2; p++) {
 		string base = "Controls/PlayerX";
 		base[15] = p + '1'; 
-		iniFile.add(base + "/movement", config.movegroup[p]);
-		iniFile.add(base + "/aiming", config.aimgroup[p]);
-		iniFile.add(base + "/usekey", config.usekey[p]);
+		iniFile.add(base + "/movement", newconf.movegroup[p]);
+		iniFile.add(base + "/aiming", newconf.aimgroup[p]);
+		iniFile.add(base + "/usekey", newconf.usekey[p]);
 	}
 	iniFile.write(f);
 	fclose(f);

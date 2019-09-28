@@ -17,7 +17,7 @@
 */
 
 #include <stdio.h>
-//#include <ClanLib/core.h>
+#include "Application.h"
 #include "InputState.hh"
 #include "Globals.hh"
 #include "ConfigFile.hh"
@@ -273,8 +273,7 @@ int InputState::getKeygroupNumber(std::string name) {
 			return i;
 		}
 	}
-	SDL_Quit();
-	exit(0);
+	Application::getApplication()->quit();
 //	throw CL_Error("No defined keygroup named " + name);
 }
 
@@ -294,9 +293,7 @@ void InputState::process()
 	{
 		if ((sdlevent.type == SDL_QUIT)/* || (_p_common_resources->key.num1.get() && _p_common_resources->key.num2.get())*/)
 		{
-//			Mix_Quit();
-			SDL_Quit();
-			exit(0);
+			Application::getApplication()->quit();
 		}
 		else if (sdlevent.type == SDL_KEYDOWN)
 		{

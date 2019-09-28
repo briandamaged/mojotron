@@ -17,7 +17,7 @@
 */
 
 //#include <ClanLib/core.h>
-//#include <ClanLib/application.h>
+#include "Application.h"
 #include <SDL.h>
 #include "World.hh"
 #include "Intro.hh"
@@ -39,7 +39,9 @@ extern Globals* globals;
 
 SDL_Renderer *game_renderer;
 
-class MojoApp {
+Application *Application::app;
+
+class MojoApp : Application {
 	private:
 		ConfigFile* configf;
 		Config conf;
@@ -64,8 +66,7 @@ class MojoApp {
 		delete globals;
 		globals = NULL;
 
-//		CL_SetupCore::deinit();
-//		CL_SetupDisplay::deinit();
+		SDL_Quit();
 		exit(EXIT_SUCCESS);
 	}
 	
@@ -117,88 +118,78 @@ class MojoApp {
 			}
 		}
 
-//		try {
-/*			CL_SetupCore::init();
-			CL_SetupDisplay::init();
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0)
+		{
+			std::cout << "Failed - SDL_Init" << std::endl;
+			exit(0);
+		}
 
-#ifdef WIN32
-			if (verbosity) {
-				CL_ConsoleWindow console("My console");
-				console.redirect_stdio();
-				cout << "Debug console up" << endl;
-			}
-#endif*/
+		configf = new ConfigFile();
+		conf = configf->getFileSettings();
 
-			configf = new ConfigFile();
-			conf = configf->getFileSettings();
+		if (!cmdlineoptsset) {
+			fullscreen = conf.fullscreen;
+			music = conf.music;
+			sound = conf.sound;
+		}
+		Sound::setMusic(music);
+		Sound::setSFX(sound);
+		PlayerStats::enterScore(conf.highscore);
 
-			if (!cmdlineoptsset) {
-				fullscreen = conf.fullscreen;
-				music = conf.music;
-				sound = conf.sound;
-			}
-			Sound::setMusic(music);
-			Sound::setSFX(sound);
-			PlayerStats::enterScore(conf.highscore);
+		game_window = SDL_CreateWindow(get_title(),
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			XWINSIZE >> 8, YWINSIZE >> 8,
+			(fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
+		if (game_window == NULL)
+		{
+			std::cout << "Failed - SDL_CreateWindow" << std::endl;
+			exit(0);
+		}
 
-			game_window = SDL_CreateWindow(get_title(),
-				SDL_WINDOWPOS_UNDEFINED,
-				SDL_WINDOWPOS_UNDEFINED,
-				XWINSIZE >> 8, YWINSIZE >> 8,
-				(fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
-			if (game_window == NULL)
-			{
-				std::cout << "Failed - SDL_CreateWindow" << std::endl;
-				exit(0);
-			}
+		game_renderer = SDL_CreateRenderer(game_window, -1, 0);
+		if (game_renderer == NULL)
+		{
+			std::cout << "Failed - SDL_CreateRenderer" << std::endl;
+			exit(0);
+		}
+		SDL_RenderSetLogicalSize(game_renderer, XWINSIZE >> 8, YWINSIZE >> 8);
 
-			game_renderer = SDL_CreateRenderer(game_window, -1, 0);
-			if (game_renderer == NULL)
-			{
-				std::cout << "Failed - SDL_CreateRenderer" << std::endl;
-				exit(0);
-			}
-			SDL_RenderSetLogicalSize(game_renderer, XWINSIZE >> 8, YWINSIZE >> 8);
+		globals = new Globals(resourcefile);
+		globals->loadSprites();
+		SkillLevel::initAll();
+		SkillLevel::setSkill(conf.skilllevel);
+		InputState::initControls(conf);
+		globals->fullscreen = fullscreen;
+		globals->verbosity = verbosity;
 
-			globals = new Globals(resourcefile);
-			globals->loadSprites();
-			SkillLevel::initAll();
-			SkillLevel::setSkill(conf.skilllevel);
-			InputState::initControls(conf);
-			globals->fullscreen = fullscreen;
-			globals->verbosity = verbosity;
+		srand((int)SDL_GetTicks());
 
-			srand((int)SDL_GetTicks());
+		if (demotest) {
+			Demo d = Demo(demofile);
+			d.test();
+		}
+
+		bool play;
 	
-			if (demotest) {
-				Demo d = Demo(demofile);
-				d.test();
-			}
-
-			bool play;
-		
-			if (Intro::show()) { // run intro, menus etc.
+		if (Intro::show()) { // run intro, menus etc.
+			do {
+				Sound::playMusic(Sound::GAME0);
+				worldobj = new World();
+				int level; level = 1;
 				do {
-					Sound::playMusic(Sound::GAME0);
-					worldobj = new World();
-					int level; level = 1;
-					do {
-						worldobj->load_level(level);
-						level = worldobj->run(recorddemo);
-					} while(level != 0);
-			
-					if (globals->verbosity > 0)	
-						cout << "Deleting world from main" << endl;
-					delete worldobj;	// nulls itself out
-					
-					play = Intro::show();
-				} while (play);
-			}
-			quit();
-/*		} catch (CL_Error err) {
-			cout << err.message.c_str() << endl;
-		}*/
-		// we caught something, otherwise we'd left through quit
+					worldobj->load_level(level);
+					level = worldobj->run(recorddemo);
+				} while(level != 0);
+		
+				if (globals->verbosity > 0)	
+					cout << "Deleting world from main" << endl;
+				delete worldobj;	// nulls itself out
+				
+				play = Intro::show();
+			} while (play);
+		}
+		quit();
 		return (EXIT_FAILURE);
 	}
 } app;
