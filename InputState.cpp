@@ -26,6 +26,7 @@ using namespace std;
 extern Globals* globals;
 
 bool InputState::anyKey(false);
+int InputState::lastScancode(0);
 
 InputAxis::InputAxis(int minus_k, int plus_k)
 {
@@ -139,35 +140,35 @@ void InputState::setUseKey(int k) {
 }
 
 std::string InputState::getUseKey() {
-/*	switch (usekey) {
+	switch (usekey) {
 		// special cases, whitespace
-		case CL_KEY_SPACE:	return "space";
-		case CL_KEY_ENTER:	return "return";
-		case CL_KEY_KP_ENTER:	return "enter";
-		case CL_KEY_LCTRL:
-		case CL_KEY_RCTRL:	return "ctrl";
-		case CL_KEY_ALT:	return "alt";
-		case CL_KEY_LSHIFT:	
-		case CL_KEY_RSHIFT:	return "shift";
-		case CL_KEY_TAB:	return "tab";
-		case CL_KEY_NONE_OF_THE_ABOVE: return "Invalid key";
+		case SDL_SCANCODE_SPACE:	return "space";
+		case SDL_SCANCODE_RETURN:	return "return";
+		case SDL_SCANCODE_KP_ENTER:	return "enter";
+		case SDL_SCANCODE_LCTRL:
+		case SDL_SCANCODE_RCTRL:	return "ctrl";
+		case SDL_SCANCODE_LALT:
+		case SDL_SCANCODE_RALT:	return "alt";
+		case SDL_SCANCODE_LSHIFT:	
+		case SDL_SCANCODE_RSHIFT:	return "shift";
+		case SDL_SCANCODE_TAB:	return "tab";
 		default: {
 			// FIXME: I am a hack
 			char c[2];
 			c[1] ='\0';
-			if (usekey >= CL_KEY_A && usekey <= CL_KEY_Z) {
-				c[0] = (usekey - CL_KEY_A) + 'a';
-			} else if (usekey >= CL_KEY_0 && usekey <= CL_KEY_9) {
-				c[0] = (usekey - CL_KEY_0) + '0';
-			} else if (usekey >= CL_KEY_KP_0 && usekey <= CL_KEY_KP_9) {
+			if (usekey >= SDL_SCANCODE_A && usekey <= SDL_SCANCODE_Z) {
+				c[0] = (usekey - SDL_SCANCODE_A) + 'a';
+			} else if (usekey >= SDL_SCANCODE_0 && usekey <= SDL_SCANCODE_9) {
+				c[0] = (usekey - SDL_SCANCODE_0) + '0';
+			} else if (usekey >= SDL_SCANCODE_KP_0 && usekey <= SDL_SCANCODE_KP_9) {
 				// it gives me none of the above instead. never reached
-				c[0] = (usekey - CL_KEY_KP_0) + '0';
+				c[0] = (usekey - SDL_SCANCODE_KP_0) + '0';
 			} else {
 				return "Some key";
 			}
 			return std::string(c);
 		}
-	}*/
+	}
 	return "";
 }
 
@@ -272,8 +273,8 @@ int InputState::getKeygroupNumber(std::string name) {
 			return i;
 		}
 	}
-			SDL_Quit();
-			exit(0);
+	SDL_Quit();
+	exit(0);
 //	throw CL_Error("No defined keygroup named " + name);
 }
 
@@ -300,6 +301,7 @@ void InputState::process()
 		else if (sdlevent.type == SDL_KEYDOWN)
 		{
 			anyKey = true;
+			lastScancode = sdlevent.key.keysym.scancode;
 		}
 	}
 }
@@ -309,6 +311,11 @@ bool InputState::anyKeyPress()
 	bool ans = anyKey;
 	anyKey = false;
 	return ans;
+}
+
+int InputState::getLastScancode()
+{
+	return lastScancode;
 }
 
 int InputState::convert_clanlib(int k)
@@ -345,6 +352,15 @@ int InputState::convert_clanlib(int k)
 		case 79:
 			return SDL_SCANCODE_KP_ENTER;
 			break;
+		case 5:
+			return SDL_SCANCODE_E;
+			break;
+		case 6:
+			return SDL_SCANCODE_F;
+			break;
+		case 7:
+			return SDL_SCANCODE_G;
+			break;
 		case 9:
 			return SDL_SCANCODE_I;
 			break;
@@ -357,6 +373,24 @@ int InputState::convert_clanlib(int k)
 		case 12:
 			return SDL_SCANCODE_L;
 			break;
+		case 18:
+			return SDL_SCANCODE_R;
+			break;
+		case 24:
+			return SDL_SCANCODE_X;
+			break;
+		case 26:
+			return SDL_SCANCODE_Z;
+			break;
+		case 56:
+			return SDL_SCANCODE_LSHIFT;
+			break;
+		case 58:
+			return SDL_SCANCODE_LALT;
+			break;
+		case 103:
+			return SDL_SCANCODE_RIGHTBRACKET;
+			break;
 		case 83:
 			return SDL_SCANCODE_KP_2;
 			break;
@@ -368,6 +402,97 @@ int InputState::convert_clanlib(int k)
 			break;
 		case 89:
 			return SDL_SCANCODE_KP_8;
+			break;
+		default:
+			break;
+	}
+	return SDL_SCANCODE_O;
+}
+
+int InputState::convert_SDL2(int k)
+{
+	switch (k)
+	{
+		case SDL_SCANCODE_W:
+			return 23;
+			break;
+		case SDL_SCANCODE_A:
+			return 1;
+			break;
+		case SDL_SCANCODE_S:
+			return 19;
+			break;
+		case SDL_SCANCODE_D:
+			return 4;
+			break;
+		case SDL_SCANCODE_UP:
+			return 52;
+			break;
+		case SDL_SCANCODE_LEFT:
+			return 50;
+			break;
+		case SDL_SCANCODE_DOWN:
+			return 53;
+			break;
+		case SDL_SCANCODE_RIGHT:
+			return 51;
+			break;
+		case SDL_SCANCODE_SPACE:
+			return 63;
+			break;
+		case SDL_SCANCODE_KP_ENTER:
+			return 79;
+			break;
+		case SDL_SCANCODE_E:
+			return 5;
+			break;
+		case SDL_SCANCODE_F:
+			return 6;
+			break;
+		case SDL_SCANCODE_G:
+			return 7;
+			break;
+		case SDL_SCANCODE_I:
+			return 9;
+			break;
+		case SDL_SCANCODE_J:
+			return 10;
+			break;
+		case SDL_SCANCODE_K:
+			return 11;
+			break;
+		case SDL_SCANCODE_L:
+			return 12;
+			break;
+		case SDL_SCANCODE_R:
+			return 18;
+			break;
+		case SDL_SCANCODE_X:
+			return 24;
+			break;
+		case SDL_SCANCODE_Z:
+			return 26;
+			break;
+		case SDL_SCANCODE_LSHIFT:
+			return 56;
+			break;
+		case SDL_SCANCODE_LALT:
+			return 58;
+			break;
+		case SDL_SCANCODE_RIGHTBRACKET:
+			return 103;
+			break;
+		case SDL_SCANCODE_KP_2:
+			return 83;
+			break;
+		case SDL_SCANCODE_KP_4:
+			return 85;
+			break;
+		case SDL_SCANCODE_KP_6:
+			return 87;
+			break;
+		case SDL_SCANCODE_KP_8:
+			return 89;
 			break;
 		default:
 			break;

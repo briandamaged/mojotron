@@ -89,7 +89,9 @@ public:
 
 	static void process();
 	static bool anyKeyPress();
+	static int getLastScancode();
 	static int convert_clanlib(int k);
+	static int convert_SDL2(int k);
 
 private:
 	InputState(	int _playernumber, string movegroup,
@@ -99,6 +101,7 @@ private:
 	int getKeygroupNumber(std::string name);
 
 	static bool anyKey;
+	static int lastScancode;
 };
 
 #endif

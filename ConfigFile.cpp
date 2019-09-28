@@ -56,7 +56,7 @@ Config ConfigFile::getCurrentSettings() {
 		keygroupnum = is->getKeyAxisPair(false);
 		c.aimgroup[pnum] = InputState::keygroups[keygroupnum];
 		
-		c.usekey[pnum] = is->usekey;
+		c.usekey[pnum] = InputState::convert_SDL2(is->usekey);
 	}
 	return c;
 }

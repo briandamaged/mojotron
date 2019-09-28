@@ -165,22 +165,21 @@ Menu::menustatus Menu::run(int delta) {
 	} else {
 		if (!(select || back) && !readyforkey) {
 			readyforkey = true;
-//			buffer.get_key();	// trash first key
+			InputState::anyKeyPress();
 		}
-/*		if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE)) {
-			buffer.clear();
+		if (state[SDL_SCANCODE_ESCAPE]) {
+			InputState::anyKeyPress();
 			choosingkey = false;
 
 		} else if (readyforkey) {
-			if (buffer.keys_left() == 1) {
-				CL_Key in = buffer.get_key();
-				keyidpicked = in.id;
+			if (InputState::anyKeyPress()) {
+				keyidpicked = InputState::getLastScancode();
         
-				buffer.clear();
+				InputState::anyKeyPress();
 				slots[currententry]->activate(true);
 				readyforkey = false;
 			}
-		}*/
+		}
 	}
 
 	lasttime = SDL_GetTicks();
@@ -402,7 +401,7 @@ void UseKeySlot::activate(bool forward) {
 		// going to read a new key from user
 		owner->choosingkey = true;
 		owner->readyforkey = false;	// don't read the enter they just pressed
-//		owner->buffer.clear();
+		InputState::anyKeyPress();
 		owner->msgline = "Press a key to use";
 	}
 }
