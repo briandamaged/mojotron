@@ -24,6 +24,7 @@
 #include <SDL_mixer.h>
 #include <string>
 #include <map>
+#include "IniFile.h"
 using namespace std;
 
 #ifdef HAVEMIKMOD
@@ -31,6 +32,7 @@ using namespace std;
 #endif
 
 #define SNDRESFILE "sound.scr"
+#define NUM_CHANNELS 20
 
 struct Soundeffect;
 
@@ -62,14 +64,14 @@ private:
 
 	Sound(string resfile = SNDRESFILE);
 	~Sound();
-//	void initSFXParams(string resname, CL_SoundBuffer sb);
-	void initPolyphony(string resname, string basename);
+	void initPolyphony(string resname, string basename, IniFile &ini);
 	bool canPlaySound(string resname);
 
 	// look these up by effect name, e.g. "explode"
-/*	std::multimap<std::string, CL_SoundBuffer> sfx;
-	std::map<std::string, CL_SoundBuffer_Session> playing;*/
+	std::multimap<std::string, Mix_Chunk*> sfx;
+/*	std::map<std::string, CL_SoundBuffer_Session> playing;*/
 	std::map<std::string, bool> polyphony;
+	std::string playing[NUM_CHANNELS];
 
 	Mix_Music* mus[MUSEND];
 //	CL_ResourceManager* sndmanager;

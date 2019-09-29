@@ -5,66 +5,41 @@ section Sounds
 	// note that only one digit can follow the sound effect name
 
 	// If you set these to a low freq, they sound like thunder
-	explode0 = wavs/explod3.wav (type=sample);
-	explode0vol = 50 (type=integer);
+	explode0 = wavs/explod0.wav (type=sample);
 	explode0polyphony = 1 (type=integer);
 
 	explode1 = wavs/explod2.wav (type=sample);
-	explode1vol = 70 (type=integer);
 	explode1polyphony = 1 (type=integer);
 
 	explode2 = wavs/explod1.wav (type=sample);
-	explode2vol = 60 (type=integer);
 	explode2polyphony = 1 (type=integer);
 
-	explode3 = wavs/explod4.wav (type=sample);
-	explode3vol = 50 (type=integer);
+	explode3 = wavs/explod3.wav (type=sample);
 	explode3polyphony = 1 (type=integer);
 
 	explode4 = wavs/explod4.wav (type=sample);
-	explode4freq = 22000 (type=integer);
-	explode4vol = 30 (type=integer);
 	explode4polyphony = 0 (type=integer);
 
-	explode5 = wavs/explod3.wav (type=sample);
-	explode5freq = 18000 (type=integer);
-	explode5vol = 30 (type=integer);
+	explode5 = wavs/explod5.wav (type=sample);
 	explode5polyphony = 0 (type=integer);
 
-	tookfruit0 = wavs/wahorgan.wav (type=sample);
-	tookfruit1 = wavs/wahorgan.wav (type=sample);
-	tookfruit2 = wavs/wahorgan.wav (type=sample);
-	tookfruit3 = wavs/wahorgan.wav (type=sample);
-	tookfruit4 = wavs/wahorgan.wav (type=sample);
-	tookfruit0freq = 22050 (type=integer);
-	tookfruit1freq = 24747 (type=integer);
-	tookfruit2freq = 29424 (type=integer);
-	tookfruit3freq = 37063 (type=integer);
-	tookfruit4freq = 44100 (type=integer);
-	tookfruit0vol = 60 (type=integer);	tookfruit0polyphony = 1 (type=integer);
-	tookfruit1vol = 60 (type=integer);	tookfruit1polyphony = 1 (type=integer);
-	tookfruit2vol = 60 (type=integer);	tookfruit2polyphony = 1 (type=integer);
-	tookfruit3vol = 60 (type=integer);	tookfruit3polyphony = 1 (type=integer);
-	tookfruit4vol = 60 (type=integer);	tookfruit4polyphony = 1 (type=integer);
-	//tookfruit0 = wavs/bria.wav (type=sample);
-	//tookfruit0vol = 100 (type=integer);
-	//combo0 = wavs/combo.wav (type=sample);
+	tookfruit0 = wavs/tookfruit0.wav (type=sample);
+	tookfruit1 = wavs/tookfruit1.wav (type=sample);
+	tookfruit2 = wavs/tookfruit2.wav (type=sample);
+	tookfruit3 = wavs/tookfruit3.wav (type=sample);
+	tookfruit4 = wavs/tookfruit4.wav (type=sample);
+	tookfruit0polyphony = 1 (type=integer);
+	tookfruit1polyphony = 1 (type=integer);
+	tookfruit2polyphony = 1 (type=integer);
+	tookfruit3polyphony = 1 (type=integer);
+	tookfruit4polyphony = 1 (type=integer);
 	combo0 = wavs/wahorgan.wav (type=sample);
-	combo0freq = 22050 (type=integer);
-	combo0vol = 100 (type=integer);
 
 	thump0 = wavs/boom.wav (type=sample);
-	thump0vol = 60 (type=integer);
 	hurt0 = wavs/growl3.wav (type=sample);
-	hurt0vol = 40 (type=integer);
-	hurt0freq = 13000 (type=integer);
 	hurt1 = wavs/growl4.wav (type=sample);
-	hurt1vol = 40 (type=integer);
-	hurt1freq = 13000 (type=integer);
 	destroyspiker0 = wavs/intake.wav (type=sample);
-	destroyspiker0vol = 100 (type=integer);
 	hurtinvincible0 = wavs/revrad.wav (type=sample);
-	hurtinvincible0vol = 100 (type=integer);
 	destroyobject0 = wavs/bounce.wav (type=sample);
 
 	fire0 = wavs/fire1.wav (type=sample);
@@ -80,43 +55,26 @@ section Sounds
 	fire3vol = 40 (type=integer);
 	fire3polyphony = 1 (type=integer);
 	firelaser0 = wavs/zap.wav (type=sample);
-	firelaser0vol = 60 (type=integer);
 
-	//die0 = wavs/rrrrr.wav (type=sample);
-	//die0vol = 100 (type=integer);
-	die0 = wavs/ooos2.wav (type=sample);
-	die0freq = 17000 (type=integer);
-	die0vol = 70 (type=integer);
+	die0 = wavs/die0.wav (type=sample);
 	die1 = wavs/aye.wav (type=sample);
-	die1freq = 27000 (type=integer);
 	gameover0 = wavs/ooos2.wav (type=sample);
-	gameover0freq = 8000 (type=integer);
 
 	levelover0 = wavs/nyadah.wav (type=sample);
-	levelover0vol = 80 (type=integer);
-	beginlevel0 = wavs/buildup.wav (type=sample);
-	beginlevel0vol = 80 (type=integer);
+	beginlevel0 = wavs/beginlevel0.wav (type=sample);
 	award0 = wavs/combo.wav (type=sample);
-	award0vol = 100 (type=integer);
 
 	takebonus0 = wavs/chimp.wav (type=sample);
-	takebonus0vol = 100 (type=integer);
 
 	activated0 = wavs/buildup.wav (type=sample);
-	activated0vol = 100 (type=integer);
 	deactivated0 = wavs/reverbedvox.wav (type=sample);
-	deactivated0vol = 100 (type=integer);
 	launchdrone0 = wavs/burp.wav (type=sample);
-	launchdrone0vol = 100 (type=integer);
 	asteroidsplit0 = wavs/siren2.wav (type=sample);
-	asteroidsplit0vol = 100 (type=integer);
 	ballbounce0 = wavs/null.wav (type=sample);
 
 	// finnish funkysiren is pretty cool, but not loud enough
 	rightanglerlunge0 = wavs/funkysiren.wav (type=sample);
-	rightanglerlunge0vol = 100 (type=integer);
 	enemyfire0 = wavs/omega.wav (type=sample);
-	enemyfire0vol = 100 (type=integer);
 }
 
 section Music

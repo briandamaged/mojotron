@@ -20,7 +20,6 @@
 #include <string>
 #include <cstring>
 #include <iostream>
-#include "IniFile.h"
 
 using namespace std;
 
@@ -51,16 +50,14 @@ Sound::Sound(string resfile) {
 		int nameend = resname.size()-1;
 		string name = resname.substr(namestart, nameend-namestart);
 
-/*		CL_SoundBuffer sb = CL_SoundBuffer((*first).c_str(),
-			sndmanager);
+		Mix_Chunk *sb = Mix_LoadWAV(sndmanager.get((*first).c_str(), std::string("")).c_str());
 
 		// do these sfx have polyphony?
 		if (!polyphony.count(name))
-			initPolyphony(resname, name);
-		initSFXParams(resname, sb);
+			initPolyphony(resname, name, sndmanager);
 
-		sfx.insert(pair<string, CL_SoundBuffer>(name, sb));
-		playing.insert(pair<string, CL_SoundBuffer_Session>
+		sfx.insert(pair<string, Mix_Chunk *>(name, sb));
+/*		playing.insert(pair<string, CL_SoundBuffer_Session>
 			(name, sb.prepare()));*/
 		first++;
 	}
@@ -72,30 +69,11 @@ Sound::Sound(string resfile) {
 
 }
 
-/*void Sound::initSFXParams(string resname, CL_SoundBuffer sb) {
-	try {
-		int volume = CL_Integer(resname + "vol", sndmanager);
-		bool status = sb.set_volume((float)volume/100);
-		if (!status)
-			cout <<"Couldn't set sample parameter"<< endl;
-	} catch (CL_Error err) { }
+void Sound::initPolyphony(string resname, string basename, IniFile &ini) {
+	bool poly = false;
+	poly = (bool)ini.get(resname + "polyphony", 0);
 
-	try {
-		int freq = CL_Integer(resname + "freq", sndmanager);
-		bool status = sb.set_frequency(freq);
-		if (!status)
-			cout <<"Couldn't set sample parameter"<< endl;
-	} catch (CL_Error err) { }
-}*/
-
-void Sound::initPolyphony(string resname, string basename) {
-/*	bool poly = false;
-	try {
-		poly = (bool)CL_Integer(
-			resname + "polyphony", sndmanager);
-	} catch (CL_Error err) { }
-
-	polyphony.insert(pair<string, bool>(basename, poly));*/
+	polyphony.insert(pair<string, bool>(basename, poly));
 }
 
 Sound::~Sound() {
@@ -153,19 +131,19 @@ void Sound::deinitAudio() {
 void Sound::playSound(string resname, float pan) {
 	if (sound) {
 		// Figure out which variant of the sound effect to play
-/*		int variants = soundobj->sfx.count(resname);
+		int variants = soundobj->sfx.count(resname);
 		int number = (int)(variants * ((float)rand() / RAND_MAX));
 		if (!variants) cout << "Error: Sample " << 
 			resname << " not found." << endl;
 
 		// Find where the samples are
-		multimap<string, CL_SoundBuffer>::iterator iter = 
+		multimap<string, Mix_Chunk*>::iterator iter = 
 			soundobj->sfx.find(resname);
 
 		// Find the one we need
 		// only a bidirectional iterator, loop instead of iter+=number
 		for (; number > 0; number--) iter++;
-		CL_SoundBuffer sb = (*iter).second;
+		Mix_Chunk *sb = (*iter).second;
 
 		// If it's already playing, do we need to play it again?
 		if (!soundobj->canPlaySound(resname)) {
@@ -174,7 +152,9 @@ void Sound::playSound(string resname, float pan) {
 		}
 
 		// Play the sample
-		try {
+		int ch = Mix_PlayChannel(-1, sb, 0);
+		soundobj->playing[ch] = resname;
+/*		try {
 			CL_SoundBuffer_Session s = sb.play();
 			s.set_pan(pan);
 
@@ -188,12 +168,22 @@ void Sound::playSound(string resname, float pan) {
 }
 
 bool Sound::canPlaySound(string resname) {
-/*	bool playmany = (*soundobj->polyphony.find(resname)).second;
+	bool playmany = (*soundobj->polyphony.find(resname)).second;
 	if (playmany)	return true; // polyphony's on, play another instance
 
-	bool isplaying = (*soundobj->playing.find(resname))
-			.second.is_playing();
-	return !isplaying;*/
+	for (int i = 0; i < NUM_CHANNELS; i++)
+	{
+		if (playing[i] == resname)
+		{
+			if (0 == Mix_Playing(i))
+			{
+				playing[i] = "";
+				return false;
+			}
+			else
+				return true;
+		}
+	}
 	return false;
 }
 
