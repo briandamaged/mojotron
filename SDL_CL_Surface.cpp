@@ -101,9 +101,9 @@ void SDL_CL_Surface_Impl::load(SDL_Renderer *r)
 					for (int x = 0; x < _w; x++)
 					{
 						if (((*((Uint32*)(_s->pixels + (((r * _h) + y) * _s->pitch) + ((c * _w) + x) * _s->format->BytesPerPixel))) & _s->format->Amask) != 0)
-							_mask[(r * _col + c) * (_w * _h) + (y * _w) + x]  = 0;
-						else
 							_mask[(r * _col + c) * (_w * _h) + (y * _w) + x]  = 1;
+						else
+							_mask[(r * _col + c) * (_w * _h) + (y * _w) + x]  = 0;
 					}
 				}
 			}
@@ -137,8 +137,12 @@ SDL_CL_Surface::SDL_CL_Surface()
 
 SDL_CL_Surface::SDL_CL_Surface(const std::string &name, SDL_CL_ResourceManager *rm)
 {
-	_impl = rm->_image_map[name];
-	_impl->load(game_renderer);
+	auto itr = rm->_image_map.find(name);
+	if (itr != rm->_image_map.end())
+	{
+		_impl = itr->second;
+		_impl->load(game_renderer);
+	}
 }
 
 /*SDL_CL_Surface::SDL_CL_Surface(const std::string &filename)
