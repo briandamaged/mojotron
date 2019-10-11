@@ -134,6 +134,7 @@ void World::load_level(int l) {
 		bgred = loadlevInt("bg_red");
 		bggreen = loadlevInt("bg_green");
 		bgblue = loadlevInt("bg_blue");
+		bg = CL_Surface(*base + "background", globals->manager);
 		
 		globals->loadingScreen(loadstarttime);
 
@@ -363,13 +364,35 @@ void World::drawBG(int delta) {
 		flashing -= (delta/4);
 		if (flashing < 0) flashing = 0;
 	}
-	SDL_Rect r;
-	SDL_SetRenderDrawColor(game_renderer, getBGRed() * 255, getBGGreen() * 255, getBGBlue() * 255, 255);
-	r.x = 0;
-	r.y = 0;
-	r.w = ARENAWIDTH>>8;
-	r.h = (ARENAHEIGHT>>8)+PAD;
-	SDL_RenderFillRect(game_renderer, &r);
+	SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
+	SDL_RenderClear(game_renderer);
+	if (bg.is_null())
+	{
+		SDL_Rect r;
+		SDL_SetRenderDrawColor(game_renderer, getBGRed() * 255, getBGGreen() * 255, getBGBlue() * 255, 255);
+		r.x = 0;
+		r.y = 0;
+		r.w = ARENAWIDTH>>8;
+		r.h = (ARENAHEIGHT>>8)+PAD;
+		SDL_RenderFillRect(game_renderer, &r);
+	}
+	else
+	{
+		SDL_fill_rect(0, 0, XWINSIZE>>8, YWINSIZE>>8, &bg, 0, 0);
+		SDL_BlendMode bm;
+		if (SDL_GetRenderDrawBlendMode(game_renderer, &bm) == 0)
+		{
+			SDL_SetRenderDrawBlendMode(game_renderer, SDL_BLENDMODE_BLEND);
+			SDL_Rect r;
+			SDL_SetRenderDrawColor(game_renderer, 255, 255, 255, (flashing / 100.0) * 255);
+			r.x = 0;
+			r.y = 0;
+			r.w = ARENAWIDTH>>8;
+			r.h = (ARENAHEIGHT>>8)+PAD;
+			SDL_RenderFillRect(game_renderer, &r);
+			SDL_SetRenderDrawBlendMode(game_renderer, bm);
+		}
+	}
 }
 
 void World::drawScoreBG() {

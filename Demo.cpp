@@ -191,8 +191,15 @@ void Demo::drawThing() {
 }
 
 void Demo::drawWorld() {
-	SDL_SetRenderDrawColor(game_renderer, ((float)r/100) * 255, ((float)g/100) * 255, ((float)b/100) * 255, 255);
+	SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(game_renderer);
+	SDL_Rect rec;
+	SDL_SetRenderDrawColor(game_renderer, ((float)r/100) * 255, ((float)g/100) * 255, ((float)b/100) * 255, 255);
+	rec.x = 0;
+	rec.y = 0;
+	rec.w = XWINSIZE>>8;
+	rec.h = (YWINSIZE>>8)+PAD;
+	SDL_RenderFillRect(game_renderer, &rec);
 }
 
 void Demo::drawAxisPair(int player, bool moveaxispair,

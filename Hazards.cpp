@@ -36,9 +36,9 @@ extern Globals* globals;
 
 Obstacle::Obstacle(Globals::sprindex _spr) : Thing(_spr) {
 	optionalkill = true;
-	row = frame%4; // 4 frame animation for each fungi
-	column = frame/4;
-	move(0); // get the first frame shown right
+	row = frame/4; // 4 frame animation for each fungi
+	column = frame%4;
+	timeperframe *= 4;
 }
 
 Obstacle::~Obstacle() {
@@ -46,9 +46,13 @@ Obstacle::~Obstacle() {
 }
 
 void Obstacle::move(int delta) {
-	if (column < 3) column++;
-	else column = 0;
-	frame = 4*row + column;
+	frameremainder += delta;
+	if (frameremainder > timeperframe) {
+		frameremainder -= timeperframe;
+		if (column < 3) column++;
+		else column = 0;
+		frame = 4*row + column;
+	}
 }
 
 /* GRUNT
