@@ -67,8 +67,8 @@ public:
 	enum direction {	UPLEFT, UP, UPRIGHT,
 				LEFT, NONE, RIGHT,
 				DOWNLEFT, DOWN, DOWNRIGHT, NUMDIR };
-	const char* movekeys;
-	const char* firekeys;
+	std::string movekeys;
+	std::string firekeys;
 	int movekeygroup;
 	int firekeygroup;
 	int usekey;

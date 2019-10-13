@@ -192,7 +192,7 @@ void InputState::setupKeyAxisPair(int keygroup, bool ismovegroup) {
 		}
 		movex = x;	movey = y;
 		movekeygroup = keygroup;
-		movekeys = globals->loadString(name + "/keys").c_str();
+		movekeys = globals->loadString(name + "/keys");
 	} else {
 		//x = firex;	y = firey;
 		if (firex)
@@ -201,7 +201,7 @@ void InputState::setupKeyAxisPair(int keygroup, bool ismovegroup) {
 		}
 		firex = x;	firey = y;
 		firekeygroup = keygroup;
-		firekeys = globals->loadString(name + "/keys").c_str();
+		firekeys = globals->loadString(name + "/keys");
 	}
 
 	// Diagonal movement key numbers
