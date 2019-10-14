@@ -291,7 +291,6 @@ Sniper::Sniper(Globals::sprindex _spr) : Thing(_spr) {
 	speed = globals->loadInt("MonsterSpecs/Sniper/speed");
 	remainder = -5000;
 	remaindermax = globals->loadInt("MonsterSpecs/Sniper/reloadtime");
-	spr->hasorientation = true;
 	animpingpong = false;
 }
 

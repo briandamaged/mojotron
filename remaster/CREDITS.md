@@ -50,6 +50,13 @@ Created by feler404
 License: GPL 2.0
 https://github.com/freeciv/freeciv/blob/6fb784dc19c5737eb263688464432db942414b2d/data/buildings/space_modules.png
 
+## replicator.png
+Created by Dennis Payne
+License: CC-BY 3.0
+Loosely based on Green Robot + Enemy
+Created by Arbiyan(darkagent)
+https://opengameart.org/content/green-robot-enemy
+
 ## robot1.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
