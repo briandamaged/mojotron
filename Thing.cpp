@@ -131,7 +131,7 @@ void Thing::move(int delta) {
 			if (animpingpong) {
 				animdirection = -1;
 				frame = spr->getFrames() - 1;
-			} else {
+			} else if (frame >= spr->getFrames()) {
 				frame = 0;
 			}
 		} else if (frame <= 0) {
