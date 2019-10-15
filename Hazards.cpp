@@ -557,6 +557,7 @@ Turret::Turret(Globals::sprindex _spr, int _fansize) : Thing(_spr) {
 }
 
 void Turret::move(int delta) {
+	Thing::move(delta);
 	lookremainder += delta;
 	if (lookremainder >= reloadtime) {
 		lookremainder -= reloadtime;

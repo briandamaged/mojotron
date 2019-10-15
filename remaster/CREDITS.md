@@ -98,3 +98,10 @@ https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature
 ## tank2.png
 Modified Dalek from original Mojotron
 License: GPL 2.0
+
+## tower.png
+Created by Dennis Payne
+License: CC-BY 3.0
+Inspired by Sensor/Radar Tower
+Created by nazzyc
+https://opengameart.org/content/sensorradar-tower
