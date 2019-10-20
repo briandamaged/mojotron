@@ -494,7 +494,6 @@ Drone::Drone(Globals::sprindex _spr, Thing* _target, bool soaksbullets) : Thing(
 	target = _target;
 	timebetweenlook = 1500;
 	killsplayerbullet = soaksbullets;
-	spr->hasorientation = true;
 	animpingpong = false;
 }
 
