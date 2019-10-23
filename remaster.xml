@@ -799,7 +799,7 @@
 	<surface name="levelicon" value="graphics/level.pcx" x="0" y="0" width="32" height="32" tcol="0" />
 	<surface name="timeicon" value="graphics/warptime.pcx" x="0" y="0" width="32" height="32" tcol="0" />
 	<surface name="stars" value="graphics/starfield.pcx" x="0" y="0" width="400" height="600" />
-	<surface name="goreexplode" value="graphics/splashchunky.pcx" x="0" y="0" width="32" height="32" tcol="0" array="6x2" />
+	<surface name="goreexplode" value="remaster/electricdeath.png" x="0" y="0" width="32" height="32" array="4x2" />
 	<surface name="fireexplode" value="graphics/draftexpl.pcx" x="0" y="0" width="32" height="32" tcol="192" array="4x2" />
 	<surface name="metallicexplode" value="graphics/debris.pcx" x="0" y="0" width="32" height="32" tcol="0" array="8x1" />
 	<surface name="bulletsoaked" value="graphics/ripple.pcx" x="0" y="0" width="16" height="16" tcol="0" array="5x1" />

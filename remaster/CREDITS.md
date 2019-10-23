@@ -18,6 +18,12 @@ First image but took spinning top from later images.
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
+# electricdeath.png
+Extended LPC Magic Pack
+Created by Daniel Eddeland
+License: CC-BY-SA 3.0, GPL 3.0
+https://opengameart.org/content/extended-lpc-magic-pack
+
 ## giantreplicator.png
 Ring is created by Dennis Payne
 Lightning effect modified from Radial lightning effect
