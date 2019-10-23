@@ -632,6 +632,7 @@ CircleBoss::CircleBoss(Globals::sprindex _spr, int x, int y, int _speed, float _
 	health = globals->loadInt("MonsterSpecs/CircleBoss/health");
 	wobblespeed = globals->loadInt("MonsterSpecs/CircleBoss/wobblespeed");
 	wobbleamplitude = globals->loadInt("MonsterSpecs/CircleBoss/wobbleamplitude");
+	animpingpong = globals->manager->get_integer_resource("MonsterSpecs/CircleBoss/animpingpong", 1);
 	circletime = start = _start;
 	spawnspeed = _speed;
 	origxwobblecent = x - spr->width/2;
