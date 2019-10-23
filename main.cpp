@@ -16,7 +16,6 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-//#include <ClanLib/core.h>
 #include "Application.h"
 #include <SDL.h>
 #include "World.hh"
@@ -48,7 +47,7 @@ class MojoApp : Application {
 		SDL_Window *game_window;
 	public:
 
-	char* get_title() {
+	const char* get_title() {
 		return "Mojotron";
 	}
 

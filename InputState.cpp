@@ -274,6 +274,7 @@ int InputState::getKeygroupNumber(std::string name) {
 		}
 	}
 	Application::getApplication()->quit();
+	return 0;
 //	throw CL_Error("No defined keygroup named " + name);
 }
 

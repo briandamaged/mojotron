@@ -145,37 +145,6 @@ SDL_CL_Surface::SDL_CL_Surface(const std::string &name, SDL_CL_ResourceManager *
 	}
 }
 
-/*SDL_CL_Surface::SDL_CL_Surface(const std::string &filename)
-{
-	_impl = std::shared_ptr<SDL_CL_Surface_Impl>(new SDL_CL_Surface_Impl);
-	_impl->_filename = filename;
-    SDL_Surface *img = IMG_Load(filename.c_str());
-    _impl->_x = 0;
-    _impl->_y = 0;
-    _impl->_w = img->w;
-    _impl->_h = img->h;
-    _impl->_t = SDL_CreateTextureFromSurface(game_renderer, img);
-    SDL_FreeSurface(img);
-}*/
-
-/************************************************************************/
-/* Draw                                                                 */
-/************************************************************************/
-void SDL_CL_Surface::draw(SDL_Renderer *gc, int x, int y)
-{
-	SDL_Rect destrect;
-	destrect.x = x;
-	destrect.y = y;
-	destrect.w = _impl->_w;
-	destrect.h = _impl->_h;
-	SDL_Rect srcrect;
-	srcrect.x = _impl->_x;
-	srcrect.y = _impl->_y;
-	srcrect.w = _impl->_w;
-	srcrect.h = _impl->_h;
-	SDL_RenderCopy(gc, _impl->_t, &srcrect, &destrect);
-}
-
 char *SDL_CL_Surface::get_data(int spr_no)
 {
 	return _impl->_mask + spr_no * _impl->_w * _impl->_h;
@@ -207,20 +176,6 @@ int SDL_CL_Surface::get_num_frames()
 	}
 	return 0;
 }
-
-/*int SDL_CL_Surface::get_pitch()
-{
-	if (_impl.get())
-		return _impl->_s->pitch;
-	return 0;
-}
-
-int SDL_CL_Surface::get_src_colorkey()
-{
-	if (_impl.get())
-		return _impl->_transparent;
-	return -1;
-}*/
 
 void SDL_CL_Surface::put_screen(int x, int y, int spr_no /* = 0*/)
 {

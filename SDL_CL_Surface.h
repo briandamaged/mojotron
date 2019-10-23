@@ -51,11 +51,8 @@ public:
 	/** Constructor	*/
 	SDL_CL_Surface();
 	SDL_CL_Surface(const std::string &name, SDL_CL_ResourceManager *rm);
-//	SDL_CL_Surface(const std::string &filename);
 
 	/** Draw	*/
-	void draw(SDL_Renderer *gc, int x, int y);
-
 	char *get_data(int spr_no);
 
 	int get_height();
@@ -63,10 +60,6 @@ public:
 	int get_width();
 
 	int get_num_frames();
-
-/*	int get_pitch();
-
-	int get_src_colorkey();*/
 
 	bool is_null() { return _impl.get() == NULL; }
 
