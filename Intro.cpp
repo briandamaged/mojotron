@@ -96,6 +96,8 @@ bool Intro::show() {
 // starfield, before menu
 void Intro::drawBg() {
 	int t = SDL_GetTicks();
+	SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
+	SDL_RenderClear(game_renderer);
 	SDL_fill_rect(0, 0, XWINSIZE>>8, YWINSIZE>>8, sur_starfield, t/50, t/100);
 }
 

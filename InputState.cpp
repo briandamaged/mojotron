@@ -152,6 +152,7 @@ std::string InputState::getUseKey() {
 		case SDL_SCANCODE_LSHIFT:	
 		case SDL_SCANCODE_RSHIFT:	return "shift";
 		case SDL_SCANCODE_TAB:	return "tab";
+		case SDL_SCANCODE_LEFTBRACKET:	return "[";
 		default: {
 			// FIXME: I am a hack
 			char c[2];
@@ -320,6 +321,9 @@ int InputState::convert_clanlib(int k)
 {
 	switch (k)
 	{
+		case 102:
+			return SDL_SCANCODE_LEFTBRACKET;
+			break;
 		case 23:
 			return SDL_SCANCODE_W;
 			break;
@@ -411,6 +415,9 @@ int InputState::convert_SDL2(int k)
 {
 	switch (k)
 	{
+		case SDL_SCANCODE_LEFTBRACKET:
+			return 102;
+			break;
 		case SDL_SCANCODE_W:
 			return 23;
 			break;

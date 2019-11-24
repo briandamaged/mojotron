@@ -17,8 +17,8 @@
 <resources>
 	<section name="Controls">
 		<!-- a list of all the sections to parse, yuk -->
-		<string name="keygroups"  value="cursorkeys,wasd,ijkl,vi,abovecursors,keypad" />
-		<integer name="numkeygroups" value="6" />	<!-- length of the list -->
+		<string name="keygroups"  value="cursorkeys,wasd,ijkl,vi,abovecursors,keypad,rdfg,swe[,ASzx" />
+		<integer name="numkeygroups" value="9" />	<!-- length of the list -->
 
 		<!-- keygroups, avoid editing
 		// (codes from ClanLib's key.h) -->
@@ -78,6 +78,30 @@
 			<integer name="left" value="65" />
 			<integer name="down" value="67" /> // using the End key doesn't work on my machine. Up cursor triggers this tho.
 			<integer name="right" value="69" />
+		</section>
+
+		<section name="rdfg">
+			<integer name="up" value="18" />
+			<integer name="left" value="4" />
+			<integer name="down" value="6" />
+			<integer name="right" value="7" />
+			<string name="keys" value=" r d g f " />
+		</section>
+
+		<section name="swe[">
+			<integer name="up" value="19" />
+			<integer name="left" value="23" />
+			<integer name="down" value="5" />
+			<integer name="right" value="102" />
+			<string name="keys" value=" s w [ e " />
+		</section>
+
+		<section name="ASzx">
+			<integer name="up" value="58" />
+			<integer name="left" value="56" />
+			<integer name="down" value="26" />
+			<integer name="right" value="24" />
+			<string name="keys" value=" A S x z " />
 		</section>
 	</section>
 
