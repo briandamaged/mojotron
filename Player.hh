@@ -28,8 +28,7 @@
 #define MAXINV 4
 
 class Player : public Thing {
-        public:
-        Player();
+public:
 	Player(int _playernumber);
 	~Player();
 
@@ -39,6 +38,7 @@ class Player : public Thing {
 	PlayerStats* stats;
 	Bonus* inventory[MAXINV]; // index 0 is the top one shown to screen.
 	Fruit::flavour taken[3];
+	Sprite *arm;
 	
 	void move(int delta);
 	int getSpeed();

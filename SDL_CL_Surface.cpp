@@ -179,24 +179,28 @@ int SDL_CL_Surface::get_num_frames()
 
 void SDL_CL_Surface::put_screen(int x, int y, int spr_no /* = 0*/)
 {
-	_impl->put_screen(x, y, spr_no);
+	if (!is_null())
+		_impl->put_screen(x, y, spr_no);
 }
 
 void SDL_CL_Surface::put_screen(int x, int y, int scale_x, int scale_y, int spr_no /* = 0*/)
 {
-	int col = spr_no % _impl->_col;
-	int row = spr_no / _impl->_col;
-	SDL_Rect destrect;
-	destrect.x = x;
-	destrect.y = y;
-	destrect.w = scale_x;
-	destrect.h = scale_y;
-	SDL_Rect srcrect;
-	srcrect.x = _impl->_x + _impl->_w * col;
-	srcrect.y = _impl->_y + _impl->_h * row;
-	srcrect.w = _impl->_w;
-	srcrect.h = _impl->_h;
-	SDL_RenderCopy(game_renderer, _impl->_t, &srcrect, &destrect);
+	if (!is_null())
+	{
+		int col = spr_no % _impl->_col;
+		int row = spr_no / _impl->_col;
+		SDL_Rect destrect;
+		destrect.x = x;
+		destrect.y = y;
+		destrect.w = scale_x;
+		destrect.h = scale_y;
+		SDL_Rect srcrect;
+		srcrect.x = _impl->_x + _impl->_w * col;
+		srcrect.y = _impl->_y + _impl->_h * row;
+		srcrect.w = _impl->_w;
+		srcrect.h = _impl->_h;
+		SDL_RenderCopy(game_renderer, _impl->_t, &srcrect, &destrect);
+	}
 }
 
 void SDL_CL_Font_Impl::build_width()

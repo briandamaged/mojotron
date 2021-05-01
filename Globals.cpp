@@ -86,8 +86,8 @@ void Globals::loadSprites() {
 	std::string resname[] = {
 		"Surfaces/player1",
 		"Surfaces/player2",
-		"Surfaces/player3",
-		"Surfaces/player4",
+		"Surfaces/player1arm",
+		"Surfaces/player2arm",
 		"Surfaces/singlegrunt", 
 		"Surfaces/bullet", 
 		"Surfaces/pellet", 

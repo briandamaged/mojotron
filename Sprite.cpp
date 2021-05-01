@@ -38,7 +38,10 @@ Sprite::Sprite(std::string resname, CL_ResourceManager* manager) {
 	if (timeperframe == 0)
 	{
 		int animlooptime = 1000 * 60 / globals->loadInt("Constants/musicbpm");
-		timeperframe = animlooptime / getFrames();
+		int frames = getFrames();
+		if (frames == 0)
+			frames = 1;
+		timeperframe = animlooptime / frames;
 	}
 }
 

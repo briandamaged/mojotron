@@ -30,11 +30,10 @@ using namespace std;
 extern World* worldobj;
 extern Globals* globals;
 
-Player::Player() {}
-
 Player::Player(int _playernumber) : Thing((Globals::sprindex)_playernumber) {
 	playernumber = _playernumber;
-	
+	arm = globals->spr[Globals::MONKEYARMONE + _playernumber];
+
 	//in = new InputState(playernumber);
 	in = InputState::playercontrols[playernumber];
 	scoreboard = new ScoreBoard(this);
@@ -248,6 +247,21 @@ void Player::addToFruit(Fruit::flavour newfruit) {
 
 void Player::draw() {
 	Thing::draw();
+	int armframe = 0;
+	if (xaim != 0)
+	{
+		if (yaim == 0)
+			armframe = 2;
+		else if (yaim < 0)
+			armframe = 1;
+		else
+			armframe = 3;
+	}
+	else if (yaim == 0)
+		armframe = 3;
+	else if (yaim > 0)
+		armframe = 4;
+	arm->draw(xpos, ypos, armframe, facingleft);
 	if (invincible) {
 		if ((SDL_GetTicks() % 100) > 50)
 			globals->spr[Globals::FORCEFIELD]->draw(xpos, ypos, 0, false);
