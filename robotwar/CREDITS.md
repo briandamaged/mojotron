@@ -1,3 +1,8 @@
+## cybermonkey.png
+Created by Bill Kendrick for Bobobot
+Modified by Dennis Payne to be larger and have cybord elements
+License: GPL 2.0
+
 ## drone1.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
