@@ -16,6 +16,7 @@
 #include <SDL.h>
 #include <list>
 #include <vector>
+#include <string>
 
 #define CL_Surface SDL_CL_Surface
 #define CL_Font SDL_CL_Font

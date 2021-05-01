@@ -27,47 +27,24 @@ Sprite::Sprite(std::string resname, CL_ResourceManager* manager) {
 	anim = new CL_Surface(resname, manager);
 	// that globals obj better be fully constructed...
 	hasorientation = (bool)globals->loadInt(resname + "flip");
+	timeperframe = globals->loadInt(resname + "timeperframe");
 
-//	pitch = anim->get_pitch();
-
-/*	if (sp->get_depth() != 8) {
-		cout << "Resource " << resname << ": Collsion checking for colour depths >1 byte not implemented!!" << endl;
-		cancolcheck = false;
-		mask = 0;
-	} else*/ {
-		cancolcheck = true;
-//		sp->lock();			// allocate a buffer of image data
-/*		mask = (char*)anim->get_data();	// get the pointer to it
-		transcol = anim->get_src_colorkey();*/
-	}
+	cancolcheck = true;
 
 	width = anim->get_width() << 8;
 	height = anim->get_height() << 8;
+
+	// this is going to get warped if the game speed is cranked up
+	if (timeperframe == 0)
+	{
+		int animlooptime = 1000 * 60 / globals->loadInt("Constants/musicbpm");
+		timeperframe = animlooptime / getFrames();
+	}
 }
 
 Sprite::~Sprite() {
-	/* This code assumes animp is unique.
-	 * Unfortunately if we got lots default animp, it'll get deleted twice!
-	 *
-	 * ClanLib seems to cache SurfaceProviders even if I delete all traces of them.
-	 * I guess I'll just stop trying to deinit them
-	 */
-	
-/*	if (globals->verbosity > 1) {
-		cout << "animp " << animp << "    ";
-		cout << "anim " << anim << "    ";
-		cout << "mask " << (void*)mask << endl;
-	}
-	if (cancolcheck)	animp->unlock();*/
-//	mask = 0;	// mask is no longer valid!
-	
-	//delete animp;
 	delete anim;
 }
-
-/*char* Sprite::getData() {
-	return mask;
-}*/
 
 unsigned int Sprite::getFrames() {
 	if (hasorientation)

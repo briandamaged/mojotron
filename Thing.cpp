@@ -66,9 +66,6 @@ void Thing::startPos() {
 void Thing::setupAnim() {
 	frame = (unsigned int)(spr->getFrames() * ((float)rand() / RAND_MAX));
 	
-	// this is going to get warped if the game speed is cranked up
-	animlooptime = 1000 * 60 / globals->loadInt("Constants/musicbpm");
-	timeperframe = animlooptime / spr->getFrames();
 	frameremainder = 0;
 
 	animdirection = 1;
@@ -92,6 +89,10 @@ Thing::~Thing() {
 
 void Thing::bonusGen(int x, int y, int luck) {
 	Bonus::randGen(x, y, luck);
+}
+
+int Thing::getTimePerFrame() {
+	return spr->timeperframe;
 }
 
 void Thing::explode(int size, Globals::sprindex type) {
@@ -122,6 +123,7 @@ void Thing::move(int delta) {
 	movez(delta);
 	
 	frameremainder += delta;
+	int timeperframe = getTimePerFrame();
 	if (frameremainder > timeperframe) {
 		frameremainder -= timeperframe;
 

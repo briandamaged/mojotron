@@ -53,6 +53,7 @@ void Explosion::move(int delta) {
 	movez(delta);
 
 	frameremainder += delta;
+	int timeperframe = getTimePerFrame();
 	if (frameremainder > timeperframe) {
 		frameremainder -= timeperframe;
 

@@ -31,6 +31,9 @@ public:
 				{ play->hurt(100); }
 	Thing::type getType()	{ return Thing::ENEMY; }
 	int column, row;
+
+protected:
+	int getTimePerFrame();
 };
 
 class Grunt : public Thing {
@@ -67,6 +70,9 @@ public:
 	void tookEnemy(Thing* x);
 	void tookPlayer(Thing* x);
 	void recoil(int injury, int xdir, int ydir);
+
+protected:
+	int getTimePerFrame();
 };
 
 class Spiker : public Thing {
@@ -80,6 +86,9 @@ public:
 	Thing::type getType()	{ return Thing::ENEMY; }
 
 	void move(int delta);
+
+protected:
+	int getTimePerFrame();
 };
 
 class Asteroid : public Thing {

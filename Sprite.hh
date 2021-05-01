@@ -34,12 +34,9 @@ private:
 	bool cancolcheck;
 
 public:
-	//Sprite(CL_SurfaceProvider* _animp);
 	Sprite(std::string resname, CL_ResourceManager* manager);
 	virtual ~Sprite();
 
-	//long* getData();
-//	char* getData();
 	unsigned int getFrames();
 	void draw(int x, int y, int frame, bool facingleft);
 	void draw(int x, int y, int frame, bool facingleft, int xscale, int yscale);
@@ -52,6 +49,7 @@ public:
 	// colcheck info
 	int width, height;
 	bool hasorientation;
+	int timeperframe;	// millisecs
 };
 
 #endif

@@ -36,7 +36,6 @@ protected:
 	int gap;
 
 	// TODO: put these in Sprite
-	int animlooptime, timeperframe;	// millisecs
 	int animdirection;
 	
 	// set timebetweenlook for infrequent direction changes
@@ -60,6 +59,8 @@ protected:
 
 	void explode(int size, Globals::sprindex type);
 	void bonusGen(int x, int y, int luck);
+
+	virtual int getTimePerFrame();
 
 public:
 	enum type { ENEMY, PLAYER, OBSTACLE, NONE }; 

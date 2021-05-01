@@ -38,7 +38,6 @@ Obstacle::Obstacle(Globals::sprindex _spr) : Thing(_spr) {
 	optionalkill = true;
 	row = frame/4; // 4 frame animation for each fungi
 	column = frame%4;
-	timeperframe *= 4;
 }
 
 Obstacle::~Obstacle() {
@@ -47,12 +46,17 @@ Obstacle::~Obstacle() {
 
 void Obstacle::move(int delta) {
 	frameremainder += delta;
+	int timeperframe = getTimePerFrame();
 	if (frameremainder > timeperframe) {
 		frameremainder -= timeperframe;
 		if (column < 3) column++;
 		else column = 0;
 		frame = 4*row + column;
 	}
+}
+
+int Obstacle::getTimePerFrame() {
+	return Thing::getTimePerFrame() * 4;
 }
 
 /* GRUNT
@@ -131,7 +135,6 @@ class Sprite;
 
 Ball::Ball(Globals::sprindex _spr) : Thing(_spr) {
 	speed = globals->loadInt("MonsterSpecs/Ball/speed");
-	timeperframe /= 4;
 	if ((int)2*rand() / RAND_MAX)
 		xposdir = 256;
 	else
@@ -173,6 +176,10 @@ void Ball::recoil(int injury, int xdir, int ydir) {
 	else			yposdir = 256;
 }
 
+int Ball::getTimePerFrame() {
+	return Thing::getTimePerFrame() / 4;
+}
+
 /*
  * SPIKER
  *********/
@@ -181,7 +188,6 @@ Spiker::Spiker(Globals::sprindex _spr) : Thing(_spr) {
 	health = globals->loadInt("MonsterSpecs/Spiker/health");
 	speed = globals->loadInt("MonsterSpecs/Spiker/speed");
 	spr->hasorientation = true;
-	timeperframe /= 4;
 }
 
 void Spiker::move(int delta) {
@@ -199,6 +205,10 @@ void Spiker::move(int delta) {
 		worldobj->addThing(sw);
 		Sound::playSound("destroyspiker");
 	}
+}
+
+int Spiker::getTimePerFrame() {
+	return Thing::getTimePerFrame() / 4;
 }
 
 /*
