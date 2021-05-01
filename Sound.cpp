@@ -178,13 +178,13 @@ bool Sound::canPlaySound(string resname) {
 			if (0 == Mix_Playing(i))
 			{
 				playing[i] = "";
-				return false;
+				return true;
 			}
 			else
-				return true;
+				return false;
 		}
 	}
-	return false;
+	return true;
 }
 
 void Sound::playMusic(musindex number) {
