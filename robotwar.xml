@@ -828,7 +828,7 @@
 	<surface name="metallicexplode" value="graphics/debris.pcx" x="0" y="0" width="32" height="32" tcol="0" array="8x1" />
 	<surface name="bulletsoaked" value="graphics/ripple.pcx" x="0" y="0" width="16" height="16" tcol="0" array="5x1" />
 
-	<surface name="player1" value="graphics/monkey.pcx" x="0" y="0" width="32" height="32" tcol="22" array="6x2" />
+	<surface name="player1" value="robotwar/cybermonkey.png" x="0" y="0" width="32" height="32" tcol="22" array="8x2" />
 	<!-- player1 = "graphics/testanim.pcx" (type=surface, x="0" y="0" width="32" height="32" tcol=1, array=1x2); -->
 	<integer name="player1flip" value="1" />
 	<surface name="player2" value="graphics/greenmonkey.pcx" x="0" y="0" width="32" height="32" tcol="0" array="6x2" />
