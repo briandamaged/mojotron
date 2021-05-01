@@ -834,8 +834,11 @@
 	<integer name="player1timeperframe" value="120" />
 	<surface name="player1arm" value="robotwar/cybermonkeyarm.png" x="0" y="0" width="32" height="32" tcol="22" array="5x2" />
 	<integer name="player1armflip" value="1" />
-	<surface name="player2" value="graphics/greenmonkey.pcx" x="0" y="0" width="32" height="32" tcol="0" array="6x2" />
+	<surface name="player2" value="robotwar/cybermonkey2.png" x="0" y="0" width="32" height="32" tcol="0" array="8x2" />
 	<integer name="player2flip" value="1" />
+	<integer name="player2timeperframe" value="120" />
+	<surface name="player2arm" value="robotwar/cybermonkeyarm2.png" x="0" y="0" width="32" height="32" tcol="22" array="5x2" />
+	<integer name="player2armflip" value="1" />
 	<surface name="heart" value="graphics/heart.pcx" x="0" y="0" width="32" height="32" tcol="0" />
 	<surface name="bullet" value="graphics/bullet.pcx" x="0" y="0" width="32" height="32" tcol="0" array="9x1" />
 	<surface name="pellet" value="graphics/pellet.pcx" x="0" y="0" width="7" height="7" tcol="0" />
