@@ -1,3 +1,10 @@
+## bossrobot.png
+Robot
+Created by Anderson dos Santos
+Modified to add black outline and resize
+License: CC-BY-SA 3.0
+https://opengameart.org/content/robot-4
+
 ## cybermonkey.png
 Created by Bill Kendrick for Bobobot
 Modified by Dennis Payne to be larger and have cybord elements
@@ -6,13 +13,14 @@ License: GPL 2.0
 ## drone1.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
+Modified to add black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
 ## drone2.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
-Slightly enlarged and cockpit turned red
+Slightly enlarged, cockpit turned red and black outline added
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
@@ -20,6 +28,7 @@ https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
 First image but took spinning top from later images.
+Modified to add black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
@@ -35,6 +44,10 @@ Lightning effect modified from Radial lightning effect
 Created by 13rice from OpenGameArt
 License: CC0
 https://opengameart.org/content/radial-lightning-effect
+
+## largersaw.png
+Modified from original Mojotron to add black outline
+License: GPL 2.0
 
 ## plate.png
 Created by Dennis Payne
@@ -78,20 +91,21 @@ https://opengameart.org/content/green-robot-enemy
 ## robot1.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
-Modified to have red eyes
+Modified to have red eyes and black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
 ## robot2.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
+Modified to add black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
 ## robot3.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
-Modified to have cockpit
+Modified to have cockpit and add black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
@@ -104,17 +118,20 @@ https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature
 ## spiderbot.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
+Modified to add black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
 ## tank1.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
+Modified to add black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
 ## tank2.png
 Modified Dalek from original Mojotron
+Modified to add black outline
 License: GPL 2.0
 
 ## tower.png
