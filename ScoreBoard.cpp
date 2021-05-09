@@ -102,6 +102,7 @@ void ScoreBoard::drawScoreBoard(int xorigin, int yorigin) {
 		SDL_RenderFillRect(game_renderer, &r);
 
 		p->spr->draw((xorigin + PAD) << 8, (yorigin) << 8, 0, false);
+		p->arm->draw((xorigin + PAD) << 8, (yorigin) << 8, 3, false);
 
 		// shuffle over and start drawing powerups
 		int xsofar = xorigin + 40;
