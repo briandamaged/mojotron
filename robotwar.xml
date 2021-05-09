@@ -920,7 +920,7 @@
 		<surface name="machinegun" value="graphics/ammo.pcx" x="0" y="0" width="24" height="24" tcol="4" /> 
 		<surface name="shrink" value="graphics/shrink.pcx" x="0" y="0" width="24" height="24" tcol="4" array="2x1" />
 		<surface name="crate" value="graphics/bonuscrate.pcx" x="0" y="0" width="24" height="24" tcol="4" />
-		<surface name="fruit" value="graphics/fruit.pcx" x="0" y="0" width="24" height="24" tcol="0" array="10x10" />
+		<surface name="fruit" value="robotwar/fruit.png" x="0" y="0" width="24" height="24" tcol="0" array="10x10" />
 	</section>
 </section>
 
