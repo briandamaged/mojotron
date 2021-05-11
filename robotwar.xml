@@ -866,7 +866,7 @@
 	<surface name="roundbullet" value="graphics/roundbullet.pcx" x="0" y="0" width="10" height="10" tcol="0" />
 	<surface name="turret" value="robotwar/tower.png" x="0" y="0" width="32" height="48" array="3x1" />
 	<surface name="soldier" value="graphics/turret.pcx" x="0" y="0" width="32" height="32" tcol="0" />
-	<surface name="rockman" value="graphics/easterhead.pcx" x="0" y="0" width="32" height="32" tcol="0" array="1x2" />
+	<surface name="rockman" value="robotwar/rollrobot.png" x="0" y="0" width="32" height="32" tcol="0" array="2x2" />
 	<integer name="rockmanflip" value="1" />
 	<surface name="centipedesegment" value="graphics/segment.pcx" x="0" y="0" width="24" height="24" tcol="0" array="4x1" />
 	<surface name="centipedehead" value="graphics/head.pcx" x="0" y="0" width="24" height="24" tcol="8" array="4x1" />
@@ -876,7 +876,7 @@
 	<surface name="laserhoriz" value="graphics/craplaserhoriz.pcx" x="0" y="0" width="32" height="32" tcol="0" />
 	<surface name="laservert" value="graphics/craplaservert.pcx" x="0" y="0" width="32" height="32" tcol="0" />
 	<surface name="trash" value="graphics/trash.pcx" x="0" y="0" width="32" height="32" tcol="0" />
-	<surface name="crate" value="graphics/crate.pcx" x="0" y="0" width="27" height="27" tcol="0" /> <!-- Hi OMM! -->
+	<surface name="crate" value="robotwar/crate.png" x="0" y="0" width="29" height="29" tcol="0" />
 
 	<!-- grunt sprites -->
 	<surface name="aolcd" value="robotwar/spiderbot.png" x="0" y="0" width="32" height="32" array="3x1" />

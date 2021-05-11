@@ -115,6 +115,13 @@ Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
+## rollrobot.png
+Robot
+Created by san2356
+Modified to roll instead of tentacles
+License: CC0
+https://opengameart.org/content/robot-7
+
 ## spiderbot.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
