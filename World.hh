@@ -91,7 +91,9 @@ private:
 	int statetime, delay;
 
 	int bgred, bggreen, bgblue;
-	CL_Surface bg;
+	int bgtile[15][10];
+	CL_Surface tiles;
+	CL_Surface ui_bg;
 	std::string lev_name;
 
 	Menu* pausemenu;

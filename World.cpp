@@ -20,6 +20,7 @@
 #include <SDL.h>
 #include <cstdio>
 #include <iostream>
+#include <sstream>
 #include "World.hh"
 #include "Thing.hh"
 #include "Player.hh"
@@ -69,6 +70,8 @@ World::World() {
 	spr_grunt = 0;
 	base = 0;
 	flashing = 0;	statetime = 0;
+	ui_bg = CL_Surface("Surfaces/ui_background", globals->manager);
+	tiles = CL_Surface("Backgrounds/tiles", globals->manager);
 }
 
 World::~World() {
@@ -134,7 +137,29 @@ void World::load_level(int l) {
 		bgred = loadlevInt("bg_red");
 		bggreen = loadlevInt("bg_green");
 		bgblue = loadlevInt("bg_blue");
-		bg = CL_Surface(*base + "background", globals->manager);
+		string bg = loadlevString("background");
+		if (bg.empty())
+		{
+			for (int i = 0; i < 15; i++)
+				for (int k = 0; k < 10; k++)
+					bgtile[i][k] = 0;
+		}
+		else
+		{
+			bg = "Backgrounds/" + bg + "/row";
+			for (int i = 0; i < 15; i++)
+			{
+				char number[3];
+				sprintf(number, "%d", i + 1);
+				stringstream row(globals->loadString(bg + number));
+				for (int k = 0; k < 10; k++)
+				{
+					string substr;
+					getline(row, substr, ',');
+					bgtile[i][k] = atoi(substr.c_str());
+				}
+			}
+		}
 		
 		globals->loadingScreen(loadstarttime);
 
@@ -366,7 +391,7 @@ void World::drawBG(int delta) {
 	}
 	SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(game_renderer);
-	if (bg.is_null())
+	if (bgtile[0][0] == 0)
 	{
 		SDL_Rect r;
 		SDL_SetRenderDrawColor(game_renderer, getBGRed() * 255, getBGGreen() * 255, getBGBlue() * 255, 255);
@@ -378,7 +403,13 @@ void World::drawBG(int delta) {
 	}
 	else
 	{
-		SDL_fill_rect(0, 0, XWINSIZE>>8, YWINSIZE>>8, &bg, 0, 0);
+		for (int i = 0; i < 15; i++)
+		{
+			for (int k = 0; k < 10; k++)
+			{
+				tiles.put_screen(k * 64, i * 32, bgtile[i][k] - 1);
+			}
+		}
 		SDL_BlendMode bm;
 		if (SDL_GetRenderDrawBlendMode(game_renderer, &bm) == 0)
 		{
@@ -396,13 +427,20 @@ void World::drawBG(int delta) {
 }
 
 void World::drawScoreBG() {
-	SDL_Rect r;
-	SDL_SetRenderDrawColor(game_renderer, (getBGRed() / 1.3f) * 255, (getBGGreen() / 1.3f) * 255, (getBGBlue() / 1.3f) * 255, 255);
-	r.x = 0;
-	r.y = (ARENAHEIGHT>>8) + PAD;
-	r.w = (XWINSIZE>>8);
-	r.h = (YWINSIZE>>8);
-	SDL_RenderFillRect(game_renderer, &r);
+	if (ui_bg.is_null())
+	{
+		SDL_Rect r;
+		SDL_SetRenderDrawColor(game_renderer, (getBGRed() / 1.3f) * 255, (getBGGreen() / 1.3f) * 255, (getBGBlue() / 1.3f) * 255, 255);
+		r.x = 0;
+		r.y = (ARENAHEIGHT>>8) + PAD;
+		r.w = (XWINSIZE>>8);
+		r.h = (YWINSIZE>>8);
+		SDL_RenderFillRect(game_renderer, &r);
+	}
+	else
+	{
+		ui_bg.put_screen(0, (ARENAHEIGHT>>8) + PAD);
+	}
 }
 
 float World::getBGRed() {

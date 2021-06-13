@@ -111,7 +111,7 @@
 		<integer name="warp_time" value="14" />
 		<!-- background colour in percentages -->
 		<integer name="bg_red" value="30" /> <integer name="bg_green" value="10" /> <integer name="bg_blue" value="30" />
-		<surface name="background" value="robotwar/plate.png" x="0" y="0" width="128" height="64" />
+		<string name="background" value="plain" />
 
 		<integer name="num_grunts" value="15" />
 		<integer name="num_balls" value="5" />
@@ -808,13 +808,35 @@
 	</section>
 </section>
 
+<section name="Backgrounds">
+	<surface name="tiles" value="robotwar/plate.png" x="0" y="0" width="64" height="32" array="2x1" />
+	<section name="plain">
+		<string name="row1" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row2" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row3" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row4" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row5" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row6" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row7" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row8" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row9" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row10" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row11" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row12" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row13" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row14" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row15" value="1,2,1,2,1,2,1,2,2,2" />
+	</section>
+</section>
+
 <section name="Surfaces">
 	<surface name="key" value="graphics/key.pcx" x="0" y="0" width="48" height="48" tcol="1" /> <!-- as in keyboard -->
 	<surface name="spacekey" value="graphics/spacekey.pcx" x="0" y="0" width="144" height="48" tcol="1" />
 	<surface name="keyselected" value="graphics/keyselected.pcx" x="0" y="0" width="48" height="48" tcol="0" />
 	<surface name="spacekeyselected" value="graphics/spacekeyselected.pcx" x="0" y="0" width="144" height="48" tcol="0" />
 	<surface name="skillicons" value="graphics/skillicons.pcx" x="0" y="0" width="20" height="20" tcol="0" array="3x1" />
-	<surface name="title" value="graphics/mojotron.tga" x="0" y="0" width="390" height="58" />
+	<surface name="title" value="robotwar/game_logo.png" x="0" y="0" width="390" height="60" />
+	<surface name="ui_background" value="robotwar/ui_background.png" x="0" y="0" width="640" height="36" />
 
 	<surface name="bubble" value="graphics/bubble.pcx" x="0" y="0" width="48" height="48" tcol="0" array="2x1" />
 	<surface name="bonusbubble" value="graphics/bubble.pcx" x="0" y="0" width="48" height="48" tcol="0" array="2x1" />
