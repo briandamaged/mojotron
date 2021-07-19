@@ -36,10 +36,10 @@ Globals::Globals(std::string resfile) {
 	int loadstart = SDL_GetTicks();
 
 	// misc graphics
-		smallfont = 0;
-		mediumfont = 0;
-		largefont = 0;
-		sur_testing = 0;
+	smallfont = 0;
+	mediumfont = 0;
+	largefont = 0;
+	sur_testing = 0;
 
 	fullscreen = false;
 	vertdisplay = false;
@@ -49,20 +49,14 @@ Globals::Globals(std::string resfile) {
 	num_players = 1;
 	loadstate = 0;
 
-//	buffer = 0;
-
 	manager = new CL_ResourceManager(resfile);
-//	buffer = new CL_InputBuffer();
+	ratings = new Ratings(manager);
 
 	// misc graphics
-//	try {
-		smallfont = new CL_Font("Fonts/smallfont", manager);
-		largefont = new CL_Font("Fonts/largefont", manager);
-		mediumfont = new CL_Font("Fonts/mediumfont", manager);
-		sur_testing = new CL_Surface("Testing/test", manager);
-/*	} catch	(CL_Error x) {
-		cout << x.message.c_str() << endl;
-	}*/
+	smallfont = new CL_Font("Fonts/smallfont", manager);
+	largefont = new CL_Font("Fonts/largefont", manager);
+	mediumfont = new CL_Font("Fonts/mediumfont", manager);
+	sur_testing = new CL_Surface("Testing/test", manager);
 	loadingScreen(loadstart);
 }
 

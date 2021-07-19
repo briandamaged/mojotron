@@ -23,6 +23,7 @@
 //#include <ClanLib/display.h>
 #include "SDL_CL_ResourceManager.h"
 #include "SDL_CL_Surface.h"
+#include "Ratings.h"
 #include <string>
 #include <map>
 using namespace std;
@@ -114,8 +115,8 @@ public:
 	bool showloadscreens;
 	int verbosity;
 	int num_players;
-/*	CL_InputBuffer* buffer;*/
 	CL_ResourceManager* manager;
+	Ratings *ratings;
 	
 	// game-wide surfaces
 	Sprite* spr[SPREND];

@@ -112,63 +112,8 @@ std::string PlayerStats::getHighScoreStr() {
 }
 
 std::string PlayerStats::rating() {
-	std::string prize;
 	int scored = calcScore();
-
-	switch (scored / 50) {
-		case 0: prize = "Shame"; break;
-		case 1:
-		case 2: prize = "A Participation Certificate"; break;
-		case 3:
-		case 4: prize = "A Free Councilling Session"; break;
-		case 5: prize = "The Taine Randall Trophy for Losing"; break;
-		case 6:
-		case 7: prize = "Player Most Likely to Submit 'Easy-Mode' Patch"; break;
-		case 8:
-		case 9: prize = "The VA Linux $2 Sponsorship"; break;
-		case 10:
-		case 11: prize = "An extra life. Oops, too late."; break;
-		case 12:
-		case 13: prize = "The John F. Kennedy Memorial Cheeseboard"; break;
-		case 14:
-		case 15: prize = "Commendable Use of 'Use' key"; break;
-		case 16:
-		case 17: prize = "A painting by RICK MOEN"; break;
-		case 18:
-		case 19: prize = "A Quad Damage signed by John Carmack Himself"; break;
-		case 20:
-		case 21: prize = "A natty Rambo-esque headband"; break;
-		case 22: prize = "Some Slack"; break;
-		case 23: prize = "A Kitten. Robotfindskitten, I win!!"; break;
-		case 24:
-		case 25: prize = "The MS Windows prize for violent collisions"; break;
-		case 26:
-		case 27: prize = "Three servings of gravy"; break;
-		case 28:
-		case 29: prize = "Budget cuts"; break;
-		case 30:
-		case 31: prize = "RSI/OOS"; break;
-		case 32:
-		case 33: prize = "Miss NRA 2001"; break;
-		case 34:
-		case 35: prize = "Funding from the Badass Research Center"; break;
-		case 36:
-		case 37: prize = "Mass 0wn4ge"; break;
-		case 38: prize = "The Rupert Murdoch prize for Taking Prisoners"; break;
-		case 39:
-		case 40: prize = "Gratitude from masses of released red pixels"; break;
-		case 41:
-		case 42: prize = "The meaning of life"; break;
-		case 43:
-		case 44:
-		case 45:
-		case 46:
-		case 47:
-		case 48:
-		case 49:
-		case 50: prize = "An overflow error"; break; // not really, it's a joke
-		default: prize = "Something nondescript"; break;
-	}
+	std::string prize = globals->ratings->rating(scored);
 	
 	char outc[1024];
 	sprintf(outc, "You have been awarded:\n%s", prize.c_str());
