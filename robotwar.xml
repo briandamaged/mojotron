@@ -1245,16 +1245,16 @@
 
 <section name="Ratings">
 	<string name="default" value="Something nondescript" />
-	<section name="rating1"><integer name="score" value="49" /><string name="text" value="Shame" /></section>
+	<section name="rating1"><integer name="score" value="49" /><string name="text" value="A Working Controller" /></section>
 	<section name="rating2"><integer name="score" value="149" /><string name="text" value="A Participation Certificate" /></section>
 	<section name="rating3"><integer name="score" value="249" /><string name="text" value="A Free Councilling Session" /></section>
-	<section name="rating4"><integer name="score" value="299" /><string name="text" value="The Taine Randall Trophy for Losing" /></section>
+	<section name="rating4"><integer name="score" value="299" /><string name="text" value="The World's Smallest Trophy" /></section>
 	<section name="rating5"><integer name="score" value="399" /><string name="text" value="Player Most Likely to Submit 'Easy-Mode' Patch" /></section>
-	<section name="rating6"><integer name="score" value="499" /><string name="text" value="The VA Linux $2 Sponsorship" /></section>
+	<section name="rating6"><integer name="score" value="499" /><string name="text" value="The Linux Foundation $2 Sponsorship" /></section>
 	<section name="rating7"><integer name="score" value="599" /><string name="text" value="An extra life. Oops, too late." /></section>
-	<section name="rating8"><integer name="score" value="699" /><string name="text" value="The John F. Kennedy Memorial Cheeseboard" /></section>
+	<section name="rating8"><integer name="score" value="699" /><string name="text" value="Half of a Wooden Chessboard" /></section>
 	<section name="rating9"><integer name="score" value="799" /><string name="text" value="Commendable Use of 'Use' key" /></section>
-	<section name="rating10"><integer name="score" value="899" /><string name="text" value="A painting by RICK MOEN" /></section>
+	<section name="rating10"><integer name="score" value="899" /><string name="text" value="A painting by an unknown artist" /></section>
 	<section name="rating11"><integer name="score" value="999" /><string name="text" value="A Quad Damage signed by John Carmack Himself" /></section>
 	<section name="rating12"><integer name="score" value="1099" /><string name="text" value="A natty Rambo-esque headband" /></section>
 	<section name="rating13"><integer name="score" value="1149" /><string name="text" value="Some Slack" /></section>
@@ -1263,10 +1263,10 @@
 	<section name="rating16"><integer name="score" value="1399" /><string name="text" value="Three servings of gravy" /></section>
 	<section name="rating17"><integer name="score" value="1499" /><string name="text" value="Budget cuts" /></section>
 	<section name="rating18"><integer name="score" value="1599" /><string name="text" value="RSI/OOS" /></section>
-	<section name="rating19"><integer name="score" value="1699" /><string name="text" value="Miss NRA 2001" /></section>
-	<section name="rating20"><integer name="score" value="1799" /><string name="text" value="Funding from the Badass Research Center" /></section>
-	<section name="rating21"><integer name="score" value="1899" /><string name="text" value="Mass 0wn4ge" /></section>
-	<section name="rating22"><integer name="score" value="1949" /><string name="text" value="The Rupert Murdoch prize for Taking Prisoners" /></section>
+	<section name="rating19"><integer name="score" value="1699" /><string name="text" value="A Mostly Violent Tatoo" /></section>
+	<section name="rating20"><integer name="score" value="1799" /><string name="text" value="Funding from the Destruction Research Center" /></section>
+	<section name="rating21"><integer name="score" value="1899" /><string name="text" value="Mass Carnage Medal" /></section>
+	<section name="rating22"><integer name="score" value="1949" /><string name="text" value="The Taking Prisoners Award" /></section>
 	<section name="rating23"><integer name="score" value="2049" /><string name="text" value="Gratitude from masses of released red pixels" /></section>
 	<section name="rating24"><integer name="score" value="2149" /><string name="text" value="The meaning of life" /></section>
 	<section name="rating25"><integer name="score" value="2549" /><string name="text" value="An overflow error" /></section>
