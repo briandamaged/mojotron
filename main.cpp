@@ -29,10 +29,6 @@
 #include "PlayerStats.hh"
 #include <iostream>
 
-#ifdef HAVEMIKMOD
-#include <ClanLib/mikmod.h>
-#endif
-
 extern World* worldobj;
 extern Globals* globals;
 
@@ -74,7 +70,7 @@ class MojoApp : Application {
 		bool fullscreen, sound, music, cmdlineoptsset;
 		demotest = recorddemo = false;
 		fullscreen = sound = music = cmdlineoptsset = false;
-		std::string resourcefile = "res.xml";
+		std::string resourcefile = "robotwar.xml";
 		std::string demofile = "";
 		int verbosity = 0;
 

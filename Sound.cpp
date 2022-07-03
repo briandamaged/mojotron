@@ -79,12 +79,6 @@ void Sound::initPolyphony(string resname, string basename, IniFile &ini) {
 Sound::~Sound() {
 	stopMusic();
 
-#ifdef HAVEMIKMOD
-	for(int i=0; i < Sound::MUSEND; i++) {
-		delete mus[i];
-	}
-#endif
-
 //	delete sndmanager;
 }
 
