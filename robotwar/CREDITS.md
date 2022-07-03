@@ -7,7 +7,7 @@ https://opengameart.org/content/robot-4
 
 ## cybermonkey.png
 Created by Bill Kendrick for Bobobot
-Modified by Dennis Payne to be larger and have cybord elements
+Modified by Dennis Payne to be larger and have cyborg elements
 License: GPL 2.0
 
 ## drone1.png
@@ -32,7 +32,7 @@ Modified to add black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
-# electricdeath.png
+## electricdeath.png
 Extended LPC Magic Pack
 Created by Daniel Eddeland
 License: CC-BY-SA 3.0, GPL 3.0

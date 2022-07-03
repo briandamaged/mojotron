@@ -32,16 +32,14 @@ as straight-forward as possible.
 
 Installation (Source)
 =====================
-To compile mojotron you'll need ClanLib-0.6 installed with headers. Version
-0.6.5 will work, but getting a recent CVS checkout of the 0.6 branch is better
-because then frequency and volume settings on sound effects will work.
+To compile mojotron you'll need SDL2, SDL2_image, SDL2_mixer and expat
+installed with headers.
 
 Compilation on Linux should just be a case of unpacking the source tarball
 and typing 'make'.
 
-There's a Visual C++ project file if you're on Windows, but I don't have that
-compiler so I can't test it. I've added source files since the last port was
-done, but it shouldn't be too difficult to get up to date.
+For Windows, there is a Makefile_mingw which will compile it under the mingw
+crosscompiler.
 
 
 Installation (Windows)
@@ -57,12 +55,8 @@ tell the mailing list.
 
 Known problems:
 Sound effects and music still need work.
-In Windows with some PCI chipsets, after several minutes of play all the 
-sprites may vanish off the screen, due to a system function giving Mojotron
-a time far in the future:
-(http://support.microsoft.com/default.aspx?scid=kb;en-us;Q274323)
 
-Ideas and patches are very welcome. There's a mailing list at SourceForge.
+Ideas and patches are very welcome.
 
 
 Command-line options
@@ -144,6 +138,3 @@ Instacrate
 
 Ram Droid
 (Covers you in the direction you're firing, and can be used to squish monsters)
-
-
-
