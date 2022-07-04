@@ -19,8 +19,6 @@
 #ifndef SPRITE_HH
 #define SPRITE_HH
 
-//#include <ClanLib/core.h>
-//#include <ClanLib/display.h>
 #include "SDL_CL_ResourceManager.h"
 #include "SDL_CL_Surface.h"
 

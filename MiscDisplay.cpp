@@ -16,7 +16,6 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-//#include <ClanLib/core.h>
 #include "MiscDisplay.hh"
 #include "World.hh"
 #include "Display.hh"

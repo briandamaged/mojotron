@@ -19,7 +19,6 @@
 #ifndef SCOREBOARD_HH
 #define SCOREBOARD_HH
 
-//#include <ClanLib/display.h>
 #include "Bonus.hh"
 
 class Player;

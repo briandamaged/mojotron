@@ -19,17 +19,11 @@
 #ifndef SOUND_HH
 #define SOUND_HH
 
-//#include <ClanLib/core.h>
-//#include <ClanLib/sound.h>
 #include <SDL_mixer.h>
 #include <string>
 #include <map>
 #include "IniFile.h"
 using namespace std;
-
-#ifdef HAVEMIKMOD
-//#include <ClanLib/mikmod.h>
-#endif
 
 #define SNDRESFILE "sound.scr"
 #define NUM_CHANNELS 20

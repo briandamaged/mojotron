@@ -19,8 +19,6 @@
 #ifndef INTRO_HH
 #define INTRO_HH
 
-//#include <ClanLib/core.h>
-//#include <ClanLib/display.h>
 #include "SDL_CL_Surface.h"
 #include <string>
 

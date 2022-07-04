@@ -22,8 +22,6 @@
 #define LINESPACE 20
 #define NAMEWIDTH 150
 
-//#include <ClanLib/core.h>
-//#include <ClanLib/display.h>
 #include <string>
 
 class Menu;

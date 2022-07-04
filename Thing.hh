@@ -19,7 +19,6 @@
 #ifndef THING_HH
 #define THING_HH
 
-//#include <ClanLib/core.h>
 #include "Globals.hh"
 
 class Sprite;

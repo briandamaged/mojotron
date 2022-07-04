@@ -19,7 +19,6 @@
 #ifndef INPUTSTATE_HH
 #define INPUTSTATE_HH
 
-//#include <ClanLib/display.h>
 #include <string>
 #include <iostream>
 using namespace std;

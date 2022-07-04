@@ -17,7 +17,6 @@
 */
 
 #include <stdio.h>
-//#include <ClanLib/core.h>
 #include "ObjectList.hh"
 #include "World.hh"
 #include <iostream>

@@ -68,11 +68,9 @@ change to, for how long, and what to go back to afterwards.
 
 RESOURCE FILE
 
-The game mostly uses one resource file, res.scr. This contains image paths,
-levels, game constants, information about monsters, players, and extras. 
-Another resource file, sound.scr was split off because ClanLib failed to parse 
-sample resources when it hadn't had sound initialised, and tried to get a lock 
-on audio if sound was initialised.
+The game mostly uses one resource file, robotwar.xml. This contains image
+paths, levels, game constants, information about monsters, players, and extras.
+Another resource file, sound.scr was split off to contain audio information.
 
 
 GLOBALS
@@ -96,18 +94,12 @@ templates, but it could be.
 SPRITES
 
 Sprite is a class to house in-game graphics, as opposed to presentation
-eye-candy. It generates collision maps automatically for pixel-perfect
-collision detection, and handles conversion between the 1/256 of a pixel units
-I use everywhere, and the ordinary pixels Clanlib likes. Also it caches a 
-horizontally flipped image, so enemies can turn around (currently disabled at 
-the moment, SP->flip_horizontal() is in the ClanLib API but isn't implemented).
-
-The ClanLib graphics API shouldn't need to be directly used for actors and
-such, this class is supposed to wrap around that.
+eye-candy. It uses CL_Surface which is an SDL implementation similar to the
+ClanLib class.
 
 This is the journey a graphics file makes when it's used for a screen object:
 
-Resource Definition in res.scr keyed by a resource name (e.g. Surfaces/flame)
+Resource Definition in robotwar.xml keyed by a resource name (e.g. Surfaces/flame)
 Same resource name is listed in the part of Globals that initialises resname[]
 Resname is iterated through constructing Sprites, 
 	which are put in the spr array of Globals

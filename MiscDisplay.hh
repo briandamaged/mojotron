@@ -19,7 +19,6 @@
 #ifndef MISCDISPLAY_HH
 #define MISCDISPLAY_HH
 
-//#include <ClanLib/display.h>
 #include "SDL_CL_Surface.h"
 
 class Sprite;

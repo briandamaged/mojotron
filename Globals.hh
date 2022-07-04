@@ -19,8 +19,6 @@
 #ifndef GLOBALS_HH
 #define GLOABLS_HH
 
-//#include <ClanLib/core.h>
-//#include <ClanLib/display.h>
 #include "SDL_CL_ResourceManager.h"
 #include "SDL_CL_Surface.h"
 #include "Ratings.h"

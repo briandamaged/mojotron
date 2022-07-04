@@ -19,7 +19,6 @@
 #ifndef DEMO_HH
 #define DEMO_HH
 
-//#include <ClanLib/core.h>
 #include "SDL_CL_Surface.h"
 #include "World.hh"
 
