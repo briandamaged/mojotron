@@ -62,6 +62,8 @@ private:
 	static int introstarttime;
 	static int slomoval;
 
+	static std::string subtitle;
+
 	static CL_Surface* sur_bubble;
 	static CL_Surface* sur_starfield;
 	static CL_Surface* sur_title;

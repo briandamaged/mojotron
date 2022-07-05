@@ -1049,6 +1049,7 @@
 </section>
 
 <section name="Intro">
+	<string name="subtitle" value="" />
 </section>
 
 <section name="MonsterSpecs">

@@ -33,6 +33,7 @@ int Intro::slomoval = 1;
 int Intro::demotime = 0;
 int Intro::delta = 0;
 int Intro::prevtime = 0;
+std::string Intro::subtitle;
 CL_Surface* Intro::sur_bubble = NULL;
 CL_Surface* Intro::sur_starfield = NULL;
 CL_Surface* Intro::sur_title = NULL;
@@ -52,6 +53,7 @@ bool Intro::show() {
 	sur_starfield = globals->loadSurface("Surfaces/stars");
 	sur_title = globals->loadSurface("Surfaces/title");
 	sur_skillicons = globals->loadSurface("Surfaces/skillicons");
+	subtitle = globals->loadString("Intro/subtitle");
 
 	Sound::playMusic(Sound::TITLE);
 
@@ -117,7 +119,7 @@ void Intro::demoBg() {
 	if (!more) demo->restart(demotime);
 
 	sur_title->put_screen(30, 30); 
-	globals->smallfont->print_left(30, 100, "} 2001 Craig Timpany");
+	globals->smallfont->print_left(30, 100, subtitle);
 
 	if (timer < CONTROLSSTART) {
 		slomoval = 1;
