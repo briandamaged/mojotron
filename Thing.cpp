@@ -60,6 +60,7 @@ void Thing::setSprite(Globals::sprindex newspr) {
 
 void Thing::startPos() {
 	randomPos();
+	circletime = 0;
 }
 
 void Thing::setupAnim() {
@@ -345,10 +346,13 @@ void Thing::wobbleChase(int delta, bool vertwobble) {
 }
 
 void Thing::XCosMove(int amplitude) {
+	int oldxpos = xpos;
 	if (amplitude)
 		xpos = (int)(cos(circletime) * amplitude) + xwobblecent;
 	else
 		xpos = (int)(cos(circletime) * wobbleamplitude) + xwobblecent;
+	if (xpos - oldxpos != 0)
+		xposdir = xpos - oldxpos;
 }
 
 void Thing::YSinMove(int amplitude) {
