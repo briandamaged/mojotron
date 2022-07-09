@@ -115,6 +115,16 @@ Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
+## robosnail.png
+Modified snail from original Mojotron
+Modified to add black outline
+License: GPL 2.0
+
+## robofrog.png
+Modified frog from original Mojotron
+Modified to add black outline
+License: GPL 2.0
+
 ## rollrobot.png
 Robot
 Created by san2356

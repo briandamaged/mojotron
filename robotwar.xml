@@ -877,7 +877,7 @@
 	<surface name="bomb" value="graphics/blackbullet.pcx" x="0" y="0" width="10" height="10" tcol="0" />
 	<surface name="spiker" value="graphics/bee.pcx" x="0" y="0" width="32" height="24" tcol="0" array="2x2" />
 	<integer name="spikerflip" value="1" />
-	<surface name="rightangler" value="graphics/frog.pcx" x="0" y="0" width="32" height="32" tcol="0" array="3x4" />
+	<surface name="rightangler" value="robotwar/robofrog.png" x="0" y="0" width="32" height="32" tcol="0" array="3x4" />
 	<surface name="pod" value="graphics/spike.pcx" x="0" y="0" width="24" height="24" tcol="0" array="9x1" />
 	<surface name="spike" value="graphics/spike.pcx" x="0" y="0" width="24" height="24" tcol="0" array="9x1" />
 	<surface name="flame" value="graphics/flame.pcx" x="0" y="0" width="32" height="32" tcol="0" array="10x1" />
