@@ -63,8 +63,15 @@ Player::Player(int _playernumber) : Thing((Globals::sprindex)_playernumber) {
 
 Player::~Player() {
 	delete scoreboard;
+	delete stats;
 	if (globals->verbosity > 0)
 		cout << "Player deleted" << endl;
+	for (int i = 0; i < MAXINV; i++) {
+		if (inventory[i] != NULL) {
+			delete inventory[i];
+			inventory[i] = NULL;
+		}
+	}
 }
 
 void Player::startPos() {
