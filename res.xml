@@ -999,6 +999,15 @@
 
 <section name="Intro">
 	<string name="subtitle" value="} 2001 Craig Timpany" />
+	<string name="text1" value="Now it is the beginning of" />
+	<string name="text2" value="a fantastic story! Let us" />
+	<string name="text3" value="make a journey to" />
+	<string name="text4" value="the cave of monsters." />
+	<string name="text5" value="" />
+	<string name="text6" value="" />
+	<string name="text7" value="Try hard!" />
+	<integer name="textstart" value="140" />
+	<integer name="textincrement" value="25" />
 </section>
 
 <section name="MonsterSpecs">

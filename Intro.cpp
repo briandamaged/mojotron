@@ -42,18 +42,33 @@ Demo* Intro::demo = NULL;
 int Intro::fruit[] = { 	51, 51, 51, 
 			51, 51, 51, 
 			51, 51, 51 };
+std::vector<std::string> Intro::text;
+int Intro::textstart;
+int Intro::textincrement;
 
 using namespace std;
 
 extern Globals* globals;
 
 bool Intro::show() {
-	demo = new Demo("demo");
-	sur_bubble = globals->loadSurface("Surfaces/bubble");
-	sur_starfield = globals->loadSurface("Surfaces/stars");
-	sur_title = globals->loadSurface("Surfaces/title");
-	sur_skillicons = globals->loadSurface("Surfaces/skillicons");
-	subtitle = globals->loadString("Intro/subtitle");
+	if (demo == NULL) {
+		demo = new Demo("demo");
+		sur_bubble = globals->loadSurface("Surfaces/bubble");
+		sur_starfield = globals->loadSurface("Surfaces/stars");
+		sur_title = globals->loadSurface("Surfaces/title");
+		sur_skillicons = globals->loadSurface("Surfaces/skillicons");
+		subtitle = globals->loadString("Intro/subtitle");
+		textstart = globals->loadInt("Intro/textstart");
+		textincrement = globals->loadInt("Intro/textincrement");
+		std::string label = "Intro/text0";
+		for (int i = 1; i < 9; i++) {
+			label[10] = '0' + i;
+			if (globals->manager->resource_exists(label))
+				text.push_back(globals->loadString(label));
+			else
+				break;
+		}
+	}
 
 	Sound::playMusic(Sound::TITLE);
 
@@ -142,11 +157,11 @@ void Intro::restart() {
 }
 
 void Intro::story() {
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9) - 100, "Now it is the beginning of");
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9) - 75, "a fantastic story! Let us");
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9) - 50, "make a journey to");
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9) - 25, "the cave of monsters.");
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9) + 50, "Try hard!");
+	int textpos = textstart;
+	for (auto &s : text) {
+		globals->mediumfont->print_center(XWINSIZE>>9, textpos, s);
+		textpos += textincrement;
+	}
 
 	globals->spr[Globals::PLAYERONE]->draw(	100<<8, YWINSIZE/2, 
 						timer % (globals->spr[Globals::PLAYERONE]->getFrames()), false);

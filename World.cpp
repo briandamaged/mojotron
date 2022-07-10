@@ -76,6 +76,7 @@ World::World() {
 World::~World() {
 	/* Deletes every screen object, even the players */
 	Thing* temp;
+	all->toListStart();
 	while ((temp = all->getNext())) {
 		if (globals->verbosity > 1)
 			cout << "Deleting Thing: " << temp << endl;

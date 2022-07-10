@@ -32,7 +32,7 @@ SDL_CL_Surface_Impl::SDL_CL_Surface_Impl(const std::string &filename, int x, int
 /************************************************************************/
 SDL_CL_Surface_Impl::~SDL_CL_Surface_Impl()
 {
-    SDL_FreeSurface(_s);
+	SDL_FreeSurface(_s);
 	SDL_DestroyTexture(_t);
 	delete [] _mask;
 }

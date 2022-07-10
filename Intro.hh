@@ -69,7 +69,9 @@ private:
 	static CL_Surface* sur_title;
 	static CL_Surface* sur_reel;
 	static int fruit[9];
-
+	static std::vector<std::string> text;
+	static int textstart;
+	static int textincrement;
 };
 
 #endif

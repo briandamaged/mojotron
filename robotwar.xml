@@ -1050,6 +1050,15 @@
 
 <section name="Intro">
 	<string name="subtitle" value="" />
+	<surface name="man" value="robotwar/man.png" x="0" y="0" width="24" height="32" array="4x4" />
+	<surface name="woman" value="robotwar/woman.png" x="0" y="0" width="24" height="32" array="4x4" />
+	<surface name="child" value="robotwar/child.png" x="0" y="0" width="24" height="32" array="4x4" />
+	<surface name="smallviewport" value="robotwar/smallviewport.png" x="0" y="0" width="302" height="274"/>
+	<surface name="smallviewbg" value="robotwar/smallviewbg.png" x="0" y="0" width="302" height="274"/>
+	<string name="text1" value="In the year 2085, the last of humanity vanished." />
+	<string name="text2" value="The machines had won." />
+	<integer name="textstart" value="140" />
+	<integer name="textincrement" value="25" />
 </section>
 
 <section name="MonsterSpecs">
