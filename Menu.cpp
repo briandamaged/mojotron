@@ -34,94 +34,65 @@ Menu::Menu(menutype t) {
 	prevtype = NOMENU;
 
 	choosingkey = false;
+	active = false;
 //	keyidpicked = CL_NO_KEY;
+}
+
+Menu::~Menu() {
 }
 
 void Menu::changeType(menutype t) {
 	msgline = "Use the cursor keys to change settings.";
 	currententry = 0;
 	type = t;
+	slots.clear();
 	switch (t) {
 		case MAIN:
-			slots[0] = new MenuSlot();
-			slots[0]->name = "1 Player Game";
-			slots[0]->activatefunc = &start1Game;
-			slots[0]->linespacing = 0;
+			slots.push_back(std::make_unique<MenuSlot>("1 Player Game", &start1Game, 0));
 
-			slots[1] = new MenuSlot();
-			slots[1]->name = "2 Player Game";
-			slots[1]->activatefunc = &start2Game;
+			slots.push_back(std::make_unique<MenuSlot>("2 Player Game", &start2Game, 1));
 
-			slots[2] = new MenuSlot();
-			slots[2]->name = "Options";
-			slots[2]->activatefunc = &optionsMenu;
+			slots.push_back(std::make_unique<MenuSlot>("Options", &optionsMenu, 1));
 
-			slots[3] = new MenuSlot();
-			slots[3]->name = "Controls";
-			slots[3]->activatefunc = &controlsMenu;
+			slots.push_back(std::make_unique<MenuSlot>("Controls", &controlsMenu, 1));
 
-			slots[4] = new MenuSlot();
-			slots[4]->name = "Quit";
-			slots[4]->activatefunc = &exitMenu;
+			slots.push_back(std::make_unique<MenuSlot>("Quit", &exitMenu, 1));
 
-			slots[0]->owner = slots[1]->owner = slots[2]->owner = slots[3]->owner = slots[4]->owner = this;
 			maxentries = 5;
 			prevtype = NOMENU;
 			break;
 
 		case OPTIONS:
-			slots[0] = new BooleanSlot(&globals->fullscreen, *(Menu::toggleFullscreen));
-			slots[0]->name = "Fullscreen";
-			slots[1] = new BooleanSlot(&Sound::sound, *(Menu::toggleSound));
-			slots[1]->name = "Sounds";
-			slots[2] = new BooleanSlot(&Sound::music, *(Menu::toggleMusic));
-			slots[2]->name = "Music";
-			slots[3] = new SkillSlot();
-			slots[3]->linespacing = 2;
+			slots.push_back(std::make_unique<BooleanSlot>("Fullscreen", &globals->fullscreen, &Menu::toggleFullscreen));
+			slots.push_back(std::make_unique<BooleanSlot>("Sounds", &Sound::sound, &Menu::toggleSound));
+			slots.push_back(std::make_unique<BooleanSlot>("Music", &Sound::music, &Menu::toggleMusic));
+			slots.push_back(std::make_unique<SkillSlot>(2));
 
-			slots[4] = new MenuSlot();
-			slots[4]->name = "Back";
-			slots[4]->activatefunc = &exitMenu;
-			slots[4]->owner = this;
-			slots[4]->linespacing = 2;
+			slots.push_back(std::make_unique<MenuSlot>("Back", &exitMenu, 2));
 			maxentries = 5;
 			break;
 
 		case CONTROLS: 
-			slots[0] = new KeysSlot(0, true);
-			slots[1] = new KeysSlot(0, false);
-			slots[2] = new UseKeySlot(0, this);
-			slots[3] = new KeysSlot(1, true);
-			slots[4] = new KeysSlot(1, false);
-			slots[5] = new UseKeySlot(1, this);
+			slots.push_back(std::make_unique<KeysSlot>(0, true));
+			slots.push_back(std::make_unique<KeysSlot>(0, false));
+			slots.push_back(std::make_unique<UseKeySlot>(0));
+			slots.push_back(std::make_unique<KeysSlot>(1, true));
+			slots.push_back(std::make_unique<KeysSlot>(1, false));
+			slots.push_back(std::make_unique<UseKeySlot>(1));
 
-			slots[6] = new MenuSlot();
-			slots[6]->name = "Back";
-			slots[6]->activatefunc = &exitMenu;
-			slots[6]->owner = this;
-			slots[6]->linespacing = 2;
+			slots.push_back(std::make_unique<MenuSlot>("Back", &exitMenu, 2));
 			maxentries = 7;
 			break;
 
 		case INGAME:
-			slots[0] = new MenuSlot();
-			slots[0]->name = "Resume Game";
-			slots[0]->activatefunc = &start1Game;
-			slots[0]->linespacing = 0;
+			slots.push_back(std::make_unique<MenuSlot>("Resume Game", &start1Game, 0));
 
-			slots[1] = new MenuSlot();
-			slots[1]->name = "Options";
-			slots[1]->activatefunc = &optionsMenu;
+			slots.push_back(std::make_unique<MenuSlot>("Options", &optionsMenu, 1));
 
-			slots[2] = new MenuSlot();
-			slots[2]->name = "Controls";
-			slots[2]->activatefunc = &controlsMenu;
+			slots.push_back(std::make_unique<MenuSlot>("Controls", &controlsMenu, 1));
 
-			slots[3] = new MenuSlot();
-			slots[3]->name = "Quit Game";
-			slots[3]->activatefunc = &exitMenu;
+			slots.push_back(std::make_unique<MenuSlot>("Quit Game", &exitMenu, 1));
 
-			slots[0]->owner = slots[1]->owner = slots[2]->owner = slots[3]->owner = this;
 			maxentries = 4;
 			prevtype = NOMENU;
 			break;
@@ -151,24 +122,22 @@ Menu::menustatus Menu::run(int delta) {
 				currententry++;
 				currententry %= maxentries;
 			} else {
-//				try {
-					if (select)
-						slots[currententry]->activate(true);
-					else if (back)
-						slots[currententry]->activate(false);
-/*				} catch (CL_Error err) {
-					msgline = err.message;
-				}*/
+				if (select)
+					slots[currententry]->activatefunc(true, this, slots[currententry]->player, slots[currententry]->movement);
+				else if (back)
+					slots[currententry]->activatefunc(false, this, slots[currententry]->player, slots[currententry]->movement);
 			}
 		}
 		readyforkey = !(moveup || movedown || select || back);
+		if (!readyforkey)
+			active = true;
 	} else {
+		active = true;
 		if (!(select || back) && !readyforkey) {
 			readyforkey = true;
 			InputState::anyKeyPress();
 		}
 		if (state[SDL_SCANCODE_ESCAPE]) {
-			InputState::anyKeyPress();
 			choosingkey = false;
 
 		} else if (readyforkey) {
@@ -176,7 +145,7 @@ Menu::menustatus Menu::run(int delta) {
 				keyidpicked = InputState::getLastScancode();
         
 				InputState::anyKeyPress();
-				slots[currententry]->activate(true);
+				slots[currententry]->activatefunc(true, this, slots[currententry]->player, slots[currententry]->movement);
 				readyforkey = false;
 			}
 		}
@@ -186,6 +155,12 @@ Menu::menustatus Menu::run(int delta) {
 	draw();
 
 	return status;
+}
+
+bool Menu::checkActive() {
+	bool result = active;
+	active = false;
+	return result;
 }
 
 void Menu::draw() {
@@ -227,16 +202,12 @@ void Menu::draw() {
 	}
 }
 
-void Menu::saveOptions() {
-
-}
-
-void Menu::toggleSound() {
+void Menu::toggleSound(bool forward, Menu* m, int player, bool movement) {
 	Sound::setSFX(!(Sound::sound));
 	Sound::playSound("takebonus");
 }
 
-void Menu::toggleMusic() {
+void Menu::toggleMusic(bool forward, Menu* m, int player, bool movement) {
 	if (Sound::music) {
 		Sound::setMusic(false);
 	} else {
@@ -245,19 +216,11 @@ void Menu::toggleMusic() {
 	}
 }
 
-void Menu::toggleFullscreen() {
+void Menu::toggleFullscreen(bool forward, Menu* m, int player, bool movement) {
 	globals->fullscreen = !globals->fullscreen;
-/*	try {
-		CL_Display::set_videomode(XWINSIZE >> 8, YWINSIZE >> 8, 16, globals->fullscreen);
-	} catch (CL_Error err) {
-		globals->fullscreen = false;
-		CL_Display::set_videomode(XWINSIZE >> 8, YWINSIZE >> 8, 16, false);
-		cout << "Got error while trying to switch modes: " << err.message << endl;
-		throw err;
-	}*/
 }
 
-void Menu::exitMenu(Menu* m) {
+void Menu::exitMenu(bool forward, Menu* m, int player, bool movement) {
 	if (m->prevtype != NOMENU) {
 		m->changeType(m->prevtype);
 	} else {
@@ -265,35 +228,30 @@ void Menu::exitMenu(Menu* m) {
 	}
 }
 
-void Menu::start1Game(Menu* m) {
+void Menu::start1Game(bool forward, Menu* m, int player, bool movement) {
 	m->status = STARTGAME;
 	globals->num_players = 1;
 }
 
-void Menu::start2Game(Menu* m) {
+void Menu::start2Game(bool forward, Menu* m, int player, bool movement) {
 	m->status = STARTGAME;
 	globals->num_players = 2;
 }
 
-void Menu::optionsMenu(Menu* m) {
+void Menu::optionsMenu(bool forward, Menu* m, int player, bool movement) {
 	m->prevtype = m->type;
 	m->changeType(OPTIONS);
 }
 
-void Menu::controlsMenu(Menu* m) {
+void Menu::controlsMenu(bool forward, Menu* m, int player, bool movement) {
 	m->prevtype = m->type;
 	m->changeType(CONTROLS);
 }
 
-MenuSlot::MenuSlot() {
-	activatefunc = NULL;
-	owner = NULL;
-	name = "unset";
-	linespacing = 1;
-}
-
-void MenuSlot::activate(bool forward) {
-	activatefunc(owner);
+MenuSlot::MenuSlot(std::string n, MenuActivateFunc a, int l) {
+	activatefunc = a;
+	name = n;
+	linespacing = l;
 }
 
 void MenuSlot::draw(int* xpos, int* ypos, bool selected) {
@@ -306,8 +264,7 @@ void MenuSlot::draw(int* xpos, int* ypos, bool selected) {
 	}
 }
 
-BooleanSlot::BooleanSlot(bool* b, void (*f)()) : MenuSlot() {
-	togglefunc = f;
+BooleanSlot::BooleanSlot(std::string n, bool* b, MenuActivateFunc a) : MenuSlot(n, a, 1) {
 	state = b;
 }
 
@@ -320,15 +277,9 @@ void BooleanSlot::draw(int* xpos, int* ypos, bool selected) {
 	globals->smallfont->print_left(*xpos + 30, *ypos, strstate.c_str());
 }
 
-void BooleanSlot::activate(bool forward) {
-	togglefunc();
-}
-
-KeysSlot::KeysSlot(int p, bool m) : MenuSlot() {
+KeysSlot::KeysSlot(int p, bool m) : MenuSlot((m ? "Movement" : "Aiming"), &activate, 1) {
 	player = p;
 	movement = m;
-	if (movement)	name = "Movement";
-	else		name = "Aiming";
 }
 
 void KeysSlot::draw(int* xpos, int* ypos, bool selected) {
@@ -354,7 +305,7 @@ void KeysSlot::draw(int* xpos, int* ypos, bool selected) {
 	}
 }
 
-void KeysSlot::activate(bool forward) {
+void KeysSlot::activate(bool forward, Menu *m, int player, bool movement) {
 	InputState* i = InputState::playercontrols[player];
 	int group = i->getKeyAxisPair(movement);
 
@@ -369,10 +320,8 @@ void KeysSlot::activate(bool forward) {
 	i->setupKeyAxisPair(group, movement);
 }
 
-UseKeySlot::UseKeySlot(int p, Menu* m) : MenuSlot() {
-	owner = m;
+UseKeySlot::UseKeySlot(int p) : MenuSlot("Use Item", &activate, 1) {
 	player = p;
-	name = "Use Item";
 }
 
 void UseKeySlot::draw(int* xpos, int* ypos, bool selected) {
@@ -386,28 +335,27 @@ void UseKeySlot::draw(int* xpos, int* ypos, bool selected) {
 	}
 }
 
-void UseKeySlot::activate(bool forward) {
-	if (owner->choosingkey) {
+void UseKeySlot::activate(bool forward, Menu *m, int player, bool movement) {
+	if (m->choosingkey) {
 		// found key
-		owner->choosingkey = false;
-		owner->msgline = "Use the cursor keys to change settings.";
+		m->choosingkey = false;
+		m->msgline = "Use the cursor keys to change settings.";
 
 		// assign keyidpicked
-		if (owner->keyidpicked) {
+		if (m->keyidpicked) {
 			InputState::playercontrols[player]->
-				setUseKey(owner->keyidpicked);
+				setUseKey(m->keyidpicked);
 		}
 	} else {
 		// going to read a new key from user
-		owner->choosingkey = true;
-		owner->readyforkey = false;	// don't read the enter they just pressed
+		m->choosingkey = true;
+		m->readyforkey = false;	// don't read the enter they just pressed
 		InputState::anyKeyPress();
-		owner->msgline = "Press a key to use";
+		m->msgline = "Press a key to use";
 	}
 }
 
-SkillSlot::SkillSlot() : MenuSlot() {
-	name = "Difficulty";
+SkillSlot::SkillSlot(int l) : MenuSlot("Difficulty", &activate, l) {
 }
 
 void SkillSlot::draw(int* xpos, int* ypos, bool selected) {
@@ -426,6 +374,6 @@ void SkillSlot::draw(int* xpos, int* ypos, bool selected) {
 	*ypos -= LINESPACE;
 }
 
-void SkillSlot::activate(bool forward) {
+void SkillSlot::activate(bool forward, Menu *m, int player, bool movement) {
 	SkillLevel::cycleSkill(forward);
 }

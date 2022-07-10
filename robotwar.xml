@@ -1049,6 +1049,7 @@
 </section>
 
 <section name="Intro">
+	<integer name="storytime" value="9000" />
 	<string name="subtitle" value="" />
 	<surface name="man" value="robotwar/man.png" x="0" y="0" width="24" height="32" array="4x4" />
 	<surface name="woman" value="robotwar/woman.png" x="0" y="0" width="24" height="32" array="4x4" />

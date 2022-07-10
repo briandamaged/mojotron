@@ -33,6 +33,9 @@ int Intro::slomoval = 1;
 int Intro::demotime = 0;
 int Intro::delta = 0;
 int Intro::prevtime = 0;
+
+int Intro::storytime = 9000;
+
 std::string Intro::subtitle;
 CL_Surface* Intro::sur_bubble = NULL;
 CL_Surface* Intro::sur_starfield = NULL;
@@ -57,6 +60,7 @@ bool Intro::show() {
 		sur_starfield = globals->loadSurface("Surfaces/stars");
 		sur_title = globals->loadSurface("Surfaces/title");
 		sur_skillicons = globals->loadSurface("Surfaces/skillicons");
+		storytime = globals->loadInt("Intro/storytime");
 		subtitle = globals->loadString("Intro/subtitle");
 		textstart = globals->loadInt("Intro/textstart");
 		textincrement = globals->loadInt("Intro/textincrement");
@@ -76,7 +80,7 @@ bool Intro::show() {
 	restarttime = introstarttime;
 	prevtime = introstarttime;
 
-	Menu m = Menu(Menu::MAIN);
+	Menu m(Menu::MAIN);
 	do {
 		int currenttime = SDL_GetTicks();
 		delta = currenttime - prevtime;
@@ -84,6 +88,9 @@ bool Intro::show() {
 
 		timer += delta;
 
+		if (timer >= RESTART) {
+			restart(m.checkActive());
+		}
 		if (timer < STORYTIME) {
 			const Uint8 *state = SDL_GetKeyboardState(NULL);
 			if (state[SDL_SCANCODE_SPACE] ||
@@ -146,14 +153,15 @@ void Intro::demoBg() {
 		fruitTable();
 	} else if (timer < RESTART) {
 		enemies();
-	} else {
-		restart();
 	}
 }
 
-void Intro::restart() {
+void Intro::restart(bool active) {
 	introstarttime = SDL_GetTicks();
-	timer = STORYTIME;
+	if (active)
+		timer = STORYTIME;
+	else
+		timer = 0;
 }
 
 void Intro::story() {

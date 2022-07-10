@@ -26,7 +26,7 @@
 #define YKEYCENT 12
 #define KEYWIDTH 48
 #define KEYHEIGHT 48
-#define STORYTIME 9000
+#define STORYTIME storytime
 #define CONTROLSSTART (STORYTIME+9000)
 #define POWERUPSTART (CONTROLSSTART+9000)
 #define FRUITSTART (POWERUPSTART+9000)
@@ -52,7 +52,7 @@ private:
 	static void drawEnemyLine(	int line, int s, 
 					std::string name, std::string info);
 	static void controlsDemo();
-	static void restart();
+	static void restart(bool active);
 
 	static int timer;
 	static int delta;
@@ -61,6 +61,8 @@ private:
 	static int restarttime;
 	static int introstarttime;
 	static int slomoval;
+
+	static int storytime;
 
 	static std::string subtitle;
 

@@ -998,6 +998,7 @@
 </section>
 
 <section name="Intro">
+	<integer name="storytime" value="9000" />
 	<string name="subtitle" value="} 2001 Craig Timpany" />
 	<string name="text1" value="Now it is the beginning of" />
 	<string name="text2" value="a fantastic story! Let us" />

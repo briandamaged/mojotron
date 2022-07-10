@@ -23,47 +23,49 @@
 #define NAMEWIDTH 150
 
 #include <string>
+#include <vector>
+#include <memory>
 
 class Menu;
 
+typedef void (*MenuActivateFunc)(bool forward, Menu *m, int player, bool movement);
+
 struct MenuSlot {
-	MenuSlot();
+	MenuSlot(std::string n, MenuActivateFunc a, int l);
 	virtual ~MenuSlot() { }
-	virtual void activate(bool forward);
 	virtual void draw(int* xpos, int* ypos, bool selected);
 	std::string name;
-	void (*activatefunc)(Menu* m);
-	Menu* owner;
+	MenuActivateFunc activatefunc;
 	int linespacing;
-};
-
-struct BooleanSlot : MenuSlot {
-	BooleanSlot(bool* b, void (*f)() );
-	void activate(bool forward);
-	void draw(int* xpos, int* ypos, bool selected);
-	bool* state;
-	void (*togglefunc)(void);
-};
-
-struct KeysSlot : MenuSlot {
-	KeysSlot(int p, bool m);
-	void activate(bool forward);
-	void draw(int* xpos, int* ypos, bool selected);
 	int player;
 	bool movement;
 };
 
-struct UseKeySlot : MenuSlot {
-	UseKeySlot(int p, Menu* m);
-	void activate(bool forward);
+struct BooleanSlot : MenuSlot {
+	BooleanSlot(std::string n, bool* b, MenuActivateFunc a);
 	void draw(int* xpos, int* ypos, bool selected);
-	int player;
+	bool* state;
+};
+
+struct KeysSlot : MenuSlot {
+	KeysSlot(int p, bool m);
+	void draw(int* xpos, int* ypos, bool selected);
+
+	static void activate(bool forward, Menu *s, int player, bool movement);
+};
+
+struct UseKeySlot : MenuSlot {
+	UseKeySlot(int p);
+	void draw(int* xpos, int* ypos, bool selected);
+
+	static void activate(bool forward, Menu *s, int player, bool movement);
 };
 
 struct SkillSlot : MenuSlot {
-	SkillSlot();
-	void activate(bool forward);
+	SkillSlot(int l);
 	void draw(int* xpos, int* ypos, bool selected);
+
+	static void activate(bool forward, Menu *s, int player, bool movement);
 };
 
 class Menu {
@@ -72,7 +74,11 @@ public:
 	enum menustatus { STARTGAME, EXIT, NONE };
 
 	Menu(menutype t);
+	~Menu();
+
 	menustatus run(int delta);
+	bool checkActive();
+
 	menutype type;
 	menustatus status;
 	bool readyforkey;
@@ -84,28 +90,28 @@ public:
 	int keyidpicked;
 
 private:
+	bool active;
 	int currententry;
 	int maxentries;
 	int lasttime;
-	MenuSlot* slots[11];
+	std::vector<std::unique_ptr<MenuSlot>> slots;
 	
 	void draw();
 	void changeType(menutype t);
 
-	static void toggleFullscreen();
-	static void toggleSound();
-	static void toggleMusic();
+	static void toggleFullscreen(bool forward, Menu *m, int player, bool movement);
+	static void toggleSound(bool forward, Menu *m, int player, bool movement);
+	static void toggleMusic(bool forward, Menu *m, int player, bool movement);
 	static void cycleDifficulty(bool forward);
 	static void changeKeyGroup(int selected, bool forward);
 
-	static void exitMenu(Menu* m);
-	static void quitGame(Menu* m);
-	static void start1Game(Menu* m);
-	static void start2Game(Menu* m);
-	static void optionsMenu(Menu* m);
-	static void controlsMenu(Menu* m);
+	static void exitMenu(bool forward, Menu* m, int player, bool movement);
+	static void quitGame(bool forward, Menu* m, int player, bool movement);
+	static void start1Game(bool forward, Menu* m, int player, bool movement);
+	static void start2Game(bool forward, Menu* m, int player, bool movement);
+	static void optionsMenu(bool forward, Menu* m, int player, bool movement);
+	static void controlsMenu(bool forward, Menu* m, int player, bool movement);
 
-	void saveOptions();
 	Menu::menutype prevtype;
 };
 
