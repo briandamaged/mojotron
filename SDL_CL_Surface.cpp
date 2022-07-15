@@ -39,6 +39,8 @@ SDL_CL_Surface_Impl::~SDL_CL_Surface_Impl()
 
 void SDL_CL_Surface_Impl::load(SDL_Renderer *r)
 {
+	if (_s)
+		return;
 	if (_x == -1)
 		_x = 0;
 	if (_y == -1)

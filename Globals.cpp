@@ -230,27 +230,13 @@ int Globals::loadInt(std::string dname) {
 }
 
 std::string Globals::loadString(std::string dataname) {
-//	try { 
-		// x is automatic!?
 		std::string x = manager->get_string_resource(dataname, "");
 		if (verbosity > 0)
 			cout << dataname << " = " << x << endl;
-		// must be a deep copy I guess
 		return x;
-/*	} catch(CL_Error err) {
-		if (verbosity > 0)
-			cout << err.message.c_str() << " Defaulting to empty." << endl;
-		return "";
-	}*/
 }
 
 CL_Surface* Globals::loadSurface(std::string dataname) {
-//	try {
 		CL_Surface* s = new CL_Surface(dataname, manager);
 		return s;
-/*	} catch(CL_Error err) {
-		if (verbosity > 0)
-			cout << err.message.c_str() << " Defaulting to test." << endl;
-		return sur_testing;
-	}*/
 }
