@@ -37,10 +37,8 @@ int Intro::prevtime = 0;
 int Intro::storytime = 9000;
 
 std::string Intro::subtitle;
-CL_Surface* Intro::sur_bubble = NULL;
-CL_Surface* Intro::sur_starfield = NULL;
-CL_Surface* Intro::sur_title = NULL;
 CL_Surface* Intro::sur_skillicons = NULL;
+CL_Surface* Intro::sur_starfield = NULL;
 Demo* Intro::demo = NULL;
 int Intro::fruit[] = { 	51, 51, 51, 
 			51, 51, 51, 
@@ -52,6 +50,19 @@ int Intro::textincrement;
 using namespace std;
 
 extern Globals* globals;
+
+Intro::Intro() {
+	sur_bubble = NULL;
+	sur_title = NULL;
+}
+
+Intro::~Intro() {
+	delete sur_bubble;	sur_bubble = NULL;
+	delete sur_starfield;	sur_starfield = NULL;
+	delete sur_title;	sur_title = NULL;
+	delete sur_skillicons;	sur_skillicons = NULL;
+	delete demo;		demo = NULL;
+}
 
 bool Intro::show() {
 	if (demo == NULL) {
@@ -282,12 +293,4 @@ void Intro::powerups() {
 		globals->mediumfont->print_right(350, 200, "Then ");
 		demo->drawBonus(0, 350, 200);
 	}
-}
-
-void Intro::deinit() {
-	delete sur_bubble;	sur_bubble = NULL;
-	delete sur_starfield;	sur_starfield = NULL;
-	delete sur_title;	sur_title = NULL;
-	delete sur_skillicons;	sur_skillicons = NULL;
-	delete demo;		demo = NULL;
 }

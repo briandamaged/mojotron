@@ -37,22 +37,24 @@ class Demo;
 
 class Intro {
 public:
-	static bool show();
-	static void deinit();
+	Intro();
+	~Intro();
+
+	bool show();
 	static void drawBg();
-	static void demoBg();
+	void demoBg();
 
 	static CL_Surface* sur_skillicons;
 	static Demo* demo;
 private:
-	static void story();
-	static void powerups();
-	static void fruitTable();
-	static void enemies();
-	static void drawEnemyLine(	int line, int s, 
+	void story();
+	void powerups();
+	void fruitTable();
+	void enemies();
+	void drawEnemyLine(	int line, int s,
 					std::string name, std::string info);
-	static void controlsDemo();
-	static void restart(bool active);
+	void controlsDemo();
+	void restart(bool active);
 
 	static int timer;
 	static int delta;
@@ -66,10 +68,10 @@ private:
 
 	static std::string subtitle;
 
-	static CL_Surface* sur_bubble;
+	CL_Surface* sur_bubble;
 	static CL_Surface* sur_starfield;
-	static CL_Surface* sur_title;
-	static CL_Surface* sur_reel;
+	CL_Surface* sur_title;
+	CL_Surface* sur_reel;
 	static int fruit[9];
 	static std::vector<std::string> text;
 	static int textstart;

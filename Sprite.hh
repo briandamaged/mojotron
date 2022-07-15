@@ -42,7 +42,7 @@ public:
 			unsigned int framea, bool afacingleft,
 			Sprite* other, int bx, int by,
 			unsigned int frameb, bool bfacingleft);
-	CL_Surface* anim;
+	CL_Surface anim;
 
 	// colcheck info
 	int width, height;

@@ -39,14 +39,14 @@ ScoreBoard::~ScoreBoard() {
 }
 
 void ScoreBoard::drawReels(int xsofar, int yorigin) {
-	CL_Surface* reelsurf = globals->spr[Globals::REEL]->anim;
+	CL_Surface reelsurf = globals->spr[Globals::REEL]->anim;
 
 	// don't update the display if they just got a combo
 	if (!highlightfruittimer) {
 		if (!(fruit[0] == p->taken[0] && fruit[1] == p->taken[1] && fruit[2] == p->taken[2])) {
 			fruit[3] = fruit[2];
 			fruit[0] = p->taken[0]; fruit[1] = p->taken[1]; fruit[2] = p->taken[2];
-			newfruittimer = (reelsurf->get_height())<<8;
+			newfruittimer = (reelsurf.get_height())<<8;
 		}
 	}
 	if (newfruittimer > 0)	newfruittimer -= worldobj->delta*12;
@@ -54,8 +54,8 @@ void ScoreBoard::drawReels(int xsofar, int yorigin) {
 	
 	int yfruitpos = (4 + yorigin)<<8;
 
-	int width = 3*reelsurf->get_width() + 4;
-	int height = reelsurf->get_height();
+	int width = 3*reelsurf.get_width() + 4;
+	int height = reelsurf.get_height();
 
 	// Window over the fruit display
 	SDL_Rect old, r;
@@ -68,15 +68,15 @@ void ScoreBoard::drawReels(int xsofar, int yorigin) {
 	r.h = height;
 	SDL_RenderSetClipRect(game_renderer, &r);
 	for (int i=0; i < 3; i++) {
-		reelsurf->put_screen(xsofar, yorigin);
+		reelsurf.put_screen(xsofar, yorigin);
 		if (!highlightfruitflashing) {
 			globals->spr[Globals::BONUSFRUIT]->draw((xsofar + 2)<<8, yfruitpos-newfruittimer, fruit[i], false);
 			if (newfruittimer)
 				globals->spr[Globals::BONUSFRUIT]->draw(
 					(xsofar + 2)<<8, 
-					(reelsurf->get_height()<<8)+yfruitpos-newfruittimer, fruit[i+1], false);
+					(reelsurf.get_height()<<8)+yfruitpos-newfruittimer, fruit[i+1], false);
 		}
-		xsofar += reelsurf->get_width() + 2;
+		xsofar += reelsurf.get_width() + 2;
 	}
 	// prepare for drawing outside the window
 	if (clipEnabled)
@@ -146,10 +146,10 @@ void ScoreBoard::drawScoreBoard(int xorigin, int yorigin) {
 }
 
 void ScoreBoard::highlightFruit() {
-	CL_Surface* reelsurf = globals->spr[Globals::REEL]->anim;
+	CL_Surface reelsurf = globals->spr[Globals::REEL]->anim;
 	highlightfruittimer = 2000;
 	fruit[0] = p->taken[0]; fruit[1] = p->taken[1]; fruit[2] = p->taken[2];
-	newfruittimer = (reelsurf->get_height())<<8;
+	newfruittimer = (reelsurf.get_height())<<8;
 }
 
 void ScoreBoard::highlightInventory() {

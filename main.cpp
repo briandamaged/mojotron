@@ -41,6 +41,8 @@ class MojoApp : Application {
 		ConfigFile* configf;
 		Config conf;
 		SDL_Window *game_window;
+		std::unique_ptr<Intro> intro;
+
 	public:
 
 	const char* get_title() {
@@ -54,7 +56,7 @@ class MojoApp : Application {
 		delete configf;
 		configf = NULL;
 
-		Intro::deinit();
+		intro = NULL;
 		Sound::deinitAudio();
 		SkillLevel::deinitAll();
 		InputState::deinitControls();
@@ -166,8 +168,9 @@ class MojoApp : Application {
 		}
 
 		bool play;
-	
-		if (Intro::show()) { // run intro, menus etc.
+		intro = std::make_unique<Intro>();
+
+		if (intro->show()) { // run intro, menus etc.
 			do {
 				Sound::playMusic(Sound::GAME0);
 				worldobj = new World();
@@ -181,7 +184,7 @@ class MojoApp : Application {
 					cout << "Deleting world from main" << endl;
 				delete worldobj;	// nulls itself out
 				
-				play = Intro::show();
+				play = intro->show();
 			} while (play);
 		}
 		quit();

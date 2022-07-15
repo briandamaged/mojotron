@@ -23,16 +23,15 @@
 using namespace std;
 extern Globals* globals;
 
-Sprite::Sprite(std::string resname, CL_ResourceManager* manager) {
-	anim = new CL_Surface(resname, manager);
+Sprite::Sprite(std::string resname, CL_ResourceManager* manager) : anim(resname, manager) {
 	// that globals obj better be fully constructed...
 	hasorientation = (bool)globals->loadInt(resname + "flip");
 	timeperframe = globals->loadInt(resname + "timeperframe");
 
 	cancolcheck = true;
 
-	width = anim->get_width() << 8;
-	height = anim->get_height() << 8;
+	width = anim.get_width() << 8;
+	height = anim.get_height() << 8;
 
 	// this is going to get warped if the game speed is cranked up
 	if (timeperframe == 0)
@@ -46,31 +45,30 @@ Sprite::Sprite(std::string resname, CL_ResourceManager* manager) {
 }
 
 Sprite::~Sprite() {
-	delete anim;
 }
 
 unsigned int Sprite::getFrames() {
 	if (hasorientation)
-		return anim->get_num_frames()/2;
+		return anim.get_num_frames()/2;
 	else
-		return anim->get_num_frames();
+		return anim.get_num_frames();
 }
 
 void Sprite::draw(	int x, int y, int frame, bool facingleft, 
 			int xscale, int yscale) 
 {
-	anim->put_screen(x >> 8, y >> 8, xscale, yscale,
+	anim.put_screen(x >> 8, y >> 8, xscale, yscale,
 			getCLFrameNum(frame, facingleft));
 }
 
 void Sprite::draw(int x, int y, int frame, bool facingleft) {
-	anim->put_screen(x >> 8, y >> 8, 
+	anim.put_screen(x >> 8, y >> 8,
 			getCLFrameNum(frame, facingleft));
 }
 
 int Sprite::getCLFrameNum(int thingframenum, bool facingleft) {
 	if (hasorientation && !facingleft)
-		return thingframenum + anim->get_num_frames()/2;
+		return thingframenum + anim.get_num_frames()/2;
 	else
 		return thingframenum;
 	return 0;
@@ -97,8 +95,8 @@ bool Sprite::andcheck(	int ax, int ay,
 	int bheight = spr2->height;
 
 	// find out which frames each sprite is on
-	char *maska = anim->get_data(getCLFrameNum(thingframea, afacingleft));
-	char *maskb = spr2->anim->get_data(spr2->getCLFrameNum(thingframeb, bfacingleft));
+	char *maska = anim.get_data(getCLFrameNum(thingframea, afacingleft));
+	char *maskb = spr2->anim.get_data(spr2->getCLFrameNum(thingframeb, bfacingleft));
 
 	int xoffset = bx - ax;
 	int yoffset = by - ay;
@@ -140,11 +138,11 @@ bool Sprite::andcheck(	int ax, int ay,
                	for(int j = left; j < right; j++) {
 			// addr of sprite + rows down + x coord
 			pixa = (*
-				( maska + anim->get_width() * i + j));
+				( maska + anim.get_width() * i + j));
 
 			// sprite addr + rows down + x coord - offset relative to thinga  
 			pixb = (*( 
-				maskb + spr2->anim->get_width() * (i - yoffset)
+				maskb + spr2->anim.get_width() * (i - yoffset)
 					+ j - xoffset
 				));
 		
