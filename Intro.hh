@@ -35,6 +35,33 @@
 
 class Demo;
 
+class IntroThing {
+public:
+	IntroThing(int x1, int y1, int f, CL_Surface a);
+	virtual ~IntroThing();
+	virtual void act(int timer) = 0;
+	void draw();
+
+protected:
+	int x, y;
+	int frame;
+	CL_Surface anim;
+};
+
+class IntroPlayer : public IntroThing {
+public:
+	IntroPlayer(int x1, int y1, int p);
+	void act(int timer);
+
+	int player;
+};
+
+class IntroBubble : public IntroThing {
+public:
+	IntroBubble(int x1, int y1);
+	void act(int timer);
+};
+
 class Intro {
 public:
 	Intro();
@@ -76,6 +103,7 @@ private:
 	static std::vector<std::string> text;
 	static int textstart;
 	static int textincrement;
+	std::vector<std::unique_ptr<IntroThing>> things;
 };
 
 #endif

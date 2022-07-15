@@ -26,6 +26,34 @@
 #include "Demo.hh"
 #include "InputState.hh"
 
+extern Globals* globals;
+
+IntroPlayer::IntroPlayer(int x1, int y1, int p) : IntroThing(x1, y1, 0, globals->spr[p]->anim), player(p) {
+}
+
+void IntroPlayer::act(int timer) {
+	frame = timer % (anim.get_num_frames() / 2);
+	if (player == Globals::PLAYERONE)
+		frame += anim.get_num_frames() / 2;
+}
+
+IntroBubble::IntroBubble(int x1, int y1) : IntroThing(x1, y1, 0, CL_Surface("Surfaces/bubble", globals->manager)) {
+}
+
+void IntroBubble::act(int timer) {
+	frame = (timer%600) > 300;
+}
+
+IntroThing::IntroThing(int x1, int y1, int f, CL_Surface a): x(x1), y(y1), frame(f), anim(a) {
+}
+
+IntroThing::~IntroThing() {
+}
+
+void IntroThing::draw() {
+	anim.put_screen(x, y, frame);
+}
+
 int Intro::timer = 0;
 int Intro::restarttime = 0;
 int Intro::introstarttime = 0;
@@ -49,11 +77,13 @@ int Intro::textincrement;
 
 using namespace std;
 
-extern Globals* globals;
-
 Intro::Intro() {
 	sur_bubble = NULL;
 	sur_title = NULL;
+	things.push_back(std::make_unique<IntroPlayer>(100, (YWINSIZE / 2) >> 8, Globals::PLAYERONE));
+	things.push_back(std::make_unique<IntroPlayer>((XWINSIZE >> 8) - 100, (YWINSIZE / 2) >> 8, Globals::PLAYERTWO));
+	things.push_back(std::make_unique<IntroBubble>(90, (YWINSIZE >> 9) -15));
+	things.push_back(std::make_unique<IntroBubble>((XWINSIZE>>8)-110, (YWINSIZE >> 9) -15));
 }
 
 Intro::~Intro() {
@@ -181,15 +211,10 @@ void Intro::story() {
 		globals->mediumfont->print_center(XWINSIZE>>9, textpos, s);
 		textpos += textincrement;
 	}
-
-	globals->spr[Globals::PLAYERONE]->draw(	100<<8, YWINSIZE/2, 
-						timer % (globals->spr[Globals::PLAYERONE]->getFrames()), false);
-	globals->spr[Globals::PLAYERTWO]->draw(	XWINSIZE - (100<<8), YWINSIZE/2, 
-						timer % (globals->spr[Globals::PLAYERTWO]->getFrames()), true);
-	sur_bubble->put_screen(90, (YWINSIZE>>9)-15,
-				(timer%600) > 300);
-	sur_bubble->put_screen((XWINSIZE>>8)-110, (YWINSIZE>>9)-15,
-				(timer%600) > 300);
+	for (auto &t : things) {
+		t->act(timer);
+		t->draw();
+	}
 }
 
 void Intro::controlsDemo() {
