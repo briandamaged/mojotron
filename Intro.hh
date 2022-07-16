@@ -80,6 +80,7 @@ public:
 	void act(int timer);
 
 	int type;
+	int lastact;
 
 	static const std::string typesurface[3];
 };

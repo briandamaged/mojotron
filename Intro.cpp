@@ -79,14 +79,16 @@ void IntroBubble::act(int timer) {
 
 const std::string IntroRobot::typesurface[3] = { "Surfaces/aolcd", "Surfaces/cjt", "Surfaces/ghost" };
 
-IntroRobot::IntroRobot(int x1, int y1, int t) : IntroThing(x1, y1, 0, CL_Surface(typesurface[t], globals->manager)), type(t) {
+IntroRobot::IntroRobot(int x1, int y1, int t) : IntroThing(x1, y1, 0, CL_Surface(typesurface[t], globals->manager)), type(t), lastact(-1) {
 	double angle = ((float)rand() / RAND_MAX) * 2.0 * std::numbers::pi;
 	x = (XWINSIZE >> 9) + (x / 2) * std::cos(angle) - anim.get_width() / 2;
 	y = (YWINSIZE >> 9) + (y / 2) * std::sin(angle) - anim.get_height() / 2;
 }
 
 void IntroRobot::act(int timer) {
-	if (timer % 160 == 0)
+	if (lastact == -1)
+		lastact = timer;
+	if ((timer - lastact) / 100 > 0)
 	{
 		int xdiff = (XWINSIZE >> 9) - x;
 		int ydiff = (YWINSIZE >> 9) - y;
@@ -102,6 +104,7 @@ void IntroRobot::act(int timer) {
 			else
 				y--;
 		}
+		lastact = timer;
 	}
 	timer = timer / 100;
 	frame = timer % anim.get_num_frames();
@@ -361,6 +364,21 @@ void Intro::story() {
 	}
 	if (!sur_viewport.is_null())
 		sur_viewport.put_screen((XWINSIZE >> 9) - (sur_viewport.get_width() / 2), (YWINSIZE >> 9) - (sur_viewport.get_height() / 2), 0);
+	int left = scenes[currentscene].storytime - timer;
+	if (left < 1000) {
+		SDL_BlendMode bm;
+		if (SDL_GetRenderDrawBlendMode(game_renderer, &bm) == 0) {
+			SDL_SetRenderDrawBlendMode(game_renderer, SDL_BLENDMODE_BLEND);
+			SDL_Rect r;
+			SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, ((1000 - left) / 1000.0) * 255);
+			r.x = 0;
+			r.y = 0;
+			r.w = XWINSIZE>>8;
+			r.h = YWINSIZE>>8;
+			SDL_RenderFillRect(game_renderer, &r);
+			SDL_SetRenderDrawBlendMode(game_renderer, bm);
+		}
+	}
 }
 
 void Intro::controlsDemo() {

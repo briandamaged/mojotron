@@ -1091,8 +1091,8 @@
 		<integer name="skip3" value="380" />
 		<string name="text4" value="him the ability to do something about it." />
 		<integer name="storytime" value="9000" />
-		<section name="thing01"><integer name="type" value="1" /><integer name="x" value="288" /><integer name="y" value="224" /><integer name="data" value="0" /></section>
-		<section name="thing02"><integer name="type" value="1" /><integer name="x" value="328" /><integer name="y" value="224" /><integer name="data" value="1" /></section>
+		<section name="thing01"><integer name="type" value="1" /><integer name="x" value="278" /><integer name="y" value="224" /><integer name="data" value="0" /></section>
+		<section name="thing02"><integer name="type" value="1" /><integer name="x" value="338" /><integer name="y" value="224" /><integer name="data" value="1" /></section>
 	</section>
 	<integer name="textstart" value="55" />
 	<integer name="textincrement" value="25" />
