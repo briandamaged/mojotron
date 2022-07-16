@@ -998,15 +998,21 @@
 </section>
 
 <section name="Intro">
-	<integer name="storytime" value="9000" />
 	<string name="subtitle" value="} 2001 Craig Timpany" />
-	<string name="text1" value="Now it is the beginning of" />
-	<string name="text2" value="a fantastic story! Let us" />
-	<string name="text3" value="make a journey to" />
-	<string name="text4" value="the cave of monsters." />
-	<string name="text5" value="" />
-	<string name="text6" value="" />
-	<string name="text7" value="Try hard!" />
+	<section name="scene1">
+		<string name="text1" value="Now it is the beginning of" />
+		<string name="text2" value="a fantastic story! Let us" />
+		<string name="text3" value="make a journey to" />
+		<string name="text4" value="the cave of monsters." />
+		<string name="text5" value="" />
+		<string name="text6" value="" />
+		<string name="text7" value="Try hard!" />
+		<integer name="storytime" value="9000" />
+		<section name="thing01"><integer name="type" value="1" /><integer name="x" value="100" /><integer name="y" value="240" /><integer name="data" value="0" /></section>
+		<section name="thing02"><integer name="type" value="1" /><integer name="x" value="540" /><integer name="y" value="240" /><integer name="data" value="1" /></section>
+		<section name="thing03"><integer name="type" value="2" /><integer name="x" value="90" /><integer name="y" value="225" /><integer name="data" value="0" /></section>
+		<section name="thing04"><integer name="type" value="2" /><integer name="x" value="530" /><integer name="y" value="225" /><integer name="data" value="1" /></section>
+	</section>
 	<integer name="textstart" value="140" />
 	<integer name="textincrement" value="25" />
 </section>

@@ -25,23 +25,86 @@
 #include "Display.hh"
 #include "Demo.hh"
 #include "InputState.hh"
+#include <numbers>
+#include <cmath>
 
 extern Globals* globals;
 
-IntroPlayer::IntroPlayer(int x1, int y1, int p) : IntroThing(x1, y1, 0, globals->spr[p]->anim), player(p) {
+IntroPlayer::IntroPlayer(int x1, int y1, int p) : IntroThing(x1, y1, 0, globals->spr[p]->anim), player(p), armanim(globals->spr[Globals::MONKEYARMONE + p]->anim) {
 }
 
 void IntroPlayer::act(int timer) {
+	timer = timer / 10;
 	frame = timer % (anim.get_num_frames() / 2);
 	if (player == Globals::PLAYERONE)
 		frame += anim.get_num_frames() / 2;
+}
+
+void IntroPlayer::draw() {
+	IntroThing::draw();
+	if (!armanim.is_null()) {
+		armanim.put_screen(x, y, 3 + (player ? 0 : 5));
+	}
+}
+
+const std::string IntroHuman::typesurface[3] = { "Intro/man", "Intro/woman", "Intro/child" };
+
+IntroHuman::IntroHuman(int x1, int y1, int t) : IntroThing(x1, y1, 0, CL_Surface(typesurface[t], globals->manager)), type(t) {
+}
+
+void IntroHuman::act(int timer) {
+	timer = timer / 100;
+	frame = timer % (anim.get_num_frames() / 4);
+	switch (type) {
+		case 0:
+			frame += anim.get_num_frames() / 4 * 3;
+			break;
+		case 1:
+			frame += anim.get_num_frames() / 4;
+			break;
+		case 2:
+			frame += anim.get_num_frames() / 4 * 2;
+			break;
+		default:
+			break;
+	}
 }
 
 IntroBubble::IntroBubble(int x1, int y1) : IntroThing(x1, y1, 0, CL_Surface("Surfaces/bubble", globals->manager)) {
 }
 
 void IntroBubble::act(int timer) {
-	frame = (timer%600) > 300;
+	frame = (timer % 600) > 300;
+}
+
+const std::string IntroRobot::typesurface[3] = { "Surfaces/aolcd", "Surfaces/cjt", "Surfaces/ghost" };
+
+IntroRobot::IntroRobot(int x1, int y1, int t) : IntroThing(x1, y1, 0, CL_Surface(typesurface[t], globals->manager)), type(t) {
+	double angle = ((float)rand() / RAND_MAX) * 2.0 * std::numbers::pi;
+	x = (XWINSIZE >> 9) + (x / 2) * std::cos(angle) - anim.get_width() / 2;
+	y = (YWINSIZE >> 9) + (y / 2) * std::sin(angle) - anim.get_height() / 2;
+}
+
+void IntroRobot::act(int timer) {
+	if (timer % 160 == 0)
+	{
+		int xdiff = (XWINSIZE >> 9) - x;
+		int ydiff = (YWINSIZE >> 9) - y;
+		if (abs(xdiff) > abs(ydiff)) {
+			if (xdiff > 0)
+				x++;
+			else
+				x--;
+		}
+		else {
+			if (ydiff > 0)
+				y++;
+			else
+				y--;
+		}
+	}
+	timer = timer / 100;
+	frame = timer % anim.get_num_frames();
 }
 
 IntroThing::IntroThing(int x1, int y1, int f, CL_Surface a): x(x1), y(y1), frame(f), anim(a) {
@@ -52,6 +115,36 @@ IntroThing::~IntroThing() {
 
 void IntroThing::draw() {
 	anim.put_screen(x, y, frame);
+}
+
+IntroSpecification::IntroSpecification() {
+}
+
+void IntroSpecification::load(std::string prefix) {
+	type = globals->loadInt(prefix + "type");
+	x = globals->loadInt(prefix + "x");
+	y = globals->loadInt(prefix + "y");
+	data = globals->loadInt(prefix + "data");
+}
+
+IntroThing* IntroSpecification::instantiate() {
+	switch (type) {
+		case 1:
+			return new IntroPlayer(x, y, data);
+			break;
+		case 2:
+			return new IntroBubble(x, y);
+			break;
+		case 3:
+			return new IntroHuman(x, y, data);
+			break;
+		case 4:
+			return new IntroRobot(x, y, data);
+			break;
+		default:
+			break;
+	}
+	return NULL;
 }
 
 int Intro::timer = 0;
@@ -71,7 +164,6 @@ Demo* Intro::demo = NULL;
 int Intro::fruit[] = { 	51, 51, 51, 
 			51, 51, 51, 
 			51, 51, 51 };
-std::vector<std::string> Intro::text;
 int Intro::textstart;
 int Intro::textincrement;
 
@@ -80,10 +172,49 @@ using namespace std;
 Intro::Intro() {
 	sur_bubble = NULL;
 	sur_title = NULL;
-	things.push_back(std::make_unique<IntroPlayer>(100, (YWINSIZE / 2) >> 8, Globals::PLAYERONE));
-	things.push_back(std::make_unique<IntroPlayer>((XWINSIZE >> 8) - 100, (YWINSIZE / 2) >> 8, Globals::PLAYERTWO));
-	things.push_back(std::make_unique<IntroBubble>(90, (YWINSIZE >> 9) -15));
-	things.push_back(std::make_unique<IntroBubble>((XWINSIZE>>8)-110, (YWINSIZE >> 9) -15));
+	currentscene = -1;
+	std::string base = "Intro/scene0/";
+	std::string label = "Intro/scene0/text1";
+	storytime = 0;
+	textstart = globals->loadInt("Intro/textstart");
+	textincrement = globals->loadInt("Intro/textincrement");
+	for (int scene = 1; scene < 9; scene++) {
+		base[11] = '0' + scene;
+		label[11] = '0' + scene;
+		label[17] = '1';
+		if (globals->manager->resource_exists(label)) {
+			int texty = textstart;
+			scenes.push_back(IntroScene());
+			for (int i = 1; i < 9; i++) {
+				label[17] = '0' + i;
+				if (globals->manager->resource_exists(label)) {
+					scenes.back().text.push_back(globals->loadString(label));
+					std::string skiplabel = base + "skip1";
+					skiplabel[17] = '0' + i;
+					if (globals->manager->resource_exists(skiplabel)) {
+						texty = globals->loadInt(skiplabel);
+					}
+					scenes.back().texty.push_back(texty);
+					texty += textincrement;
+				}
+				else
+					break;
+			}
+			storytime += globals->loadInt(base + "storytime");
+			scenes.back().storytime = storytime;
+			std::string thinglabel = base + "thing01/";
+			while (globals->manager->resource_exists(thinglabel + "type")) {
+				scenes.back().specs.push_back(IntroSpecification());
+				scenes.back().specs.back().load(thinglabel);
+				if (thinglabel[19] == '9') {
+					thinglabel[18] = thinglabel[18] + 1;
+					thinglabel[19] = '0';
+				}
+				else
+					thinglabel[19] = thinglabel[19] + 1;
+			}
+		}
+	}
 }
 
 Intro::~Intro() {
@@ -101,18 +232,9 @@ bool Intro::show() {
 		sur_starfield = globals->loadSurface("Surfaces/stars");
 		sur_title = globals->loadSurface("Surfaces/title");
 		sur_skillicons = globals->loadSurface("Surfaces/skillicons");
-		storytime = globals->loadInt("Intro/storytime");
+		sur_view = CL_Surface("Intro/smallviewbg", globals->manager);
+		sur_viewport = CL_Surface("Intro/smallviewport", globals->manager);
 		subtitle = globals->loadString("Intro/subtitle");
-		textstart = globals->loadInt("Intro/textstart");
-		textincrement = globals->loadInt("Intro/textincrement");
-		std::string label = "Intro/text0";
-		for (int i = 1; i < 9; i++) {
-			label[10] = '0' + i;
-			if (globals->manager->resource_exists(label))
-				text.push_back(globals->loadString(label));
-			else
-				break;
-		}
 	}
 
 	Sound::playMusic(Sound::TITLE);
@@ -133,13 +255,22 @@ bool Intro::show() {
 			restart(m.checkActive());
 		}
 		if (timer < STORYTIME) {
+			if ((currentscene == -1) || (timer > scenes[currentscene].storytime))
+			{
+				currentscene++;
+				things.clear();
+				for (auto &s : scenes[currentscene].specs) {
+					things.push_back(std::unique_ptr<IntroThing>(s.instantiate()));
+				}
+			}
 			const Uint8 *state = SDL_GetKeyboardState(NULL);
 			if (state[SDL_SCANCODE_SPACE] ||
 				state[SDL_SCANCODE_ESCAPE]) {
 				timer = STORYTIME;
+				m.readyforkey = false;
 			}
 
-			drawBg();
+			introBg();
 			story();
 			globals->smallfont->print_center(XWINSIZE>>9, (YWINSIZE>>8) - 25, "Press Space to start");
 
@@ -197,24 +328,39 @@ void Intro::demoBg() {
 	}
 }
 
+void Intro::introBg() {
+	if (sur_view.is_null())
+		drawBg();
+	else
+	{
+		SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
+		SDL_RenderClear(game_renderer);
+		sur_view.put_screen((XWINSIZE >> 9) - (sur_view.get_width() / 2), (YWINSIZE >> 9) - (sur_view.get_height() / 2), 0);
+	}
+}
+
 void Intro::restart(bool active) {
 	introstarttime = SDL_GetTicks();
 	if (active)
 		timer = STORYTIME;
-	else
+	else {
+		currentscene = -1;
 		timer = 0;
+	}
 }
 
 void Intro::story() {
-	int textpos = textstart;
-	for (auto &s : text) {
-		globals->mediumfont->print_center(XWINSIZE>>9, textpos, s);
-		textpos += textincrement;
+	auto textpos = scenes[currentscene].texty.begin();
+	for (auto &s : scenes[currentscene].text) {
+		globals->mediumfont->print_center(XWINSIZE>>9, *textpos, s);
+		textpos++;
 	}
 	for (auto &t : things) {
 		t->act(timer);
 		t->draw();
 	}
+	if (!sur_viewport.is_null())
+		sur_viewport.put_screen((XWINSIZE >> 9) - (sur_viewport.get_width() / 2), (YWINSIZE >> 9) - (sur_viewport.get_height() / 2), 0);
 }
 
 void Intro::controlsDemo() {

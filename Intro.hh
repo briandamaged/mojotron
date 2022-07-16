@@ -40,7 +40,7 @@ public:
 	IntroThing(int x1, int y1, int f, CL_Surface a);
 	virtual ~IntroThing();
 	virtual void act(int timer) = 0;
-	void draw();
+	virtual void draw();
 
 protected:
 	int x, y;
@@ -52,14 +52,56 @@ class IntroPlayer : public IntroThing {
 public:
 	IntroPlayer(int x1, int y1, int p);
 	void act(int timer);
+	void draw();
 
 	int player;
+	CL_Surface armanim;
+};
+
+class IntroHuman : public IntroThing {
+public:
+	IntroHuman(int x1, int y1, int t);
+	void act(int timer);
+
+	int type;
+
+	static const std::string typesurface[3];
 };
 
 class IntroBubble : public IntroThing {
 public:
 	IntroBubble(int x1, int y1);
 	void act(int timer);
+};
+
+class IntroRobot : public IntroThing {
+public:
+	IntroRobot(int x1, int y1, int t);
+	void act(int timer);
+
+	int type;
+
+	static const std::string typesurface[3];
+};
+
+class IntroSpecification {
+public:
+	IntroSpecification();
+
+	void load(std::string prefix);
+	IntroThing* instantiate();
+
+	int type;
+	int x, y;
+	int data;
+};
+
+class IntroScene {
+public:
+	std::vector<std::string> text;
+	std::vector<int> texty;
+	std::vector<IntroSpecification> specs;
+	int storytime;
 };
 
 class Intro {
@@ -70,6 +112,7 @@ public:
 	bool show();
 	static void drawBg();
 	void demoBg();
+	void introBg();
 
 	static CL_Surface* sur_skillicons;
 	static Demo* demo;
@@ -99,10 +142,13 @@ private:
 	static CL_Surface* sur_starfield;
 	CL_Surface* sur_title;
 	CL_Surface* sur_reel;
+	CL_Surface sur_view;
+	CL_Surface sur_viewport;
 	static int fruit[9];
-	static std::vector<std::string> text;
 	static int textstart;
 	static int textincrement;
+	int currentscene;
+	std::vector<IntroScene> scenes;
 	std::vector<std::unique_ptr<IntroThing>> things;
 };
 

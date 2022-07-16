@@ -7,7 +7,7 @@ OBJS = main.o World.o ScoreBoard.o Thing.o Globals.o Sound.o Intro.o ObjectList.
 REQUIREDLIBS =  `pkg-config --libs sdl2 SDL2_image SDL2_mixer expat`
 
 #CPPFLAGS = -g -pg -Wall $(DEFS)
-CPPFLAGS = -Wall -O3 $(DEFS) `pkg-config --cflags sdl2 SDL2_image SDL2_mixer expat`
+CPPFLAGS = -std=c++20 -Wall -O3 $(DEFS) `pkg-config --cflags sdl2 SDL2_image SDL2_mixer expat`
 
 all: $(OBJS)
 	$(CXX) -o mojotron $(OBJS) $(REQUIREDLIBS) $(SOUNDLIBS)

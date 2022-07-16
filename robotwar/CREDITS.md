@@ -157,3 +157,21 @@ License: CC-BY 3.0
 Inspired by Sensor/Radar Tower
 Created by nazzyc
 https://opengameart.org/content/sensorradar-tower
+
+## man.png
+Edited and Extended 24x32 Character Pack
+Created by diamonddmgirl based on work by Svetlana Kushnariova (lana-chan@yandex.ru)
+License: CC-BY 3.0
+https://opengameart.org/node/66147
+
+## woman.png
+Edited and Extended 24x32 Character Pack
+Created by diamonddmgirl based on work by Svetlana Kushnariova (lana-chan@yandex.ru)
+License: CC-BY 3.0
+https://opengameart.org/node/66147
+
+## child.png
+Edited and Extended 24x32 Character Pack
+Created by diamonddmgirl based on work by Svetlana Kushnariova (lana-chan@yandex.ru)
+License: CC-BY 3.0
+https://opengameart.org/node/66147

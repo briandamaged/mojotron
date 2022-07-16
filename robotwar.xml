@@ -1049,16 +1049,52 @@
 </section>
 
 <section name="Intro">
-	<integer name="storytime" value="9000" />
 	<string name="subtitle" value="" />
-	<surface name="man" value="robotwar/man.png" x="0" y="0" width="24" height="32" array="4x4" />
-	<surface name="woman" value="robotwar/woman.png" x="0" y="0" width="24" height="32" array="4x4" />
-	<surface name="child" value="robotwar/child.png" x="0" y="0" width="24" height="32" array="4x4" />
+	<surface name="man" value="robotwar/man.png" x="0" y="0" width="24" height="32" array="3x4" />
+	<surface name="woman" value="robotwar/woman.png" x="0" y="0" width="24" height="32" array="3x4" />
+	<surface name="child" value="robotwar/child.png" x="0" y="0" width="24" height="32" array="3x4" />
 	<surface name="smallviewport" value="robotwar/smallviewport.png" x="0" y="0" width="302" height="274"/>
 	<surface name="smallviewbg" value="robotwar/smallviewbg.png" x="0" y="0" width="302" height="274"/>
-	<string name="text1" value="In the year 2085, the last of humanity vanished." />
-	<string name="text2" value="The machines had won." />
-	<integer name="textstart" value="140" />
+	<section name="scene1">
+		<string name="text1" value="In the year 2085, the last of humanity vanished." />
+		<integer name="skip1" value="80" />
+		<string name="text2" value="The machines had won." />
+		<integer name="skip2" value="380" />
+		<integer name="storytime" value="9000" />
+		<section name="thing01"><integer name="type" value="3" /><integer name="x" value="288" /><integer name="y" value="224" /><integer name="data" value="0" /></section>
+		<section name="thing02"><integer name="type" value="3" /><integer name="x" value="328" /><integer name="y" value="224" /><integer name="data" value="1" /></section>
+		<section name="thing03"><integer name="type" value="3" /><integer name="x" value="308" /><integer name="y" value="240" /><integer name="data" value="2" /></section>
+		<section name="thing04"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="0" /></section>
+		<section name="thing05"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="0" /></section>
+		<section name="thing06"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="0" /></section>
+		<section name="thing07"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="0" /></section>
+		<section name="thing08"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="0" /></section>
+		<section name="thing09"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="0" /></section>
+		<section name="thing10"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="0" /></section>
+		<section name="thing11"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="1" /></section>
+		<section name="thing12"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="1" /></section>
+		<section name="thing13"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="1" /></section>
+		<section name="thing14"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="1" /></section>
+		<section name="thing15"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="1" /></section>
+		<section name="thing16"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="2" /></section>
+		<section name="thing17"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="2" /></section>
+		<section name="thing18"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="2" /></section>
+		<section name="thing19"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="2" /></section>
+		<section name="thing20"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="2" /></section>
+		<section name="thing21"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="2" /></section>
+		<section name="thing22"><integer name="type" value="4" /><integer name="x" value="253" /><integer name="y" value="234" /><integer name="data" value="2" /></section>
+	</section>
+	<section name="scene2">
+		<string name="text1" value="Mojo doesn't know why they continued" />
+		<string name="text2" value="experimenting on monkeys." />
+		<string name="text3" value="He wants it to stop and the robots have given" />
+		<integer name="skip3" value="380" />
+		<string name="text4" value="him the ability to do something about it." />
+		<integer name="storytime" value="9000" />
+		<section name="thing01"><integer name="type" value="1" /><integer name="x" value="288" /><integer name="y" value="224" /><integer name="data" value="0" /></section>
+		<section name="thing02"><integer name="type" value="1" /><integer name="x" value="328" /><integer name="y" value="224" /><integer name="data" value="1" /></section>
+	</section>
+	<integer name="textstart" value="55" />
 	<integer name="textincrement" value="25" />
 </section>
 
