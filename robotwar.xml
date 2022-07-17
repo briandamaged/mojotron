@@ -117,7 +117,6 @@
 		<integer name="num_balls" value="5" />
 		<integer name="num_obst" value="8" />
 
-		<!-- Grunt = "graphics/aolcd.pcx" (type=surface, x="0" y="0" width="32" height="32" tcol="0" array=20x1); -->
 		<string name="Grunt" value="aolcd" />
 
 		<integer name="gruntspeed" value="2" />
@@ -126,11 +125,12 @@
 		<string name="lev_name" value="Match fruit and win!!" />
 		<integer name="warp_time" value="13" />
 		<integer name="bg_red" value="10" /> <integer name="bg_green" value="20" /> <integer name="bg_blue" value="50" />
+		<string name="background" value="plain" />
 
 		<integer name="num_grunts" value="17" />
 		<integer name="num_balls" value="4" />
-		<integer name="num_obst" value="10" /> // This'll confuse the
-		<integer name="num_fruit" value="3" /> // Germans in the audience :)
+		<integer name="num_obst" value="10" />
+		<integer name="num_fruit" value="3" />
 
 		<integer name="redfruit" value="1" />
 		<integer name="orangefruit" value="1" />
@@ -138,9 +138,10 @@
 		<integer name="gruntspeed" value="4" />
 	</section>
 	<section name="level3">
-		<string name="lev_name" value="Why, Ronald, Why!?"/>
+		<string name="lev_name" value="Careful or they may succeed in death"/>
 		<integer name="warp_time" value="11" />
 		<integer name="bg_red" value="0" /> <integer name="bg_green" value="40" /> <integer name="bg_blue" value="20" />
+		<string name="background" value="plain" />
 
 		<integer name="num_grunts" value="10" />
 		<integer name="num_spikers" value="2" />
@@ -258,7 +259,7 @@
 		<integer name="rightanglermix" value="0" />
  	</section>
 	<section name="level10">
-		<string name="lev_name" value="Mr. Snuggles must die" />
+		<string name="lev_name" value="Bigger they are, the harder they fall" />
 		<integer name="warp_time" value="17" />
 		<integer name="bg_red" value="20" /> <integer name="bg_green" value="40" /> <integer name="bg_blue" value="0" />
 
@@ -851,7 +852,6 @@
 	<surface name="bulletsoaked" value="graphics/ripple.pcx" x="0" y="0" width="16" height="16" tcol="0" array="5x1" />
 
 	<surface name="player1" value="robotwar/cybermonkey.png" x="0" y="0" width="32" height="32" tcol="22" array="8x2" />
-	<!-- player1 = "graphics/testanim.pcx" (type=surface, x="0" y="0" width="32" height="32" tcol=1, array=1x2); -->
 	<integer name="player1flip" value="1" />
 	<integer name="player1timeperframe" value="120" />
 	<surface name="player1arm" value="robotwar/cybermonkeyarm.png" x="0" y="0" width="32" height="32" tcol="22" array="5x2" />
