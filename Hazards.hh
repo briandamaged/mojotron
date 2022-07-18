@@ -241,6 +241,7 @@ public:
 	void tookPlayer(Thing* play)
 				{ play->hurt(100); }
 	Thing::type getType()	{ return Thing::ENEMY; }
+	void draw();
 	void move(int delta);
 	void startPos();
 	void getInBehind();	// ...I'm from New Zealand

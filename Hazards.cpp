@@ -454,6 +454,7 @@ void SimpleBoss::startPos() {
 	if (number%2 == 0) xwobblecent = 4000; 
 	else xwobblecent = ARENAWIDTH - 4000 - spr->width;
 	circletime = M_PI * number / 2;
+	ywobblecent = (ARENAHEIGHT - spr->height)/2;
 	move(0);	// update xpos and ypos
 }
 
@@ -716,6 +717,19 @@ Centipede::~Centipede() {
 	}
 	bonusGen(3, xpos, ypos);
 	explode(0, Globals::GOREEXPLODE);
+}
+
+void Centipede::draw() {
+	if (prev == NULL) {
+		// Draw tail first
+		Thing *itr = this;
+		while (itr->next)
+			itr = itr->next;
+		while (itr) {
+			itr->Thing::draw();
+			itr = itr->prev;
+		}
+	}
 }
 
 void Centipede::hurt(int injury, int xdir, int ydir) {

@@ -275,22 +275,6 @@ void Teleport::deactivated() {
 	owner->invincible = false;
 }
 
-/*
-BoolSwitch::BoolSwitch(int x, int y, Bonus::Id number) : Bonus(Globals::spr_unknown) {
-	xpos = x; ypos = y;
-	spr = globals->spr_bonus[number];
-	// name = Globals:: what to do?
-}
-
-BoolSwitch::activated() {
-	owner->type += 1 << (number-1);
-}
-
-BoolSwitch::deactivated() {
-	owner->type -= 1 << (number-1);
-}
-*/
-
 SpeedUp::SpeedUp(int x, int y) : Bonus(Globals::BONUSSPEEDUP) {
 	xpos = x; ypos = y;
 	name = "Speed Boost";
