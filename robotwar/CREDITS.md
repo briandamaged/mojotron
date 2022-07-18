@@ -117,12 +117,12 @@ https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature
 
 ## robosnail.png
 Modified snail from original Mojotron
-Modified to add black outline
+Modified to add black outline and make robotic
 License: GPL 2.0
 
 ## robofrog.png
 Modified frog from original Mojotron
-Modified to add black outline
+Modified to add black outline and make robotic
 License: GPL 2.0
 
 ## rollrobot.png
@@ -175,3 +175,13 @@ Edited and Extended 24x32 Character Pack
 Created by diamonddmgirl based on work by Svetlana Kushnariova (lana-chan@yandex.ru)
 License: CC-BY 3.0
 https://opengameart.org/node/66147
+
+## segment.png
+Modified segment from original Mojotron
+Modified to add black outline and make robotic
+License: GPL 2.0
+
+## head.png
+Modified head from original Mojotron
+Modified to add black outline and make robotic
+License: GPL 2.0
