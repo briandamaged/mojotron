@@ -26,17 +26,18 @@ using namespace std;
 
 struct Config;
 
-class InputAxis
+class InputAxisPair
 {
 public:
-	InputAxis(int minus_k, int plus_k);
+	InputAxisPair(int minus_xk, int plus_xk, int minus_yk, int plus_yk);
 
-	int get_pos();
-	void set_controller(SDL_GameController *j, int a);
+	void get_pos(int &x, int &y);
+	void set_controller(SDL_GameController *j, int xa, int ya);
 
 private:
-	int minus_key, plus_key;
-	int axis;
+	int minus_xkey, plus_xkey;
+	int minus_ykey, plus_ykey;
+	int xaxis, yaxis;
 	SDL_GameController *joy;
 };
 
@@ -64,10 +65,8 @@ public:
 	static void deinitControls();
 	static void readGroups();
 
-	InputAxis* movex;
-	InputAxis* movey;
-	InputAxis* firex;
-	InputAxis* firey;
+	InputAxisPair* move;
+	InputAxisPair* fire;
 	InputButton* use;
 	SDL_GameController *joystick;
 

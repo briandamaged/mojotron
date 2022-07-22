@@ -311,10 +311,9 @@ void Player::move(int delta) {
 		inventory[0]->switchedon = true;
 	}
 
-	int inx = (int)(in->movex->get_pos());
-	int iny = (int)(in->movey->get_pos());
-	int finx = (int)(in->firex->get_pos());
-	int finy = (int)(in->firey->get_pos());
+	int inx, iny, finx, finy;
+	in->move->get_pos(inx, iny);
+	in->fire->get_pos(finx, finy);
 
 	if (inx || iny) {
 		// if move keys are pressed, face in a new direction

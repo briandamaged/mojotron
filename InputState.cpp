@@ -28,37 +28,52 @@ extern Globals* globals;
 bool InputState::anyKey(false);
 int InputState::lastScancode(0);
 
-InputAxis::InputAxis(int minus_k, int plus_k)
+InputAxisPair::InputAxisPair(int minus_xk, int plus_xk, int minus_yk, int plus_yk)
 : joy(NULL)
 {
-	minus_key = InputState::convert_clanlib(minus_k);
-	plus_key = InputState::convert_clanlib(plus_k);
+	minus_xkey = InputState::convert_clanlib(minus_xk);
+	plus_xkey = InputState::convert_clanlib(plus_xk);
+	minus_ykey = InputState::convert_clanlib(minus_yk);
+	plus_ykey = InputState::convert_clanlib(plus_yk);
 }
 
-int InputAxis::get_pos()
+void InputAxisPair::get_pos(int &x, int &y)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
-	if (state[minus_key])
-		return -1;
-	else if (state[plus_key])
-		return 1;
-	else if (joy) {
-		int val = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)axis);
-		if (val > 3200)
-			return 1;
-		else if (val < -3200)
-			return -1;
-		else
-			return 0;
+	x = 0;
+	y = 0;
+	if (joy) {
+		int xval = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)xaxis);
+		int yval = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)yaxis);
+		double ratio = fabs((double)xval / (double)yval);
+		if (ratio > 0.2) {
+			if (xval > 3200)
+				x = 1;
+			else if (xval < -3200)
+				x = -1;
+		}
+		if (ratio < 0.8) {
+			if (yval > 3200)
+				y = 1;
+			else if (yval < -3200)
+				y = -1;
+		}
 	}
-	else
-		return 0;
+	if (state[minus_xkey])
+		x = -1;
+	else if (state[plus_xkey])
+		x = 1;
+	if (state[minus_ykey])
+		y = -1;
+	else if (state[plus_ykey])
+		y = 1;
 }
 
-void InputAxis::set_controller(SDL_GameController *j, int a)
+void InputAxisPair::set_controller(SDL_GameController *j, int xa, int ya)
 {
 	joy = j;
-	axis = a;
+	xaxis = xa;
+	yaxis = ya;
 }
 
 InputButton::InputButton(int b)
@@ -126,7 +141,7 @@ void InputState::deinitControls() {
 InputState::InputState(int _playernumber, string movegroup, 
 			string aimgroup, int usek) {
 	playernumber = _playernumber;
-	movex = movey = firex = firey = NULL;
+	move = fire = NULL;
 	use = NULL;
 	joystick = NULL;
 	keyboardnumber = 0;
@@ -150,10 +165,8 @@ InputState::InputState(int _playernumber, string movegroup,
 		}
 		if (found == playernumber) {
 			joystick = SDL_GameControllerOpen(JoystickIndex);
-			movex->set_controller(joystick, SDL_CONTROLLER_AXIS_LEFTX);
-			movey->set_controller(joystick, SDL_CONTROLLER_AXIS_LEFTY);
-			firex->set_controller(joystick, SDL_CONTROLLER_AXIS_RIGHTX);
-			firey->set_controller(joystick, SDL_CONTROLLER_AXIS_RIGHTY);
+			move->set_controller(joystick, SDL_CONTROLLER_AXIS_LEFTX, SDL_CONTROLLER_AXIS_LEFTY);
+			fire->set_controller(joystick, SDL_CONTROLLER_AXIS_RIGHTX, SDL_CONTROLLER_AXIS_RIGHTY);
 			use->set_controller(joystick, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 			break;
 		}
@@ -218,27 +231,24 @@ void InputState::setupKeyAxisPair(int keygroup, bool ismovegroup) {
 
 
 	// Normal direction keys
-	InputAxis *x = new InputAxis(globals->loadInt(name + "/left"), globals->loadInt(name + "/right"));
-	InputAxis *y = new InputAxis(globals->loadInt(name + "/up"), globals->loadInt(name + "/down"));
+	InputAxisPair *a = new InputAxisPair(globals->loadInt(name + "/left"), globals->loadInt(name + "/right"), globals->loadInt(name + "/up"), globals->loadInt(name + "/down"));
 	if (ismovegroup) {
-		//x = movex;	y = movey;
 		/* Memory leak?
 		 * Will the axes stored inside get freed?
 		 */
-		if (movex)
+		if (move)
 		{
-			delete movex;	delete movey;
+			delete move;
 		}
-		movex = x;	movey = y;
+		move = a;
 		movekeygroup = keygroup;
 		movekeys = globals->loadString(name + "/keys");
 	} else {
-		//x = firex;	y = firey;
-		if (firex)
+		if (fire)
 		{
-			delete firex;	delete firey;
+			delete fire;
 		}
-		firex = x;	firey = y;
+		fire = a;
 		firekeygroup = keygroup;
 		firekeys = globals->loadString(name + "/keys");
 	}
@@ -274,10 +284,11 @@ void InputState::setupKeyAxisPair(int keygroup, bool ismovegroup) {
 }
 
 std::string InputState::serialiseKeys() {
-	int xmov = 1 + (int)movex->get_pos();
-	int ymov = 1 + (int)movey->get_pos();
-	int xaim = 1 + (int)firex->get_pos();
-	int yaim = 1 + (int)firey->get_pos();
+	int xmov, ymov, xaim, yaim;
+	move->get_pos(xmov, ymov);
+	xmov++; ymov++;
+	fire->get_pos(xaim, yaim);
+	xaim++; yaim++;
 	int iuse = use->is_pressed();
 
 	char buffer[12];
@@ -318,10 +329,8 @@ int InputState::getKeygroupNumber(std::string name) {
 }
 
 InputState::~InputState() {
-	delete movex;
-	delete movey;
-	delete firex;
-	delete firey;
+	delete move;
+	delete fire;
 	delete use;
 }
 
