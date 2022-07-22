@@ -29,6 +29,7 @@ bool InputState::anyKey(false);
 int InputState::lastScancode(0);
 
 InputAxis::InputAxis(int minus_k, int plus_k)
+: joy(NULL)
 {
 	minus_key = InputState::convert_clanlib(minus_k);
 	plus_key = InputState::convert_clanlib(plus_k);
@@ -41,19 +42,46 @@ int InputAxis::get_pos()
 		return -1;
 	else if (state[plus_key])
 		return 1;
+	else if (joy) {
+		int val = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)axis);
+		if (val > 3200)
+			return 1;
+		else if (val < -3200)
+			return -1;
+		else
+			return 0;
+	}
 	else
 		return 0;
 }
 
+void InputAxis::set_controller(SDL_GameController *j, int a)
+{
+	joy = j;
+	axis = a;
+}
+
 InputButton::InputButton(int b)
-: button(b)
+: button(b), joy(NULL)
 {
 }
 
 int InputButton::is_pressed()
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
-	return state[button];
+	int ans = state[button];
+	if ((ans == 0) && (joy)) {
+		int val = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)joy_button);
+		if (val > 3200)
+			ans = 1;
+	}
+	return ans;
+}
+
+void InputButton::set_controller(SDL_GameController *j, int b)
+{
+	joy = j;
+	joy_button = b;
 }
 
 InputState* InputState::playercontrols[2] = { NULL, NULL };
@@ -100,6 +128,7 @@ InputState::InputState(int _playernumber, string movegroup,
 	playernumber = _playernumber;
 	movex = movey = firex = firey = NULL;
 	use = NULL;
+	joystick = NULL;
 	keyboardnumber = 0;
 
 	if (globals->verbosity > 0)
@@ -111,17 +140,26 @@ InputState::InputState(int _playernumber, string movegroup,
 	setupKeyAxisPair(getKeygroupNumber(aimgroup), false);
 	
 	// detect joysticks
-/*	unsigned int joy = playernumber*2;	// players get two joysticks each
-	if (CL_Input::joysticks.size() > joy) {
-		movex->add(CL_Input::joysticks[joy]->get_axis(0));
-		movey->add(CL_Input::joysticks[joy]->get_axis(1));
-		joy++;
-
-		if (CL_Input::joysticks.size() > joy) {
-			firex->add(CL_Input::joysticks[joy]->get_axis(0));
-			firey->add(CL_Input::joysticks[joy]->get_axis(1));
+	int joy = SDL_NumJoysticks();
+	int found = 0;
+	for(int JoystickIndex=0; JoystickIndex < joy; ++JoystickIndex)
+	{
+		if (!SDL_IsGameController(JoystickIndex))
+		{
+			continue;
 		}
-	}*/
+		if (found == playernumber) {
+			joystick = SDL_GameControllerOpen(JoystickIndex);
+			movex->set_controller(joystick, SDL_CONTROLLER_AXIS_LEFTX);
+			movey->set_controller(joystick, SDL_CONTROLLER_AXIS_LEFTY);
+			firex->set_controller(joystick, SDL_CONTROLLER_AXIS_RIGHTX);
+			firey->set_controller(joystick, SDL_CONTROLLER_AXIS_RIGHTY);
+			use->set_controller(joystick, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+			break;
+		}
+		else
+			found++;
+	}
 
 	if (globals->verbosity > 0)
 		cout << "All assigned." << endl;

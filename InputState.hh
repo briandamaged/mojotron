@@ -19,6 +19,7 @@
 #ifndef INPUTSTATE_HH
 #define INPUTSTATE_HH
 
+#include <SDL.h>
 #include <string>
 #include <iostream>
 using namespace std;
@@ -31,9 +32,12 @@ public:
 	InputAxis(int minus_k, int plus_k);
 
 	int get_pos();
+	void set_controller(SDL_GameController *j, int a);
 
 private:
 	int minus_key, plus_key;
+	int axis;
+	SDL_GameController *joy;
 };
 
 class InputButton
@@ -42,9 +46,12 @@ public:
 	InputButton(int b);
 
 	int is_pressed();
+	void set_controller(SDL_GameController *j, int b);
 
 private:
 	int button;
+	int joy_button;
+	SDL_GameController *joy;
 };
 
 class InputState {
@@ -62,6 +69,7 @@ public:
 	InputAxis* firex;
 	InputAxis* firey;
 	InputButton* use;
+	SDL_GameController *joystick;
 
 	enum direction {	UPLEFT, UP, UPRIGHT,
 				LEFT, NONE, RIGHT,
