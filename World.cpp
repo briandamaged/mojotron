@@ -553,6 +553,7 @@ void World::updateDisplay() {
 								(playerlist[i]->stats->score()).c_str());
 
 				globals->spr[i]->draw( 100<<8, (textbegin + textheight*i + textheight/3)<<8, 0, false );
+    globals->spr[Globals::MONKEYARMONE + i]->draw(100<<8, (textbegin + textheight*i + textheight/3)<<8, 3, false);
 
 				globals->smallfont->print_left(160, textbegin + textheight*i + textheight/3,
 								(playerlist[i]->stats->rating()).c_str());
