@@ -19,3 +19,11 @@ h1,h2,h3 {
   background-color: white;
   text-align: center;
 }
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 48%;
+}
