@@ -81,6 +81,7 @@ public:
 
 	int type;
 	int lastact;
+ bool hasorientation;
 
 	static const std::string typesurface[3];
 };

@@ -83,14 +83,15 @@ IntroRobot::IntroRobot(int x1, int y1, int t) : IntroThing(x1, y1, 0, CL_Surface
 	double angle = ((float)rand() / RAND_MAX) * 2.0 * std::numbers::pi;
 	x = (XWINSIZE >> 9) + (x / 2) * std::cos(angle) - anim.get_width() / 2;
 	y = (YWINSIZE >> 9) + (y / 2) * std::sin(angle) - anim.get_height() / 2;
+	hasorientation = (bool)globals->loadInt(typesurface[t] + "flip");
 }
 
 void IntroRobot::act(int timer) {
 	if (lastact == -1)
 		lastact = timer;
+	int xdiff = (XWINSIZE >> 9) - x;
 	if ((timer - lastact) / 100 > 0)
 	{
-		int xdiff = (XWINSIZE >> 9) - x;
 		int ydiff = (YWINSIZE >> 9) - y;
 		if (abs(xdiff) > abs(ydiff)) {
 			if (xdiff > 0)
@@ -107,7 +108,9 @@ void IntroRobot::act(int timer) {
 		lastact = timer;
 	}
 	timer = timer / 100;
-	frame = timer % anim.get_num_frames();
+	frame = timer % (anim.get_num_frames() / (hasorientation ? 2 : 1));
+	if ((xdiff > 0) && hasorientation)
+		frame += anim.get_num_frames() / 2;
 }
 
 IntroThing::IntroThing(int x1, int y1, int f, CL_Surface a): x(x1), y(y1), frame(f), anim(a) {

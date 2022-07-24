@@ -922,10 +922,12 @@
 
 	<!-- grunt sprites -->
 	<surface name="aolcd" value="robotwar/spiderbot.png" x="0" y="0" width="32" height="32" array="3x1" />
-	<surface name="cjt" value="robotwar/robot1.png" x="0" y="0" width="32" height="32" array="3x1" />
+	<surface name="cjt" value="robotwar/robot1.png" x="0" y="0" width="32" height="32" array="3x2" />
+	<integer name="cjtflip" value="1" />
 	<surface name="baby" value="robotwar/robot3.png" x="0" y="0" width="32" height="32" array="3x2" />
 	<integer name="babyflip" value="1" />
-	<surface name="ghost" value="robotwar/robot2.png" x="0" y="0" width="32" height="32" array="3x1" />
+	<surface name="ghost" value="robotwar/robot2.png" x="0" y="0" width="32" height="32" array="3x2" />
+	<integer name="ghostflip" value="1" />
 	<surface name="burger" value="robotwar/tank1.png" x="0" y="0" width="32" height="32" array="3x2" />
 	<integer name="burgerflip" value="1" />
 	<surface name="dalek" value="robotwar/tank2.png" x="0" y="0" width="24" height="24" tcol="0" array="1x2" />
