@@ -107,252 +107,247 @@ World::~World() {
  ****************/
 
 void World::load_level(int l) {
-//	try {
-		int loadstarttime = SDL_GetTicks();
-		globals->loadingScreen(loadstarttime);
+	int loadstarttime = SDL_GetTicks();
+	globals->loadingScreen(loadstarttime);
 
-		num_lev = l;
+	num_lev = l;
 
-		// make char array string containing level num. extension
-		char number[3];
-		sprintf(number, "%d", l);
-		
-		// put the directory for the current level in string 'base'
-		if (base)	delete base;
-		base = new std::string("Levels/level/");
-		base->insert((unsigned int)12, number);
-		if (globals->verbosity > 0)
-			cout << "Loading: " << *base << endl;
-		
-		lev_name = loadlevString("lev_name");
-		warp_time = loadlevInt("warp_time");
-		warp_time += (int)((monster_quantity - 1.0f) * warp_time / 2);
-		warp_time /= num_players;
+	// make char array string containing level num. extension
+	char number[3];
+	sprintf(number, "%d", l);
 
-		// increase the player's stats
-		for (int i=0; i < num_players; i++) {
-			playerlist[i]->speedUp(num_lev / 10);
-		}
+	// put the directory for the current level in string 'base'
+	if (base)	delete base;
+	base = new std::string("Levels/level/");
+	base->insert((unsigned int)12, number);
+	if (globals->verbosity > 0)
+		cout << "Loading: " << *base << endl;
 
-		bgred = loadlevInt("bg_red");
-		bggreen = loadlevInt("bg_green");
-		bgblue = loadlevInt("bg_blue");
-		string bg = loadlevString("background");
-		if (bg.empty())
+	lev_name = loadlevString("lev_name");
+	warp_time = loadlevInt("warp_time");
+	warp_time += (int)((monster_quantity - 1.0f) * warp_time / 2);
+	warp_time /= num_players;
+
+	// increase the player's stats
+	for (int i=0; i < num_players; i++) {
+		playerlist[i]->speedUp(num_lev / 10);
+	}
+
+	bgred = loadlevInt("bg_red");
+	bggreen = loadlevInt("bg_green");
+	bgblue = loadlevInt("bg_blue");
+	string bg = loadlevString("background");
+	if (bg.empty())
+	{
+		for (int i = 0; i < 15; i++)
+			for (int k = 0; k < 10; k++)
+				bgtile[i][k] = 0;
+	}
+	else
+	{
+		bg = "Backgrounds/" + bg + "/row";
+		for (int i = 0; i < 15; i++)
 		{
-			for (int i = 0; i < 15; i++)
-				for (int k = 0; k < 10; k++)
-					bgtile[i][k] = 0;
-		}
-		else
-		{
-			bg = "Backgrounds/" + bg + "/row";
-			for (int i = 0; i < 15; i++)
+			char number[3];
+			sprintf(number, "%d", i + 1);
+			stringstream row(globals->loadString(bg + number));
+			for (int k = 0; k < 10; k++)
 			{
-				char number[3];
-				sprintf(number, "%d", i + 1);
-				stringstream row(globals->loadString(bg + number));
-				for (int k = 0; k < 10; k++)
-				{
-					string substr;
-					getline(row, substr, ',');
-					bgtile[i][k] = atoi(substr.c_str());
-				}
+				string substr;
+				getline(row, substr, ',');
+				bgtile[i][k] = atoi(substr.c_str());
 			}
 		}
-		
-		globals->loadingScreen(loadstarttime);
+	}
 
-		// Looking for initial numbers of monsters etc.
-		// Oh no! This method needs to know about every kind of monster/hazard in the game.
-		int num_balls = loadlevInt("num_balls");
-		int num_obst = loadlevInt("num_obst");
-		int num_grunts = loadlevInt("num_grunts");
-		int num_spikers = loadlevInt("num_spikers");
-		int num_asteroids = loadlevInt("num_asteroids");
-		int num_snipers = loadlevInt("num_snipers");
-		int num_rightanglers = loadlevInt("num_rightanglers");
-		int num_simpleboss = loadlevInt("num_simpleboss");
-		int num_rockmen = loadlevInt("num_rockmen");
-		int num_turrets = loadlevInt("num_turrets");
-		int num_soldiers = loadlevInt("num_soldiers");
-		int num_circleboss = loadlevInt("num_circleboss");
-		int num_centipedes = loadlevInt("num_centipedes");
-		int num_cellphones = loadlevInt("num_cellphones");
-		int num_spirals = loadlevInt("num_spirals");
-		//int num_conglomerates = loadlevInt("num_conglomerates");
-		int num_lasers = loadlevInt("num_lasers");
-		int num_barricades = loadlevInt("num_barricades");
-		int num_fruit = loadlevInt("num_fruit");
-		
-		// used in empty.scr to make sure no SPs are loaded twice
-		if (globals->loadInt("Testing/singlegruntsprite")) {
-			spr_grunt = globals->spr[Globals::SINGLEGRUNT];
-		} else {
-			if (spr_grunt) {
-				delete spr_grunt;
-			}
-			std::string temp = std::string("Surfaces/");
-			temp.append(loadlevString("Grunt"));
-			spr_grunt = new Sprite(temp, globals->manager);
+	globals->loadingScreen(loadstarttime);
+
+	// Looking for initial numbers of monsters etc.
+	// Oh no! This method needs to know about every kind of monster/hazard in the game.
+	int num_balls = loadlevInt("num_balls");
+	int num_obst = loadlevInt("num_obst");
+	int num_grunts = loadlevInt("num_grunts");
+	int num_spikers = loadlevInt("num_spikers");
+	int num_asteroids = loadlevInt("num_asteroids");
+	int num_snipers = loadlevInt("num_snipers");
+	int num_rightanglers = loadlevInt("num_rightanglers");
+	int num_simpleboss = loadlevInt("num_simpleboss");
+	int num_rockmen = loadlevInt("num_rockmen");
+	int num_turrets = loadlevInt("num_turrets");
+	int num_soldiers = loadlevInt("num_soldiers");
+	int num_circleboss = loadlevInt("num_circleboss");
+	int num_centipedes = loadlevInt("num_centipedes");
+	int num_cellphones = loadlevInt("num_cellphones");
+	int num_spirals = loadlevInt("num_spirals");
+	//int num_conglomerates = loadlevInt("num_conglomerates");
+	int num_lasers = loadlevInt("num_lasers");
+	int num_barricades = loadlevInt("num_barricades");
+	int num_fruit = loadlevInt("num_fruit");
+
+	// used in empty.scr to make sure no SPs are loaded twice
+	if (globals->loadInt("Testing/singlegruntsprite")) {
+		spr_grunt = globals->spr[Globals::SINGLEGRUNT];
+	} else {
+		if (spr_grunt) {
+			delete spr_grunt;
 		}
-		globals->loadingScreen(loadstarttime);
+		std::string temp = std::string("Surfaces/");
+		temp.append(loadlevString("Grunt"));
+		spr_grunt = new Sprite(temp, globals->manager);
+	}
+	globals->loadingScreen(loadstarttime);
 
-		int gruntspeed = loadlevInt("gruntspeed");
-		int grunthealth = loadlevInt("grunthealth");
-		bool gruntescapepod = loadlevInt("gruntescapepod");
-		bool gruntrandompod = loadlevInt("gruntrandompod");
-		bool gruntbouncingpod = loadlevInt("gruntbouncingpod");
-		int rightanglermix = loadlevInt("rightanglermix"); // 0 for random, 1 for all on walls, 2 for all on roof/floor
-		int turretfansize = loadlevInt("turretfansize");
-		int barricadeson = loadlevInt("dropbarricades"); // 1 dead enemies drop barricades, 0 normal
-		int centipedelength = loadlevInt("centipedelength");
+	int gruntspeed = loadlevInt("gruntspeed");
+	int grunthealth = loadlevInt("grunthealth");
+	bool gruntescapepod = loadlevInt("gruntescapepod");
+	bool gruntrandompod = loadlevInt("gruntrandompod");
+	bool gruntbouncingpod = loadlevInt("gruntbouncingpod");
+	int rightanglermix = loadlevInt("rightanglermix"); // 0 for random, 1 for all on walls, 2 for all on roof/floor
+	int turretfansize = loadlevInt("turretfansize");
+	int barricadeson = loadlevInt("dropbarricades"); // 1 dead enemies drop barricades, 0 normal
+	int centipedelength = loadlevInt("centipedelength");
+
+	bool fruittypes[6];
+	fruittypes[0] = (bool)loadlevInt("specialfruit");
+	fruittypes[1] = (bool)loadlevInt("redfruit");
+	fruittypes[2] = (bool)loadlevInt("orangefruit");
+	fruittypes[3] = (bool)loadlevInt("yellowfruit");
+	fruittypes[4] = (bool)loadlevInt("greenfruit");
+	fruittypes[5] = (bool)loadlevInt("bluefruit");
 	
-		bool fruittypes[6];
-		fruittypes[0] = (bool)loadlevInt("specialfruit");
-		fruittypes[1] = (bool)loadlevInt("redfruit");
-		fruittypes[2] = (bool)loadlevInt("orangefruit");
-		fruittypes[3] = (bool)loadlevInt("yellowfruit");
-		fruittypes[4] = (bool)loadlevInt("greenfruit");
-		fruittypes[5] = (bool)loadlevInt("bluefruit");
-		
-		// Construct Things
-		all->clearLevel();
-		int n;
+	// Construct Things
+	all->clearLevel();
+	int n;
 
-		globals->loadingScreen(loadstarttime);
+	globals->loadingScreen(loadstarttime);
 
-		// monsters required killed
-		for(n=0; n < (int)(monster_quantity * num_balls); n++) {
-			if (globals->verbosity > 1) cout << "z";
-			all->addThing(new Ball(Globals::BALL));
+	// monsters required killed
+	for(n=0; n < (int)(monster_quantity * num_balls); n++) {
+		if (globals->verbosity > 1) cout << "z";
+		all->addThing(new Ball(Globals::BALL));
+	}
+
+	globals->loadingScreen(loadstarttime);
+
+	for(n=0; n < (int)(monster_quantity * num_grunts); n++) {
+		if (globals->verbosity > 1) cout << "y";
+		Thing* temp = new Grunt(Globals::SINGLEGRUNT, gruntspeed);
+		temp->spr = spr_grunt;
+		temp->setupAnim();
+
+		if (grunthealth) temp->health = grunthealth;
+		if (barricadeson) temp->dropsbarricade = true;
+		all->addThing(temp);
+	}
+	Grunt::escapepod = gruntescapepod;
+	Grunt::randompod = gruntrandompod;
+	Grunt::bouncingpod = gruntbouncingpod;
+
+	globals->loadingScreen(loadstarttime);
+
+	for(n=0; n < (int)(monster_quantity * num_spikers); n++) {
+		if (globals->verbosity > 1) cout << "s";
+		all->addThing(new Spiker(Globals::SPIKER));
+	}
+	for(n=0; n < (int)(monster_quantity * num_asteroids); n++) {
+		if (globals->verbosity > 1) cout << "a";
+		all->addThing(new Asteroid());
+	}
+	for(n=0; n < (int)(monster_quantity * num_snipers); n++) {
+		if (globals->verbosity > 1) cout << "g";
+		all->addThing(new Sniper(Globals::SNIPER));
+	}
+	for(n=0; n < (int)(monster_quantity * num_rightanglers); n++) {
+		if (globals->verbosity > 1) cout << "g";
+		if (rightanglermix == 1) {
+			all->addThing(new RightAngler(Globals::RIGHTANGLER, true));
+		} else if (rightanglermix == 2) {
+			all->addThing(new RightAngler(Globals::RIGHTANGLER, false));
+		} else {
+			all->addThing(new RightAngler(Globals::RIGHTANGLER, (rand() < RAND_MAX/2)));
 		}
+	}
+	globals->loadingScreen(loadstarttime);
 
-		globals->loadingScreen(loadstarttime);
+	for(n=0; n < (int)(monster_quantity * num_turrets); n++) {
+		all->addThing(new Turret(Globals::TURRET, turretfansize));
+	}
+	for(n=0; n < (int)(monster_quantity * num_soldiers); n++) {
+		Thing* temp = new Soldier(Globals::SOLDIER);
+		if (barricadeson) temp->dropsbarricade = true;
+		all->addThing(temp);
+	}
+	globals->loadingScreen(loadstarttime);
+	for(n=0; n < (int)(monster_quantity * num_simpleboss); n++) {
+		all->addThing(new SimpleBoss(Globals::SIMPLEBOSS, n));
+	}
+	for(n=0; n < (int)(monster_quantity * num_circleboss); n++) {
+		// evenly distribute the bosses around their circles, and make one circle 180deg to the other
+		all->addThing(new CircleBoss(Globals::CIRCLEBOSS, 
+						ARENAWIDTH/3 * (1 + n%2), ARENAHEIGHT/2, gruntspeed, 
+						(n/2)*4*M_PI/num_circleboss + (1 + n%2)*M_PI)); 
+	}
+	globals->loadingScreen(loadstarttime);
 
-		for(n=0; n < (int)(monster_quantity * num_grunts); n++) {
-			if (globals->verbosity > 1) cout << "y";
-			Thing* temp = new Grunt(Globals::SINGLEGRUNT, gruntspeed);
-			temp->spr = spr_grunt;
-			temp->setupAnim();
+	for(n=0; n < (int)(monster_quantity * num_centipedes); n++) {
+		Thing* head = new Centipede(Globals::CENTIHEAD, 0);
+		all->addThing(head);
 
-			if (grunthealth) temp->health = grunthealth;
-			if (barricadeson) temp->dropsbarricade = true;
+		Thing* leadby = head;
+		for(int j=1; j < centipedelength; j++) {
+			Thing* temp = new Centipede(Globals::CENTISEG, leadby);
 			all->addThing(temp);
+			leadby = temp;
 		}
-		Grunt::escapepod = gruntescapepod;
-		Grunt::randompod = gruntrandompod;
-		Grunt::bouncingpod = gruntbouncingpod;
+		head->startPos();	// special case. Other monsters should call their own startPos
+	}
 
-		globals->loadingScreen(loadstarttime);
+	globals->loadingScreen(loadstarttime);
 
-		for(n=0; n < (int)(monster_quantity * num_spikers); n++) {
-			if (globals->verbosity > 1) cout << "s";
-			all->addThing(new Spiker(Globals::SPIKER));
-		}
-		for(n=0; n < (int)(monster_quantity * num_asteroids); n++) {
-			if (globals->verbosity > 1) cout << "a";
-			all->addThing(new Asteroid());
-		}
-		for(n=0; n < (int)(monster_quantity * num_snipers); n++) {
-			if (globals->verbosity > 1) cout << "g";
-			all->addThing(new Sniper(Globals::SNIPER));
-		}
-		for(n=0; n < (int)(monster_quantity * num_rightanglers); n++) {
-			if (globals->verbosity > 1) cout << "g";
-			if (rightanglermix == 1) {
-				all->addThing(new RightAngler(Globals::RIGHTANGLER, true));
-			} else if (rightanglermix == 2) {
-				all->addThing(new RightAngler(Globals::RIGHTANGLER, false));
-			} else {
-				all->addThing(new RightAngler(Globals::RIGHTANGLER, (rand() < RAND_MAX/2)));
-			}
-		}
-		globals->loadingScreen(loadstarttime);
+	Thing* previous = 0;
+	for(n=0; n < (int)(monster_quantity * num_cellphones); n++) {
+		Thing* temp = new Cellphone(Globals::CELLPHONE, previous);
+		all->addThing(temp);
+		previous = temp;
+	}
+	for(n=0; n < (int)(monster_quantity * num_spirals); n++) {
+		all->addThing(new Spiral(Globals::SPIRAL));
+	}
+	max_active = num_active = all->getNumToBeKilled();
 
-		for(n=0; n < (int)(monster_quantity * num_turrets); n++) {
-			all->addThing(new Turret(Globals::TURRET, turretfansize));
-		}
-		for(n=0; n < (int)(monster_quantity * num_soldiers); n++) {
-			Thing* temp = new Soldier(Globals::SOLDIER);
-			if (barricadeson) temp->dropsbarricade = true;
-			all->addThing(temp);
-		}
-		globals->loadingScreen(loadstarttime);
-		for(n=0; n < (int)(monster_quantity * num_simpleboss); n++) {
-			all->addThing(new SimpleBoss(Globals::SIMPLEBOSS, n));
-		}
-		for(n=0; n < (int)(monster_quantity * num_circleboss); n++) {
-			// evenly distribute the bosses around their circles, and make one circle 180deg to the other
-			all->addThing(new CircleBoss(Globals::CIRCLEBOSS, 
-							ARENAWIDTH/3 * (1 + n%2), ARENAHEIGHT/2, gruntspeed, 
-							(n/2)*4*M_PI/num_circleboss + (1 + n%2)*M_PI)); 
-		}
-		globals->loadingScreen(loadstarttime);
+	globals->loadingScreen(loadstarttime);
 
-		for(n=0; n < (int)(monster_quantity * num_centipedes); n++) {
-			Thing* head = new Centipede(Globals::CENTIHEAD, 0);
-			all->addThing(head);
+	// optionally killed
+	for(n=0; n < (int)(monster_quantity * num_obst); n++) {
+		if (globals->verbosity > 1) cout << "x";
+		all->addThing(new Obstacle(Globals::OBSTACLE));
+	}
+	for(n=0; n < num_fruit; n++) {
+		if (globals->verbosity > 1) cout << "f";
+		all->addThing(new Fruit(fruittypes));
+	}
 
-			Thing* leadby = head;
-			for(int j=1; j < centipedelength; j++) {
-				Thing* temp = new Centipede(Globals::CENTISEG, leadby);
-				all->addThing(temp);
-				leadby = temp;
-			}
-			head->startPos();	// special case. Other monsters should call their own startPos
-		}
+	globals->loadingScreen(loadstarttime);
 
-		globals->loadingScreen(loadstarttime);
+	for(n=0; n < (int)(monster_quantity * num_rockmen); n++) {
+		if (globals->verbosity > 1) cout << "r";
+		all->addThing(new RockMan(Globals::ROCKMAN));
+	}
+	for(n=0; n < num_barricades; n++) {
+		all->addThing(new Barricade());
+	}
+	for(n=0; n < (int)(monster_quantity * num_lasers); n++) {
+		if (rand() > RAND_MAX/2)
+			all->addThing(new Laser(Globals::LASERVERT, true));
+		else
+			all->addThing(new Laser(Globals::LASERHORIZ, false));
+	}
+	globals->loadingScreen(loadstarttime);
 
-		Thing* previous = 0;
-		for(n=0; n < (int)(monster_quantity * num_cellphones); n++) {
-			Thing* temp = new Cellphone(Globals::CELLPHONE, previous);
-			all->addThing(temp);
-			previous = temp;
-		}
-		for(n=0; n < (int)(monster_quantity * num_spirals); n++) {
-			all->addThing(new Spiral(Globals::SPIRAL));
-		}
-		max_active = num_active = all->getNumToBeKilled();
-
-		globals->loadingScreen(loadstarttime);
-
-		// optionally killed
-		for(n=0; n < (int)(monster_quantity * num_obst); n++) {
-			if (globals->verbosity > 1) cout << "x";
-			all->addThing(new Obstacle(Globals::OBSTACLE));
-		}
-		for(n=0; n < num_fruit; n++) {
-			if (globals->verbosity > 1) cout << "f";
-			all->addThing(new Fruit(fruittypes));
-		}
-
-		globals->loadingScreen(loadstarttime);
-
-		for(n=0; n < (int)(monster_quantity * num_rockmen); n++) {
-			if (globals->verbosity > 1) cout << "r";
-			all->addThing(new RockMan(Globals::ROCKMAN));
-		}
-		for(n=0; n < num_barricades; n++) {
-			all->addThing(new Barricade());
-		}
-		for(n=0; n < (int)(monster_quantity * num_lasers); n++) {
-			if (rand() > RAND_MAX/2)
-				all->addThing(new Laser(Globals::LASERVERT, true));
-			else
-				all->addThing(new Laser(Globals::LASERHORIZ, false));
-		}
-		globals->loadingScreen(loadstarttime);
-		
-		for(int i=0; i < num_players; i++) {
-			playerlist[i]->startPos();
-		}
-		globals->loadingScreen(loadstarttime);
-
-/*	} catch(CL_Error err) {
-		cout << "CL_Error: " << err.message.c_str() << std::endl;
-	}*/
+	for(int i=0; i < num_players; i++) {
+		playerlist[i]->startPos();
+	}
+	globals->loadingScreen(loadstarttime);
 }
 
 // templates would probably be the good thing here

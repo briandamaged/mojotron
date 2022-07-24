@@ -268,7 +268,11 @@ void Player::draw() {
 		armframe = 3;
 	else if (yaim > 0)
 		armframe = 4;
-	arm->draw(xpos, ypos, armframe, facingleft);
+	if (worldobj->monster_size) {
+		arm->draw(xpos, ypos-zpos, armframe, facingleft, worldobj->monster_size, worldobj->monster_size);
+	} else {
+		arm->draw(xpos, ypos, armframe, facingleft);
+	}
 	if (invincible) {
 		if ((SDL_GetTicks() % 100) > 50)
 			globals->spr[Globals::FORCEFIELD]->draw(xpos, ypos, 0, false);
