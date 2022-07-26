@@ -153,6 +153,35 @@ IntroThing* IntroSpecification::instantiate() {
 	return NULL;
 }
 
+void Scene::load(int textstart, int textincrement, const std::string &prefix) {
+	int cury = textstart;
+	std::string label = prefix + "text1";
+	std::string skiplabel = prefix + "skip1";
+	int end = label.length() - 1;
+	for (int i = 1; i < 9; i++) {
+		label[end] = '0' + i;
+		if (globals->manager->resource_exists(label)) {
+			text.push_back(globals->loadString(label));
+			skiplabel[end] = '0' + i;
+			if (globals->manager->resource_exists(skiplabel)) {
+				cury = globals->loadInt(skiplabel);
+			}
+			texty.push_back(cury);
+			cury += textincrement;
+		}
+		else
+			break;
+	}
+}
+
+void Scene::draw() {
+	auto textpos = texty.begin();
+	for (auto &s : text) {
+		globals->mediumfont->print_center(XWINSIZE>>9, *textpos, s);
+		textpos++;
+	}
+}
+
 int Intro::timer = 0;
 int Intro::restarttime = 0;
 int Intro::introstarttime = 0;
@@ -180,32 +209,14 @@ Intro::Intro() {
 	sur_title = NULL;
 	currentscene = -1;
 	std::string base = "Intro/scene0/";
-	std::string label = "Intro/scene0/text1";
 	storytime = 0;
 	textstart = globals->loadInt("Intro/textstart");
 	textincrement = globals->loadInt("Intro/textincrement");
 	for (int scene = 1; scene < 9; scene++) {
 		base[11] = '0' + scene;
-		label[11] = '0' + scene;
-		label[17] = '1';
-		if (globals->manager->resource_exists(label)) {
-			int texty = textstart;
+		if (globals->manager->resource_exists(base + "text1")) {
 			scenes.push_back(IntroScene());
-			for (int i = 1; i < 9; i++) {
-				label[17] = '0' + i;
-				if (globals->manager->resource_exists(label)) {
-					scenes.back().text.push_back(globals->loadString(label));
-					std::string skiplabel = base + "skip1";
-					skiplabel[17] = '0' + i;
-					if (globals->manager->resource_exists(skiplabel)) {
-						texty = globals->loadInt(skiplabel);
-					}
-					scenes.back().texty.push_back(texty);
-					texty += textincrement;
-				}
-				else
-					break;
-			}
+			scenes.back().load(textstart, textincrement, base);
 			storytime += globals->loadInt(base + "storytime");
 			scenes.back().storytime = storytime;
 			std::string thinglabel = base + "thing01/";
@@ -356,11 +367,7 @@ void Intro::restart(bool active) {
 }
 
 void Intro::story() {
-	auto textpos = scenes[currentscene].texty.begin();
-	for (auto &s : scenes[currentscene].text) {
-		globals->mediumfont->print_center(XWINSIZE>>9, *textpos, s);
-		textpos++;
-	}
+	scenes[currentscene].draw();
 	for (auto &t : things) {
 		t->act(timer);
 		t->draw();

@@ -98,10 +98,17 @@ public:
 	int data;
 };
 
-class IntroScene {
+class Scene {
 public:
+	void load(int textstart, int textincrement, const std::string &prefix);
+	void draw();
+
 	std::vector<std::string> text;
 	std::vector<int> texty;
+};
+
+class IntroScene : public Scene {
+public:
 	std::vector<IntroSpecification> specs;
 	int storytime;
 };

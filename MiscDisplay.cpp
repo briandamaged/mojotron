@@ -33,6 +33,8 @@ MiscDisplay::MiscDisplay() {
 	livesicon = globals->loadSurface("Surfaces/livesicon");
 	levelicon = globals->loadSurface("Surfaces/levelicon");
 	timeicon = globals->loadSurface("Surfaces/timeicon");
+	wontitle = globals->loadString("Won/title");
+	won.load(globals->loadInt("Won/textstart"), globals->loadInt("Won/textincrement"), "Won/");
 }
 
 MiscDisplay::~MiscDisplay() {
@@ -94,11 +96,8 @@ void MiscDisplay::drawHelpBonus(int time) {
 }
 
 void MiscDisplay::drawWonGame() {
-	globals->largefont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-150, "404 No More Game!!");
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-75, "Mojo the monkey lived happily ever after, and was");
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-50, "thanked by everyone for clearing the land of monsters.");
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9), "Everyone except those stone head things, who still");
-	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9)+25, "want his blood. You can't please everybody, I suppose.");
+	globals->largefont->print_center(XWINSIZE>>9, (YWINSIZE>>9)-150, wontitle);
+	won.draw();
 	globals->mediumfont->print_center(XWINSIZE>>9, (YWINSIZE>>9)+150, "Press any key to continue.");
 }
 

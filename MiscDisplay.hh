@@ -20,6 +20,7 @@
 #define MISCDISPLAY_HH
 
 #include "SDL_CL_Surface.h"
+#include "Intro.hh"
 
 class Sprite;
 class PlayerStats;
@@ -41,6 +42,8 @@ public:
 private: 
 	int consoletimer;
 	std::string consoledisplay;
+	std::string wontitle;
+	Scene won;
 
 	static CL_Surface* livesicon;
 	static CL_Surface* levelicon;

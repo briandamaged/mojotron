@@ -1017,6 +1017,17 @@
 	<integer name="textincrement" value="25" />
 </section>
 
+<section name="Won">
+	<string name="title" value="404 No More Game!!" />
+	<string name="text1" value="Mojo the monkey lived happily ever after, and was" />
+	<string name="text2" value="thanked by everyone for clearing the land of monsters." />
+	<string name="text3" value="Everyone except those stone head things, who still" />
+	<integer name="skip3" value="240" />
+	<string name="text4" value="want his blood. You can't please everybody, I suppose." />
+	<integer name="textstart" value="165" />
+	<integer name="textincrement" value="25" />
+</section>
+
 <section name="MonsterSpecs">
 	<section name="Ball">
 		<integer name="speed" value="13" />
