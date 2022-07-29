@@ -67,7 +67,6 @@ World::World() {
 	pausemenu = new Menu(Menu::INGAME);
 
 	spr_grunt = 0;
-	base = 0;
 	flashing = 0;	statetime = 0;
 	ui_bg = CL_Surface("Surfaces/ui_background", globals->manager);
 	tiles = CL_Surface("Backgrounds/tiles", globals->manager);
@@ -89,8 +88,6 @@ World::~World() {
 	delete pllist;
 	delete olist;
 	delete ollist;
-
-	delete base;
 
 	if (!globals->loadInt("Testing/singlegruntsprite")) {
 		// will be null if world deleted immediately
@@ -117,13 +114,32 @@ void World::load_level(int l) {
 	sprintf(number, "%d", l);
 
 	// put the directory for the current level in string 'base'
-	if (base)	delete base;
-	base = new std::string("Levels/level/");
-	base->insert((unsigned int)12, number);
+	base = "Levels/level/";
+	base.insert((unsigned int)12, number);
 	if (globals->verbosity > 0)
-		cout << "Loading: " << *base << endl;
+		cout << "Loading: " << base << endl;
 
 	lev_name = loadlevString("lev_name");
+	if (lev_name.empty()) {
+		std::string prev = base;
+		l--;
+		while (l > 0) {
+			sprintf(number, "%d", l);
+
+			// put the directory for the current level in string 'base'
+			base = "Levels/level/";
+			base.insert((unsigned int)12, number);
+			lev_name = loadlevString("lev_name");
+			if (!lev_name.empty())
+				break;
+			prev = base;
+			l--;
+		}
+		l++;
+		base = prev;
+		lev_name = "";
+		num_lev = l;
+	}
 	warp_time = loadlevInt("warp_time");
 	warp_time += (int)((monster_quantity - 1.0f) * warp_time / 2);
 	warp_time /= num_players;
@@ -354,14 +370,14 @@ void World::load_level(int l) {
 
 int World::loadlevInt(std::string dataname) {
 	// loads /Levels/levelxx/dataname, from the resource file
-	std::string temp = *base;
+	std::string temp = base;
 	temp.append(dataname);
 	return (globals->loadInt(temp));
 }
 
 std::string World::loadlevString(std::string dataname) {
 	// loads /Levels/levelxx/dataname, from the resource file
-	std::string temp = *base;
+	std::string temp = base;
 	temp.append(dataname);
 	return (globals->loadString(temp));
 }
@@ -548,7 +564,7 @@ void World::updateDisplay() {
 								(playerlist[i]->stats->score()).c_str());
 
 				globals->spr[i]->draw( 100<<8, (textbegin + textheight*i + textheight/3)<<8, 0, false );
-    globals->spr[Globals::MONKEYARMONE + i]->draw(100<<8, (textbegin + textheight*i + textheight/3)<<8, 3, false);
+				globals->spr[Globals::MONKEYARMONE + i]->draw(100<<8, (textbegin + textheight*i + textheight/3)<<8, 3, false);
 
 				globals->smallfont->print_left(160, textbegin + textheight*i + textheight/3,
 								(playerlist[i]->stats->rating()).c_str());

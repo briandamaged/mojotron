@@ -118,7 +118,7 @@ private:
 
 	int loadlevInt(std::string dataname);
 	std::string loadlevString(std::string dataname);
-	std::string *base;
+	std::string base;
 	
 	ObjectList* all;
 	ObjectList* elist;
