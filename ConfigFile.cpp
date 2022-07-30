@@ -25,6 +25,7 @@
 #include "SkillLevel.hh"
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
 using namespace std;
 
@@ -34,8 +35,19 @@ string ConfigFile::getFilename() {
 #ifdef WIN32
 	return "mojotron.ini";
 #else
-	//#include <stdlib.h>
-	return string(getenv("HOME")) + "/.mojotronrc";
+	string result;
+	char* env;
+
+	env=getenv("XDG_DATA_HOME");
+	if(env!=NULL){
+		result = env;
+	}else{
+		result = getenv("HOME");
+		result += "/.local/share";
+	}
+	result += "/mojotron";
+	std::filesystem::create_directories(result);
+	return result + "/config";
 #endif
 }
 
