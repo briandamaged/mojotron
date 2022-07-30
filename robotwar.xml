@@ -799,9 +799,9 @@
 		<string name="lev_name" value="" />
 		<integer name="warp_time" value="0" />
 		<integer name="bg_red" value="20" /> <integer name="bg_green" value="30" /> <integer name="bg_blue" value="70" />
+		<string name="background" value="forest" />
 
-		<integer name="num_grunts" value="16" />
-		<integer name="num_fruit" value="40" />
+		<integer name="num_grunts" value="30" />
 
 		<string name="Grunt" value="clouds" />
 
@@ -813,7 +813,7 @@
 </section>
 
 <section name="Backgrounds">
-	<surface name="tiles" value="robotwar/plate.png" x="0" y="0" width="64" height="32" array="2x2" />
+	<surface name="tiles" value="robotwar/plate.png" x="0" y="0" width="64" height="32" array="4x3" />
 	<section name="plain">
 		<string name="row1" value="1,2,1,2,1,2,1,2,1,2" />
 		<string name="row2" value="2,1,2,1,2,1,2,1,2,1" />
@@ -847,6 +847,23 @@
 		<string name="row13" value="1,2,1,2,1,2,1,2,1,4" />
 		<string name="row14" value="2,1,2,1,2,1,2,1,2,1" />
 		<string name="row15" value="1,2,1,2,1,2,1,2,2,2" />
+	</section>
+	<section name="forest">
+		<string name="row1" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row2" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row3" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row4" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row5" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row6" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row7" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row8" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row9" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row10" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row11" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row12" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row13" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row14" value="5,5,5,5,5,5,5,5,5,5" />
+		<string name="row15" value="5,5,5,5,5,5,5,5,5,5" />
 	</section>
 </section>
 
@@ -934,7 +951,7 @@
 	<integer name="dalekflip" value="1" />
 	<surface name="fish" value="robotwar/drone2.png" x="0" y="0" width="32" height="24" array="3x2" />
 	<integer name="fishflip" value="1" />
-	<surface name="clouds" value="graphics/clouds.tga" x="0" y="0" width="64" height="64" array="6x1" />
+	<surface name="clouds" value="robotwar/trees.png" x="0" y="0" width="64" height="64" array="2x1" />
 	<surface name="pokey" value="robotwar/drone3.png" x="0" y="0" width="29" height="41" tcol="119" array="3x2" />
 	<integer name="pokeyflip" value="1" />
 	<surface name="hammer" value="robotwar/robot4.png" x="0" y="0" width="32" height="32" tcol="0" array="3x2" />
@@ -1121,12 +1138,12 @@
 </section>
 
 <section name="Won">
-	<string name="title" value="404 No More Game!!" />
-	<string name="text1" value="Mojo the monkey lived happily ever after, and was" />
-	<string name="text2" value="thanked by everyone for clearing the land of monsters." />
-	<string name="text3" value="Everyone except those stone head things, who still" />
+	<string name="title" value="Escape!" />
+	<string name="text1" value="Mojo escaped into the forest. Many machines were" />
+	<string name="text2" value="destroyed in the process but they build more." />
+	<string name="text3" value="Eliminating all the robots will take time and" />
 	<integer name="skip3" value="240" />
-	<string name="text4" value="want his blood. You can't please everybody, I suppose." />
+	<string name="text4" value="perseverance." />
 	<integer name="textstart" value="165" />
 	<integer name="textincrement" value="25" />
 </section>

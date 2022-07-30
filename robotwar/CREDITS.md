@@ -50,8 +50,11 @@ Modified from original Mojotron to add black outline
 License: GPL 2.0
 
 ## plate.png
-Created by Dennis Payne
+Most created by Dennis Payne
 License: CC0
+Grass created by Proxy Games
+License: CC0
+https://opengameart.org/content/grass-texture-pack
 
 ## powerplant.png
 This is composed of many graphics and has been modified. The second set of images is a combination of the Temple and Stock Exchange images.
@@ -185,3 +188,9 @@ License: GPL 2.0
 Modified head from original Mojotron
 Modified to add black outline and make robotic
 License: GPL 2.0
+
+## trees.png
+2D Stone/rock, tree and spruce
+Created by CornerLord
+License: CC-BY 3.0
+https://opengameart.org/content/2d-stonerock-tree-and-spruce
