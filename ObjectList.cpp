@@ -89,22 +89,20 @@ void ObjectList::unlistThing(Thing* deadthing) {
 
 // thanks Jim. (From Swarm)
 void ObjectList::clearDeadStuff() {
-	for(int i=0; i < length; i++) {
-		for(int j = i; j < length; j++) {
-			if (contents[j]->health <= 0) {
-				if (globals->verbosity > 1)
-					cout << "Removing #" << j << " of " << length << " objs. (health is " << contents[j]->health << ")" << endl;
+	for(int j = 0; j < length; j++) {
+		while ((j < length) && (contents[j]->health <= 0)) {
+			if (globals->verbosity > 1)
+				cout << "Removing #" << j << " of " << length << " objs. (health is " << contents[j]->health << ")" << endl;
 
-				// aargh! coupling!
-				if (!(contents[j]->optionalkill))
-					worldobj->num_active--;
+			// aargh! coupling!
+			if (!(contents[j]->optionalkill))
+				worldobj->num_active--;
 
-				delete contents[j];
-				length--;
-				contents[j] = contents[length];
-			}
+			delete contents[j];
+			length--;
+			contents[j] = contents[length];
 		}
-	}			
+	}
 }
 
 void ObjectList::clearLevel() { // clears everything not marked persistant
