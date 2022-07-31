@@ -147,7 +147,8 @@ void Sound::playSound(string resname, float pan) {
 
 		// Play the sample
 		int ch = Mix_PlayChannel(-1, sb, 0);
-		soundobj->playing[ch] = resname;
+		if (ch >= 0 && ch < NUM_CHANNELS)
+			soundobj->playing[ch] = resname;
 /*		try {
 			CL_SoundBuffer_Session s = sb.play();
 			s.set_pan(pan);
