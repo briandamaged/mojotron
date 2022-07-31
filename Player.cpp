@@ -187,15 +187,16 @@ void Player::addToInventory(Bonus* newb) {
 		if (globals->verbosity > 0)
 			cout << "0" << ": inventory item " << inventory[0] << endl;
 	} else {
-		int i = 1;
-		while (i < (MAXINV-1) && inventory[i] != NULL) {
-			i++;
-		}
-		
-		if (inventory[i] != 0) {
+		int i = MAXINV - 1;
+		if (inventory[i] != NULL) {
 			if (inventory[i]->switchedon) inventory[i]->deactivated();
+			delete inventory[i];
 		}
-		inventory[i] = inventory[0];
+		while (i > 0) {
+			inventory[i] = inventory[i - 1];
+			i--;
+		}
+
 		inventory[0] = newb;
 	
 		if (globals->verbosity > 0) {
