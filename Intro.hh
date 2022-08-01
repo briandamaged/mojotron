@@ -34,6 +34,7 @@
 #define RESTART (ENEMYSTART+0)
 
 class Demo;
+class World;
 
 class IntroThing {
 public:
@@ -125,6 +126,7 @@ public:
 
 	static CL_Surface* sur_skillicons;
 	static Demo* demo;
+	static int demotime;
 private:
 	void story();
 	void powerups();
@@ -138,7 +140,6 @@ private:
 	static int timer;
 	static int delta;
 	static int prevtime;
-	static int demotime;
 	static int restarttime;
 	static int introstarttime;
 	static int slomoval;
@@ -147,6 +148,7 @@ private:
 
 	static std::string subtitle;
 
+	World *demoworld;
 	CL_Surface* sur_bubble;
 	static CL_Surface* sur_starfield;
 	CL_Surface* sur_title;

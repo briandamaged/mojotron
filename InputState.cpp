@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include "Application.h"
 #include "InputState.hh"
+#include "Intro.hh"
 #include "Globals.hh"
 #include "ConfigFile.hh"
 
@@ -27,6 +28,9 @@ extern Globals* globals;
 
 bool InputState::anyKey(false);
 int InputState::lastScancode(0);
+
+AbstractAxisPair::~AbstractAxisPair() {
+}
 
 InputAxisPair::InputAxisPair(int minus_xk, int plus_xk, int minus_yk, int plus_yk)
 : joy(NULL)
@@ -76,6 +80,38 @@ void InputAxisPair::set_controller(SDL_GameController *j, int xa, int ya)
 	yaxis = ya;
 }
 
+int DemoAxisPair::moveinput[DEMOMOVEINPUT][3] = {{1000, 1, 0}, {2000, 1, 1}, {500000, -1, 0}};
+int DemoAxisPair::fireinput[DEMOFIREINPUT][3] = {{900, 1, 0}, {1000, 1, 1}, {1100, 0, 1}, {1900, 1, 1}, {2000, 0, 1}, {2100, -1, 1}, {4000, -1, 0}, {500000, 1, 0}};
+
+DemoAxisPair::DemoAxisPair(bool m) : move(m) {
+}
+
+void DemoAxisPair::get_pos(int &x, int &y) {
+	if (move) {
+		for (int i = 0; i < DEMOMOVEINPUT; i++) {
+			if (Intro::demotime <= moveinput[i][0]) {
+				x = moveinput[i][1];
+				y = moveinput[i][2];
+				return;
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < DEMOFIREINPUT; i++) {
+			if (Intro::demotime <= fireinput[i][0]) {
+				x = fireinput[i][1];
+				y = fireinput[i][2];
+				return;
+			}
+		}
+	}
+	x = 0;
+	y = 0;
+}
+
+AbstractButton::~AbstractButton() {
+}
+
 InputButton::InputButton(int b)
 : button(b), joy(NULL)
 {
@@ -99,7 +135,12 @@ void InputButton::set_controller(SDL_GameController *j, int b)
 	joy_button = b;
 }
 
+int DemoButton::is_pressed() {
+	return 0;
+}
+
 InputState* InputState::playercontrols[2] = { NULL, NULL };
+InputState* InputState::democontrols = NULL;
 std::string* InputState::keygroups = NULL;
 int InputState::numkeygroups = 0;
 
@@ -110,6 +151,7 @@ void InputState::initControls(Config conf) {
 		playercontrols[i] = new InputState(i, conf.movegroup[i],
 					conf.aimgroup[i], conf.usekey[i]);
 	}
+	democontrols = new InputState();
 }
 
 void InputState::readGroups() {
@@ -144,7 +186,6 @@ InputState::InputState(int _playernumber, string movegroup,
 	move = fire = NULL;
 	use = NULL;
 	joystick = NULL;
-	keyboardnumber = 0;
 
 	if (globals->verbosity > 0)
 		cout << "Assigning keys to Input groups" << std::endl;
@@ -165,9 +206,9 @@ InputState::InputState(int _playernumber, string movegroup,
 		}
 		if (found == playernumber) {
 			joystick = SDL_GameControllerOpen(JoystickIndex);
-			move->set_controller(joystick, SDL_CONTROLLER_AXIS_LEFTX, SDL_CONTROLLER_AXIS_LEFTY);
-			fire->set_controller(joystick, SDL_CONTROLLER_AXIS_RIGHTX, SDL_CONTROLLER_AXIS_RIGHTY);
-			use->set_controller(joystick, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+			dynamic_cast<InputAxisPair*>(move)->set_controller(joystick, SDL_CONTROLLER_AXIS_LEFTX, SDL_CONTROLLER_AXIS_LEFTY);
+			dynamic_cast<InputAxisPair*>(fire)->set_controller(joystick, SDL_CONTROLLER_AXIS_RIGHTX, SDL_CONTROLLER_AXIS_RIGHTY);
+			dynamic_cast<InputButton*>(use)->set_controller(joystick, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 			break;
 		}
 		else
@@ -176,6 +217,13 @@ InputState::InputState(int _playernumber, string movegroup,
 
 	if (globals->verbosity > 0)
 		cout << "All assigned." << endl;
+}
+
+InputState::InputState() {
+	playernumber = 0;
+	move = new DemoAxisPair(true);
+	fire = new DemoAxisPair(false);
+	use = new DemoButton();
 }
 
 void InputState::setUseKey(int k) {

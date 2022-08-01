@@ -63,9 +63,10 @@ public:
 	void serialiseAll();
 
 	PlayerStats* getStats(int player);
-	World();
+	World(bool demo = false);
 	~World();
 	int run(bool recorddemo); // here lies the game loop
+	void playing();
 	void highlightFruit();
 
 	MiscDisplay* miscdisplay;
@@ -83,12 +84,17 @@ public:
 	int monster_size;
 
 	int lives;
+
+	void updateDisplay();
 	
 private: 
 	bool readyforkey;
 	int inittime, pausetimer;
 	unsigned long cltime, oldtime;
 	int statetime, delay;
+	int startaccellength;
+	int maxdelta;
+	int mindelta;
 
 	int bgred, bggreen, bgblue;
 	int bgtile[15][10];
@@ -104,7 +110,6 @@ private:
 	void findPlayerCols();
 	void findEnemyCols();
 	void findObstacleCols();
-	void updateDisplay();
 	void drawBG(int delta);
 	void drawScoreBG();
 	void listenPauseToggle();
@@ -113,7 +118,7 @@ private:
 	//void newPlayerCheck();
 	//void addInactivePlayer();
 	//void activatePlayer();
-	void makePlayer(int i);
+	void makePlayer(int i, bool demo);
 	void restart();
 
 	int loadlevInt(std::string dataname);

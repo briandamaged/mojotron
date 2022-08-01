@@ -17,6 +17,7 @@
 */
 
 #include <SDL.h>
+#include "Bullet.hh"
 #include "Intro.hh"
 #include "Thing.hh"
 #include "Sprite.hh" 
@@ -25,6 +26,7 @@
 #include "Display.hh"
 #include "Demo.hh"
 #include "InputState.hh"
+#include "World.hh"
 #include <numbers>
 #include <cmath>
 
@@ -232,6 +234,7 @@ Intro::Intro() {
 			}
 		}
 	}
+	demoworld = NULL;
 }
 
 Intro::~Intro() {
@@ -292,11 +295,29 @@ bool Intro::show() {
 			globals->smallfont->print_center(XWINSIZE>>9, (YWINSIZE>>8) - 25, "Press Space to start");
 
 		} else {
+			if (demoworld == NULL) {
+				demoworld = new World(true);
+				worldobj = demoworld;
+				demoworld->load_level(0);
+			}
+			if (demoworld->state == World::DELAY)
+			{
+				demoworld->load_level(0);
+				demoworld->state = World::PLAYING;
+				demoworld->lives = globals->loadInt("PlayerSpecs/startlives");
+				demotime = 0;
+				demoworld->levelage = 0;
+			}
 			if (!(m.type == Menu::OPTIONS || m.type == Menu::CONTROLS))
 				demoBg();
 
 			Menu::menustatus ret = m.run(delta);
-			if (ret == Menu::STARTGAME)	return true;
+			if (ret == Menu::STARTGAME) {
+				delete demoworld;
+				demoworld = NULL;
+				worldobj = NULL;
+				return true;
+			}
 			else if (ret == Menu::EXIT)	return false;
 		}
 
@@ -323,9 +344,18 @@ void Intro::demoBg() {
 	}
 
 	// slomo value of zero pauses demoplayback
-	if (slomoval)
+	if (slomoval) {
 		demotime += delta/slomoval;
-		
+		demoworld->delta = delta/slomoval;
+		demoworld->levelage += delta;
+	} else {
+		demotime += delta;
+		demoworld->delta = delta;
+		demoworld->levelage += delta;
+	}
+
+/*	demoworld->playing();
+	demoworld->updateDisplay();*/
 	bool more = demo->play(demotime);
 	if (!more) demo->restart(demotime);
 

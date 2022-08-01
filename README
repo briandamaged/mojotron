@@ -1,6 +1,6 @@
 
 MOJOTRON: ROBOT WARS
-http://identicalsoftware.com/mojotron
+https://identicalsoftware.com/mojotron
 
 Current Developer: dulsi@identicalsoftware.com
 
@@ -57,10 +57,6 @@ Command-line options
 ====================
 --fullscreen
 Show the game filling the whole screen, rather than the default window.
-Note: Many Linux window managers get confused if you switch to another task 
-      with alt-tab while fullscreened, so try to avoid that.
-      In Windows you may have to press return once to get the controls to
-      work. It's probably something to do with window focus.
 
 --enable-sound
 --disable-sound

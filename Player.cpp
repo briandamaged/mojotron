@@ -30,12 +30,14 @@ using namespace std;
 extern World* worldobj;
 extern Globals* globals;
 
-Player::Player(int _playernumber) : Thing((Globals::sprindex)_playernumber) {
+Player::Player(int _playernumber, bool demo) : Thing((Globals::sprindex)_playernumber) {
 	playernumber = _playernumber;
 	arm = globals->spr[Globals::MONKEYARMONE + _playernumber];
 
-	//in = new InputState(playernumber);
-	in = InputState::playercontrols[playernumber];
+	if (demo)
+		in = InputState::democontrols;
+	else
+		in = InputState::playercontrols[playernumber];
 	scoreboard = new ScoreBoard(this);
 	stats = new PlayerStats(this);
 	

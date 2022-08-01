@@ -29,7 +29,7 @@
 
 class Player : public Thing {
 public:
-	Player(int _playernumber);
+	Player(int _playernumber, bool demo);
 	~Player();
 
 	int playernumber;

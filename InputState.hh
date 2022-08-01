@@ -26,7 +26,14 @@ using namespace std;
 
 struct Config;
 
-class InputAxisPair
+class AbstractAxisPair {
+public:
+	virtual ~AbstractAxisPair();
+
+	virtual void get_pos(int &x, int &y) = 0;
+};
+
+class InputAxisPair : public AbstractAxisPair
 {
 public:
 	InputAxisPair(int minus_xk, int plus_xk, int minus_yk, int plus_yk);
@@ -41,7 +48,30 @@ private:
 	SDL_GameController *joy;
 };
 
-class InputButton
+#define DEMOMOVEINPUT 3
+#define DEMOFIREINPUT 8
+
+class DemoAxisPair : public AbstractAxisPair {
+public:
+	DemoAxisPair(bool m);
+
+	void get_pos(int &x, int &y);
+
+private:
+	bool move;
+
+	static int moveinput[DEMOMOVEINPUT][3];
+	static int fireinput[DEMOFIREINPUT][3];
+};
+
+class AbstractButton {
+public:
+	virtual ~AbstractButton();
+
+	virtual int is_pressed() = 0;
+};
+
+class InputButton : public AbstractButton
 {
 public:
 	InputButton(int b);
@@ -55,19 +85,25 @@ private:
 	SDL_GameController *joy;
 };
 
+class DemoButton : public AbstractButton {
+public:
+	int is_pressed();
+};
+
 class InputState {
 public:
 	// should make max players a define somewhere
 	static InputState* playercontrols[2];
+	static InputState* democontrols;
 	static std::string* keygroups;
 	static int numkeygroups;
 	static void initControls(Config c);
 	static void deinitControls();
 	static void readGroups();
 
-	InputAxisPair* move;
-	InputAxisPair* fire;
-	InputButton* use;
+	AbstractAxisPair* move;
+	AbstractAxisPair* fire;
+	AbstractButton* use;
 	SDL_GameController *joystick;
 
 	enum direction {	UPLEFT, UP, UPRIGHT,
@@ -79,8 +115,6 @@ public:
 	int firekeygroup;
 	int usekey;
 
-	// going to assume all of a players keys are on one keyboard
-	int keyboardnumber;
 	int playernumber;
 
 	// direction key -> char. NB: 0 is x axis, 1 is y axis
@@ -102,6 +136,7 @@ public:
 private:
 	InputState(	int _playernumber, string movegroup,
 			string aimgroup, int use);
+	InputState();
 	~InputState();
 
 	int getKeygroupNumber(std::string name);

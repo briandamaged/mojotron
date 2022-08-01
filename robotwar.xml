@@ -106,6 +106,23 @@
 	</section>
 
 <section name="Levels">
+	<section name="level0">
+		<string name="lev_name" value="Demo" />
+		<integer name="warp_time" value="12" />
+		<integer name="bg_red" value="40" /> <integer name="bg_green" value="40" /> <integer name="bg_blue" value="40" />
+		<string name="background" value="crack" />
+
+		<integer name="num_grunts" value="15" />
+		<integer name="num_snipers" value="5" />
+		<integer name="num_spikers" value="4" />
+		<integer name="num_turrets" value="2" />
+		<integer name="gruntspeed" value="4" />
+		<integer name="num_fruit" value="4" />
+
+		<string name="Grunt" value="burger" />
+		<integer name="redfruit" value="1" /> <integer name="orangefruit" value="1" /> <integer name="yellowfruit" value="1" />
+		<integer name="greenfruit" value="1" /> <integer name="bluefruit" value="1" />
+	</section>
 	<section name="level1">
 		<string name="lev_name" value="Kill all moving objects" /> <!-- levels without a name are deemed to be non-existant -->
 		<integer name="warp_time" value="14" />
@@ -209,6 +226,7 @@
 		<string name="lev_name" value="Mojo goes pitchin' in the sewers" />
 		<integer name="warp_time" value="14" />
 		<integer name="bg_red" value="10" /> <integer name="bg_green" value="20" /> <integer name="bg_blue" value="10" />
+		<string name="background" value="crack2" />
 
 		<integer name="num_grunts" value="7" />
 		<integer name="num_balls" value="5" />
@@ -227,6 +245,7 @@
 		<string name="lev_name" value="Don't worry, they're only robots" /> // levels without a name are deemed to be non-existant
 		<integer name="warp_time" value="11" />
 		<integer name="bg_red" value="0" /> <integer name="bg_green" value="40" /> <integer name="bg_blue" value="0" />
+		<string name="background" value="crack3" />
 
 		<integer name="num_spirals" value="6" />
 		<integer name="num_snipers" value="1" />
@@ -846,6 +865,40 @@
 		<string name="row12" value="2,1,2,1,2,1,2,3,2,1" />
 		<string name="row13" value="1,2,1,2,1,2,1,2,1,4" />
 		<string name="row14" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row15" value="1,2,1,2,1,2,1,2,2,2" />
+	</section>
+	<section name="crack2">
+		<string name="row1" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row2" value="2,1,2,1,2,1,2,1,2,6" />
+		<string name="row3" value="1,2,1,2,1,2,3,2,1,2" />
+		<string name="row4" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row5" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row6" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row7" value="1,2,1,2,1,2,1,4,1,2" />
+		<string name="row8" value="2,1,2,1,2,1,2,1,2,3" />
+		<string name="row9" value="1,2,1,2,1,2,1,2,1,8" />
+		<string name="row10" value="2,1,2,1,2,3,2,1,2,1" />
+		<string name="row11" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row12" value="2,1,2,1,2,1,2,3,2,1" />
+		<string name="row13" value="1,2,1,2,1,2,1,2,1,8" />
+		<string name="row14" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row15" value="1,2,1,2,1,2,1,2,2,2" />
+	</section>
+	<section name="crack3">
+		<string name="row1" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row2" value="2,1,2,1,2,1,2,1,2,7" />
+		<string name="row3" value="1,2,1,2,1,2,3,2,1,2" />
+		<string name="row4" value="2,1,2,1,2,1,2,1,2,1" />
+		<string name="row5" value="1,2,1,2,1,2,1,2,1,2" />
+		<string name="row6" value="2,1,2,3,2,1,2,1,2,1" />
+		<string name="row7" value="1,2,1,2,1,2,1,4,1,2" />
+		<string name="row8" value="2,1,2,1,2,1,2,1,2,6" />
+		<string name="row9" value="1,2,1,2,1,2,1,2,1,8" />
+		<string name="row10" value="2,1,2,1,2,6,2,1,2,1" />
+		<string name="row11" value="1,2,1,2,1,2,1,4,1,2" />
+		<string name="row12" value="2,1,2,1,2,1,2,6,2,1" />
+		<string name="row13" value="1,2,1,2,1,2,1,2,1,8" />
+		<string name="row14" value="2,1,2,1,2,1,2,1,2,3" />
 		<string name="row15" value="1,2,1,2,1,2,1,2,2,2" />
 	</section>
 	<section name="forest">

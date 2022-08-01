@@ -39,7 +39,7 @@ using namespace std;
 World* worldobj;
 extern Globals* globals;
 
-World::World() {
+World::World(bool demo) {
 	// General variables, global speed etc.
 	orig_monster_speed = (float)globals->loadInt("Constants/monsterspeed")/100;
 	monster_speed = orig_monster_speed;
@@ -55,7 +55,7 @@ World::World() {
 
 	// build the player list
 	for (int i=0; i < num_players; i++) {
-		makePlayer(i);
+		makePlayer(i, demo);
 	}
 	elist = new ObjectList(MAX_OBJS);
 	ellist = new ObjectList(MAX_OBJS);
@@ -70,6 +70,10 @@ World::World() {
 	flashing = 0;	statetime = 0;
 	ui_bg = CL_Surface("Surfaces/ui_background", globals->manager);
 	tiles = CL_Surface("Backgrounds/tiles", globals->manager);
+
+	maxdelta = globals->loadInt("Constants/maxdelta");
+	mindelta = globals->loadInt("Constants/mindelta");
+	startaccellength = globals->loadInt("Constants/startaccelerationlength");
 }
 
 World::~World() {
@@ -605,7 +609,6 @@ void World::updateDisplay() {
 	}
 
 	InputState::process();
-	SDL_RenderPresent(game_renderer);
 }
 
 /*
@@ -620,9 +623,6 @@ int World::run(bool recorddemo) {
 	cltime = SDL_GetTicks();	// don't get the time directly, use this
 	oldtime = SDL_GetTicks();
 	inittime = oldtime;
-	int maxdelta = globals->loadInt("Constants/maxdelta");
-	int mindelta = globals->loadInt("Constants/mindelta");
-	int startaccellength = globals->loadInt("Constants/startaccelerationlength");
 	startaccel = 0.0f;
 	
 	levelage = timesinceready = 0;
@@ -651,41 +651,7 @@ int World::run(bool recorddemo) {
 				cltime = SDL_GetTicks();
 				delta = cltime - oldtime;
 
-				// time since ready is in real millisecs, not game millisecs
-				timesinceready += delta;
-				startaccel = 0.5f;
-				startaccel += (float)timesinceready / (startaccellength+1);
-				if (startaccel > 1.0f)	startaccel = 1.0f;
-				// a percentage
-				deltamodify = (int)(SkillLevel::current->speed * startaccel);
-
-				delta = delta*deltamodify / 100;
-
-				// if we get an excessivly large delta, don't act on it.
-				if (delta > maxdelta)	delta = 0;
-				
-				listenPauseToggle();	
-				
-				if (!num_players) state = GAMEOVER;
-				if (!num_active) state = WON;
-				
-				Grunt::calcSpeed(delta, max_active-num_active);
-				
-				// move all
-				all->toListStart();	Thing* x;
-				while ((x = all->getNext())) {
-					x->move(delta);
-				}
-				all->clearDeadStuff();
-
-				if (recorddemo)	demo.writeSnapshot(timesinceready);
-
-				// Check for collisions, and call event methods
-				makeLists();
-				findEnemyCols();
-				findPlayerCols();
-				findObstacleCols();
-
+				playing();
 				break;
 			}
 		
@@ -762,6 +728,7 @@ int World::run(bool recorddemo) {
 		// int gamelogictime = CL_System::get_time() - cltime;
 		
 		updateDisplay();
+		SDL_RenderPresent(game_renderer);
 		
 		//int graphicstime = (CL_System::get_time() - cltime) - gamelogictime;
 		
@@ -782,6 +749,43 @@ int World::run(bool recorddemo) {
 		}
 	}
 	return 0;	// never reached, see state = EXIT
+}
+
+void World::playing() {
+	// time since ready is in real millisecs, not game millisecs
+	timesinceready += delta;
+	startaccel = 0.5f;
+	startaccel += (float)timesinceready / (startaccellength+1);
+	if (startaccel > 1.0f)	startaccel = 1.0f;
+	// a percentage
+	deltamodify = (int)(SkillLevel::current->speed * startaccel);
+
+	delta = delta*deltamodify / 100;
+
+	// if we get an excessivly large delta, don't act on it.
+	if (delta > maxdelta)	delta = 0;
+
+	listenPauseToggle();
+
+	if (!num_players) state = GAMEOVER;
+	if (!num_active) state = WON;
+
+	Grunt::calcSpeed(delta, max_active-num_active);
+
+	// move all
+	all->toListStart();	Thing* x;
+	while ((x = all->getNext())) {
+		x->move(delta);
+	}
+	all->clearDeadStuff();
+
+//	if (recorddemo)	demo.writeSnapshot(timesinceready);
+
+	// Check for collisions, and call event methods
+	makeLists();
+	findEnemyCols();
+	findPlayerCols();
+	findObstacleCols();
 }
 
 /*
@@ -967,8 +971,8 @@ void World::findPlayerCols() {
  * LIST HANDLING
  ****************/
 
-void World::makePlayer(int i) {
-	Player* newplay = new Player(i);
+void World::makePlayer(int i, bool demo) {
+	Player* newplay = new Player(i, demo);
 	playerlist[i] = newplay;
 	all->addThing(newplay);
 	newplay->playing = true;
