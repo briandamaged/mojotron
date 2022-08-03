@@ -48,8 +48,8 @@ private:
 	SDL_GameController *joy;
 };
 
-#define DEMOMOVEINPUT 3
-#define DEMOFIREINPUT 8
+#define DEMOMOVEINPUT 6
+#define DEMOFIREINPUT 9
 
 class DemoAxisPair : public AbstractAxisPair {
 public:
@@ -59,6 +59,7 @@ public:
 
 private:
 	bool move;
+	int xprev, yprev;
 
 	static int moveinput[DEMOMOVEINPUT][3];
 	static int fireinput[DEMOFIREINPUT][3];

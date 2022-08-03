@@ -36,6 +36,14 @@ ObjectList::~ObjectList() {
 	delete[] contents;
 }
 
+Thing** ObjectList::begin() {
+	return contents;
+}
+
+Thing** ObjectList::end() {
+	return contents + length;
+}
+
 void ObjectList::clearData() {
 	length = 0;
 	toListStart();

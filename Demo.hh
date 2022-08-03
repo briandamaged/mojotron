@@ -24,7 +24,6 @@
 
 class Demo {
 private:
-	FILE* f;
 	// current snapshot details
 	int r, g, b;
 	int x[MAX_OBJS], y[MAX_OBJS], spr[MAX_OBJS];
@@ -34,9 +33,7 @@ private:
 	int starttime, snaptime;
 
 	void drawThing();	// draws obj
-	bool readThing(std::string record);	// reads and draws
-
-	bool readSnapshot(char* line);
+	bool readPosition(std::string record);
 
 	CL_Surface* sur_key;
 	CL_Surface* sur_spacekey;
@@ -48,17 +45,18 @@ public:
 	Demo(std::string filename);	// for playback
 	~Demo();
 
-	bool play(int time);
-	void restart(int timeoffset);
-	void test();
 	void writeSnapshot(int time);
 
 	void drawWorld();
 	void drawAxisPair(int player, bool moveaxispair, 
 			int xaxis, int yaxis, int xpos, int ypos);
 	void drawBonus(int player, int xpos=100, int ypos=300);
+	void updateDemotime(int demotime);
 
-	int xmov, ymov, xaim, yaim, use;
+	bool record;
+	int maxdemotime;
+	std::vector<std::pair<int, int>> startpos;
+	std::vector<std::pair<int, int>> currentpos;
 };
 
 #endif

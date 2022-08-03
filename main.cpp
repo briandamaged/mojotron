@@ -41,6 +41,7 @@ class MojoApp : Application {
 		ConfigFile* configf;
 		Config conf;
 		SDL_Window *game_window;
+		std::unique_ptr<Demo> demo;
 		std::unique_ptr<Intro> intro;
 
 	public:
@@ -73,7 +74,7 @@ class MojoApp : Application {
 		demotest = recorddemo = false;
 		fullscreen = sound = music = cmdlineoptsset = false;
 		std::string resourcefile = "robotwar.xml";
-		std::string demofile = "";
+		std::string demofile = "demo";
 		int verbosity = 0;
 
 		for (int i=1; i < argc; i++) {
@@ -110,7 +111,6 @@ class MojoApp : Application {
 			}
 			if (!strcmp(argv[i], "-d")) {
 				demofile = argv[i+1];
-				demotest = true;
 				i++;
 			}
 		}
@@ -162,13 +162,12 @@ class MojoApp : Application {
 
 		srand((int)SDL_GetTicks());
 
-		if (demotest) {
-			Demo d = Demo(demofile);
-			d.test();
-		}
-
 		bool play;
-		intro = std::make_unique<Intro>();
+		if (recorddemo)
+			demo = std::make_unique<Demo>();
+		else
+			demo = std::make_unique<Demo>(demofile);
+		intro = std::make_unique<Intro>(demo.get());
 
 		if (intro->show()) { // run intro, menus etc.
 			do {

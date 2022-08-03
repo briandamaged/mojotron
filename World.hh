@@ -34,7 +34,7 @@ class MiscDisplay;
 class ObjectList;
 class Demo;
 class Menu;
-	
+
 class World {
 public:
 	enum GameState { PLAYING, DIED, PAUSED, 
@@ -61,6 +61,8 @@ public:
 	float getBGBlue();
 	std::string serialiseBG();
 	void serialiseAll();
+	void captureDemo(std::vector<std::pair<int, int>> &demostart);
+	void setDemo(std::vector<std::pair<int, int>> &demostart);
 
 	PlayerStats* getStats(int player);
 	World(bool demo = false);

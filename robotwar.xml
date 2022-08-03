@@ -116,6 +116,7 @@
 		<integer name="num_snipers" value="5" />
 		<integer name="num_spikers" value="4" />
 		<integer name="num_turrets" value="2" />
+		<integer name="num_rockmen" value="3" />
 		<integer name="gruntspeed" value="4" />
 		<integer name="num_fruit" value="4" />
 

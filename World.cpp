@@ -890,6 +890,25 @@ void World::serialiseAll() {
 	printf("\n");
 }
 
+void World::captureDemo(std::vector<std::pair<int, int>> &demostart)
+{
+	for (Thing **itr = all->begin(); itr != all->end(); itr++) {
+		demostart.push_back(std::make_pair((*itr)->xpos, (*itr)->ypos));
+	}
+}
+
+void World::setDemo(std::vector<std::pair<int, int>> &demostart)
+{
+	Thing **current = all->begin();
+	for (const auto &itr : demostart) {
+		if (current != all->end()) {
+			(*current)->xpos = itr.first;
+			(*current)->ypos = itr.second;
+			current++;
+		}
+	}
+}
+
 /*
  * EVENT SYSTEM
  ***************/

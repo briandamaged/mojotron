@@ -26,6 +26,8 @@ public:
 	ObjectList(int maxsize);
 	~ObjectList();
 
+	Thing** begin();
+	Thing** end();
 	Thing* getNext();	// null if beyond last
 	void toListStart();
 	int getNumToBeKilled();	// only used on instance 'all'

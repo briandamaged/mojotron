@@ -37,7 +37,8 @@ extern World* worldobj;
 extern Globals* globals;
 
 Demo::Demo() {
-	f = NULL;
+	record = true;
+	maxdemotime = -1;
 	sur_key = globals->loadSurface("Surfaces/key");
 	sur_spacekey = globals->loadSurface("Surfaces/spacekey");
 	sur_key_select = globals->loadSurface("Surfaces/keyselected");
@@ -45,9 +46,10 @@ Demo::Demo() {
 }
 
 Demo::Demo(std::string filename) {
+	record = false;
+	maxdemotime = -1;
 	snaptime = 0;
 	starttime = 0;
-	xmov = ymov = xaim = yaim = use = 0;
 	r = g = b = 0;
 	for (int ii=0; ii < MAX_OBJS; ii++) {
 		// to cause crash if an unfilled index is used
@@ -60,87 +62,20 @@ Demo::Demo(std::string filename) {
 	sur_key_select = globals->loadSurface("Surfaces/keyselected");
 	sur_spacekey_select = globals->loadSurface("Surfaces/spacekeyselected");
 
-	f = fopen(filename.c_str(), "r");
+	FILE *f = fopen(filename.c_str(), "r");
 	if (f)	{ if (globals->verbosity > 0)	cout << "Loading demo " << filename << endl; }
 	else	cout << filename << " not found." << endl;
+
+	char buffer[MAXLINEWIDTH];
+	std::string str;
+	do {
+		if (!fgets(buffer, MAXLINEWIDTH, f)) break;
+		str = std::string(buffer);
+	} while (readPosition(str));
+	fclose(f);
 }
 
 Demo::~Demo() {
-	if (f)	fclose(f);
-	f = NULL;
-}
-
-void Demo::restart(int timeoffset) {
-	rewind(f);
-	obj = -1;
-	snaptime = 0;
-	starttime = timeoffset;
-}
-
-void Demo::test() {
-	bool ismore = true;
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
-	while (!(state[SDL_SCANCODE_ESCAPE] || !ismore)) {
-		ismore = play(SDL_GetTicks());
-		InputState::process();
-		SDL_RenderPresent(game_renderer);
-	}
-}
-
-bool Demo::play(int time) {
-	time -= starttime;
-
-	bool readnewshot = false;
-	char buffer[MAXLINEWIDTH];
-
-	if (!f) return false;
-
-	// what happens when time progresses faster than we can search?
-	// this may play slower on slow machines, but not faster on fast ones
-	while (snaptime < time) {
-
-		// advance to next snapshot
-		if (!fgets(buffer, MAXLINEWIDTH, f)) {
-			// couldn't get line
-			return false;
-		}
-		/* TODO: have some way of resetting the time during playback
-		if (buffer[0] == 'r') {
-			cout << "resetting" << endl;
-			starttime = time;
-			time = 0;
-		}*/
-		readSnapshot(buffer);
-		readnewshot = true;
-	};
-	// leaves once it has a snapshot from just into the future
-
-	drawWorld();
-
-	// draw the objects
-	if (readnewshot) {
-		// new frame from disk
-		std::string str;
-		obj = -1;
-		do {
-			if (!fgets(buffer, MAXLINEWIDTH, f)) return false;
-			str = std::string(buffer);
-		} while (readThing(str));
-		obj--;	// last loop returned false, but incremented anyway
-	} else {
-		SDL_Delay(snaptime - time);
-		// no frame read yet
-		if (obj == -1)	return true;
-
-		// redraw last objects
-		int max = obj;
-		for (obj = 0; obj <= max; obj++) {
-			drawThing();
-		}
-		obj--;
-	}
-
-	return true;
 }
 
 void Demo::writeSnapshot(int time) {
@@ -155,32 +90,14 @@ void Demo::writeSnapshot(int time) {
 	worldobj->serialiseAll();
 }
 
-bool Demo::readSnapshot(char* line) {
-	int status = sscanf(line, "Time:%d BG:%3d%3d%3d Keys:%1d%1d%1d%1d%d\n",
-			&snaptime, &r, &g, &b, 
-			&xmov, &ymov, &xaim, &yaim, &use); 
-
-	return (status == 9);
-}
-
-bool Demo::readThing(std::string record) {
-	//int x, y, spr, frame, left;
-	obj++;
-	int status = sscanf(	record.c_str(), "%d %d\t%d %d %d\n",
-				&x[obj], &y[obj],
-				&spr[obj], &frame[obj], &faceleft[obj]);
-
-	if (status != 5)	return false;
-
-	// catch bad spr
-	if (spr[obj] > Globals::SPREND) {
-		return false;
+bool Demo::readPosition(std::string record) {
+	int x, y;
+	int status = sscanf(record.c_str(), "%d,%d\n", &x, &y);
+	if (status == 2) {
+		startpos.push_back(std::make_pair(x, y));
 	}
-	// fix bad frame
-	frame[obj] %= globals->spr[spr[obj]]->getFrames();
-	
-	drawThing();
-	return true;
+
+	return (status == 2);
 }
 
 void Demo::drawThing() {
@@ -254,4 +171,13 @@ void Demo::drawBonus(int player, int xpos, int ypos) {
 	sur_spacekey->put_screen(skeyxorigin, skeyyorigin+40);
 	globals->smallfont->print_left(skeyxorigin+XKEYCENT, skeyyorigin+40+YKEYCENT, 
 					InputState::playercontrols[player]->getUseKey().c_str());
+}
+
+void Demo::updateDemotime(int demotime)
+{
+	if (maxdemotime == -1 || maxdemotime < demotime) {
+		maxdemotime = demotime;
+		startpos = currentpos;
+	}
+	currentpos.clear();
 }

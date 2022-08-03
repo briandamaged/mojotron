@@ -49,19 +49,15 @@ void InputAxisPair::get_pos(int &x, int &y)
 	if (joy) {
 		int xval = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)xaxis);
 		int yval = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)yaxis);
-		double ratio = fabs((double)xval / (double)yval);
-		if (ratio > 0.2) {
-			if (xval > 3200)
-				x = 1;
-			else if (xval < -3200)
-				x = -1;
-		}
-		if (ratio < 0.8) {
-			if (yval > 3200)
-				y = 1;
-			else if (yval < -3200)
-				y = -1;
-		}
+		int angle = (int(atan2(yval, xval) * 180 / std::numbers::pi) + 360) % 360;
+		if ((angle <= 60 || angle >= 300) && (xval > 3200))
+			x = 1;
+		else if ((angle >= 120 && angle <= 240) && (xval < -3200))
+			x = -1;
+		if ((angle >= 30 && angle <= 150) && (yval > 3200))
+			y = 1;
+		else if ((angle >= 210 && angle <= 330) && (yval < -3200))
+			y = -1;
 	}
 	if (state[minus_xkey])
 		x = -1;
@@ -80,8 +76,8 @@ void InputAxisPair::set_controller(SDL_GameController *j, int xa, int ya)
 	yaxis = ya;
 }
 
-int DemoAxisPair::moveinput[DEMOMOVEINPUT][3] = {{1000, 1, 0}, {2000, 1, 1}, {500000, -1, 0}};
-int DemoAxisPair::fireinput[DEMOFIREINPUT][3] = {{900, 1, 0}, {1000, 1, 1}, {1100, 0, 1}, {1900, 1, 1}, {2000, 0, 1}, {2100, -1, 1}, {4000, -1, 0}, {500000, 1, 0}};
+int DemoAxisPair::moveinput[DEMOMOVEINPUT][3] = {{1000, 1, 0}, {2000, 1, 1}, {7000, -1, 0}, {9000, 0, -1}, {15000, 1, 0}, {500000, 0, 1}};
+int DemoAxisPair::fireinput[DEMOFIREINPUT][3] = {{900, 1, 0}, {1000, 1, 1}, {1100, 0, 1}, {1900, 1, 1}, {2000, 0, 1}, {2100, -1, 1}, {4000, -1, 0}, {12000, 1, 0}, {500000, -1, 0}};
 
 DemoAxisPair::DemoAxisPair(bool m) : move(m) {
 }

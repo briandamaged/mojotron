@@ -116,7 +116,7 @@ public:
 
 class Intro {
 public:
-	Intro();
+	Intro(Demo *d);
 	~Intro();
 
 	bool show();

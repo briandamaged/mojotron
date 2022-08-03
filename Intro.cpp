@@ -27,6 +27,7 @@
 #include "Demo.hh"
 #include "InputState.hh"
 #include "World.hh"
+#include "ObjectList.hh"
 #include <numbers>
 #include <cmath>
 
@@ -206,7 +207,8 @@ int Intro::textincrement;
 
 using namespace std;
 
-Intro::Intro() {
+Intro::Intro(Demo *d) {
+	demo = d;
 	sur_bubble = NULL;
 	sur_title = NULL;
 	currentscene = -1;
@@ -235,6 +237,13 @@ Intro::Intro() {
 		}
 	}
 	demoworld = NULL;
+	sur_bubble = globals->loadSurface("Surfaces/bubble");
+	sur_starfield = globals->loadSurface("Surfaces/stars");
+	sur_title = globals->loadSurface("Surfaces/title");
+	sur_skillicons = globals->loadSurface("Surfaces/skillicons");
+	sur_view = CL_Surface("Intro/smallviewbg", globals->manager);
+	sur_viewport = CL_Surface("Intro/smallviewport", globals->manager);
+	subtitle = globals->loadString("Intro/subtitle");
 }
 
 Intro::~Intro() {
@@ -242,21 +251,9 @@ Intro::~Intro() {
 	delete sur_starfield;	sur_starfield = NULL;
 	delete sur_title;	sur_title = NULL;
 	delete sur_skillicons;	sur_skillicons = NULL;
-	delete demo;		demo = NULL;
 }
 
 bool Intro::show() {
-	if (demo == NULL) {
-		demo = new Demo("demo");
-		sur_bubble = globals->loadSurface("Surfaces/bubble");
-		sur_starfield = globals->loadSurface("Surfaces/stars");
-		sur_title = globals->loadSurface("Surfaces/title");
-		sur_skillicons = globals->loadSurface("Surfaces/skillicons");
-		sur_view = CL_Surface("Intro/smallviewbg", globals->manager);
-		sur_viewport = CL_Surface("Intro/smallviewport", globals->manager);
-		subtitle = globals->loadString("Intro/subtitle");
-	}
-
 	Sound::playMusic(Sound::TITLE);
 
 	introstarttime = SDL_GetTicks();
@@ -299,6 +296,11 @@ bool Intro::show() {
 				demoworld = new World(true);
 				worldobj = demoworld;
 				demoworld->load_level(0);
+				if (demo->record) {
+					demoworld->captureDemo(demo->currentpos);
+				}
+				else
+					demoworld->setDemo(demo->startpos);
 			}
 			if (demoworld->state == World::DELAY)
 			{
@@ -307,6 +309,12 @@ bool Intro::show() {
 				demoworld->lives = globals->loadInt("PlayerSpecs/startlives");
 				demotime = 0;
 				demoworld->levelage = 0;
+				if (demo->record) {
+					demo->updateDemotime(demotime);
+					demoworld->captureDemo(demo->currentpos);
+				}
+				else
+					demoworld->setDemo(demo->startpos);
 			}
 			if (!(m.type == Menu::OPTIONS || m.type == Menu::CONTROLS))
 				demoBg();
@@ -318,7 +326,14 @@ bool Intro::show() {
 				worldobj = NULL;
 				return true;
 			}
-			else if (ret == Menu::EXIT)	return false;
+			else if (ret == Menu::EXIT) {
+				if (demo->record) {
+					for (auto i : demo->startpos) {
+						cout << i.first << "," << i.second << endl;
+					}
+				}
+				return false;
+			}
 		}
 
 		InputState::process();
@@ -354,10 +369,8 @@ void Intro::demoBg() {
 		demoworld->levelage += delta;
 	}
 
-/*	demoworld->playing();
-	demoworld->updateDisplay();*/
-	bool more = demo->play(demotime);
-	if (!more) demo->restart(demotime);
+	demoworld->playing();
+	demoworld->updateDisplay();
 
 	sur_title->put_screen(30, 30); 
 	globals->smallfont->print_left(30, 100, subtitle);
@@ -431,12 +444,16 @@ void Intro::controlsDemo() {
 		slomoval = 4;
 	} else if (t < slomotime + freezeframetime) {
 		slomoval = 0;
-		demo->drawAxisPair(0, true, demo->xmov, demo->ymov, 100, 200);
+		int xmov, ymov;
+		InputState::democontrols->move->get_pos(xmov, ymov);
+		demo->drawAxisPair(0, true, xmov + 1, ymov + 1, 100, 200);
 	} else if (t < 2*slomotime + freezeframetime) {
 		slomoval = 4;
 	} else {
 		slomoval = 0;
-		demo->drawAxisPair(0, false, demo->xaim, demo->yaim, 420, 200);
+		int xaim, yaim;
+		InputState::democontrols->fire->get_pos(xaim, yaim);
+		demo->drawAxisPair(0, false, xaim + 1, yaim + 1, 420, 200);
 	}
 
 	//demo->drawBonus();
