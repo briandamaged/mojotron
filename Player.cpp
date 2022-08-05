@@ -25,6 +25,7 @@
 #include "Sprite.hh"
 #include "Bonus.hh"
 #include "Sound.hh"
+#include "IRandom.hh"
 
 using namespace std;
 extern World* worldobj;
@@ -150,8 +151,8 @@ void Player::fire(int _xdir, int _ydir) {
 	int bulletypos = ypos;
 	if (machinegunon) {
 		// add spread
-		_xdir += (int)((40.0*rand()/RAND_MAX) - 20);
-		_ydir += (int)((40.0*rand()/RAND_MAX) - 20);
+		_xdir += (int)(IRandom::roll(40) - 20);
+		_ydir += (int)(IRandom::roll(40) - 20);
 		// bullets not player sized, 
 		// so will be in topleft corner otherwise
 		bulletxpos = xpos + spr->width/2;

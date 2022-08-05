@@ -33,6 +33,7 @@
 #include "MiscDisplay.hh"
 #include "Bullet.hh"
 #include "Barricade.hh"
+#include "IRandom.hh"
 
 using namespace std;
 extern World* worldobj;
@@ -47,7 +48,7 @@ Bonus::Bonus(Globals::sprindex _spr) : Thing(_spr) {
 	
 	switchedon = false;
 	optionalkill = true; // yeah, but if the warp has already timed out, might as well let them have it
-	xmov = (int)(24 * ((float) rand() / RAND_MAX)) - 12; 
+	xmov = (int)(IRandom::roll(24)) - 12;
 	name = "Generic Bonus";
 }
 
@@ -115,7 +116,7 @@ void Bonus::give(int type, int x, int y) {
 			to 10 which is guaranteed extra life */
 void Bonus::randGen(int luck, int x, int y) {
 	int roll=(int)((globals->loadInt("Bonus/maxchances") * (10 - luck))/10 * 
-		((float)rand() / RAND_MAX));
+		((float)IRandom::roll(RAND_MAX) / RAND_MAX));
 
 	for (int i = 1; i < BONUSEND; i++) {
 		if ((roll -= prob[i]) < 0) {
@@ -171,12 +172,12 @@ void Bonus::startPos() {
 
 Fruit::Fruit(bool colours[6]) : Thing(Globals::BONUSFRUIT) {
 	// random selection here
-	int onescolumn = (unsigned int)(3 * ((float)rand() / RAND_MAX)) + 1;
+	int onescolumn = (unsigned int)(IRandom::roll(3)) + 1;
 	int tenscolumn;
 
 	// O(random) algorithm. :P
 	do {
-		tenscolumn = (unsigned int)(6 * ((float)rand() / RAND_MAX));
+		tenscolumn = (unsigned int)(IRandom::roll(6));
 	} while(colours[tenscolumn] == false);
 
 	frame = onescolumn + 10*tenscolumn;
@@ -187,7 +188,7 @@ Fruit::Fruit(bool colours[6]) : Thing(Globals::BONUSFRUIT) {
 	optionalkill = true;
 	blinking = false;
 	maxage = worldobj->warp_time*1000 + globals->loadInt("Constants/minfruitrottime") +
-		(int)(globals->loadInt("Constants/fruitrottimevariation") * ((float)rand() / RAND_MAX));
+		(int)(globals->loadInt("Constants/fruitrottimevariation") * ((float)IRandom::roll(RAND_MAX) / RAND_MAX));
 }
 
 Fruit::~Fruit() {}

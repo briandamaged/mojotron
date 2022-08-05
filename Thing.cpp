@@ -24,6 +24,7 @@
 #include "Barricade.hh"
 #include "Explosion.hh"
 #include "Display.hh"
+#include "IRandom.hh"
 #include <cmath>
 #include <iostream>
 
@@ -64,7 +65,7 @@ void Thing::startPos() {
 }
 
 void Thing::setupAnim() {
-	frame = (unsigned int)(spr->getFrames() * ((float)rand() / RAND_MAX));
+	frame = (unsigned int)(IRandom::roll(spr->getFrames()));
 	
 	frameremainder = 0;
 
@@ -152,7 +153,7 @@ void Thing::movez(int delta) {
 }
 
 void Thing::jump(int maxvelocity) {
-	//zvelocity = (int)(maxvelocity * ((float)rand() / RAND_MAX));
+	//zvelocity = (int)(IRandom::roll(maxvelocity));
 	zvelocity = maxvelocity;
 	zpos = 2000;
 }
@@ -171,8 +172,8 @@ void Thing::randomPos() {
 	int playerposx = ARENAWIDTH/2 + (globals->spr[Globals::PLAYERONE]->width)/2;
 	int playerposy = ARENAHEIGHT/2 + (globals->spr[Globals::PLAYERONE]->height)/2;
 	do {
-		xpos=(int)(maxx * ((float)rand() / RAND_MAX));
-		ypos=(int)(maxy * ((float)rand() / RAND_MAX));
+		xpos=(int)(IRandom::roll(maxx));
+		ypos=(int)(IRandom::roll(maxy));
 	} while( !(abs(playerposx - xpos) > globals->loadInt("Constants/barepatchwidth") ) &&
 		!(abs(playerposy - ypos) > globals->loadInt("Constants/barepatchheight") ) );
 	
@@ -287,8 +288,8 @@ void Thing::randomMove(int delta, int timebetweenlook) {
 	if (lookremainder >= timebetweenlook) {
 		lookremainder -= timebetweenlook;
 		
-		xposdir = rand() - (RAND_MAX/2);
-		yposdir = rand() - (RAND_MAX/2);
+		xposdir = IRandom::roll(RAND_MAX) - (RAND_MAX/2);
+		yposdir = IRandom::roll(RAND_MAX) - (RAND_MAX/2);
 		xposdir >>= 16;
 		yposdir >>= 16;
 		normaliseDirection();

@@ -25,6 +25,7 @@
 #include "World.hh"
 #include "Bullet.hh"
 #include "Explosion.hh"
+#include "IRandom.hh"
 
 using namespace std;
 extern World* worldobj;
@@ -102,7 +103,7 @@ void Grunt::calcSpeed(int delta, int numberkilled) {
 void Grunt::hurt(int injury, int xdir, int ydir) {
 	if ((health - injury <= 0) && escapepod) {
 		if (randompod) {
-			int randdir = (int)(9.0*rand() / RAND_MAX);
+			int randdir = (int)(IRandom::roll(9));
 			if (randdir == 4) randdir = 0;
 			xdir = (randdir/3) - 1;	xdir *= 256;
 			ydir = (randdir%3) - 1;	ydir *= 256;
@@ -135,11 +136,11 @@ class Sprite;
 
 Ball::Ball(Globals::sprindex _spr) : Thing(_spr) {
 	speed = globals->loadInt("MonsterSpecs/Ball/speed");
-	if ((int)2*rand() / RAND_MAX)
+	if (IRandom::roll(2))
 		xposdir = 256;
 	else
 		xposdir = -256;
-	if ((int)2*rand() / RAND_MAX)
+	if (IRandom::roll(2))
 		yposdir = 256;
 	else
 		yposdir = -256;
@@ -327,7 +328,7 @@ void Sniper::move(int delta) {
 
 RightAngler::RightAngler(Globals::sprindex _spr, bool _verthunting) : Thing(_spr) {
 	verthunting = _verthunting;
-	goingup = (rand() < RAND_MAX/2);
+	goingup = IRandom::roll(2);
 
 	huntspeed = globals->loadInt("MonsterSpecs/RightAngler/huntspeed");
 	attackspeed = globals->loadInt("MonsterSpecs/RightAngler/attackspeed");
@@ -832,7 +833,7 @@ Spiral::Spiral(Globals::sprindex _spr) : Thing(_spr) {
 	speed = globals->loadInt("MonsterSpecs/Spiral/speed");
 	starttime = globals->loadInt("MonsterSpecs/Spiral/minstarttime");
 	expandstep = globals->loadInt("MonsterSpecs/Spiral/expandstep");
-	starttime += (int)((float)globals->loadInt("MonsterSpecs/Spiral/startvariation") * rand() / RAND_MAX);
+	starttime += (int)(IRandom::roll(globals->loadInt("MonsterSpecs/Spiral/startvariation")));
 	spr->hasorientation = true;
 	startPos();
 }

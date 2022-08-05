@@ -17,6 +17,7 @@
 */
 
 #include "Sound.hh"
+#include "IRandom.hh"
 #include <string>
 #include <cstring>
 #include <iostream>
@@ -126,7 +127,7 @@ void Sound::playSound(string resname, float pan) {
 	if (sound) {
 		// Figure out which variant of the sound effect to play
 		int variants = soundobj->sfx.count(resname);
-		int number = (int)(variants * ((float)rand() / RAND_MAX));
+		int number = (int)(IRandom::roll(variants));
 		if (!variants) cout << "Error: Sample " << 
 			resname << " not found." << endl;
 

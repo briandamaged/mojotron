@@ -34,6 +34,7 @@
 #include "ObjectList.hh"
 #include "Demo.hh"
 #include "Menu.hh"
+#include "IRandom.hh"
 
 using namespace std;
 World* worldobj;
@@ -284,7 +285,7 @@ void World::load_level(int l) {
 		} else if (rightanglermix == 2) {
 			all->addThing(new RightAngler(Globals::RIGHTANGLER, false));
 		} else {
-			all->addThing(new RightAngler(Globals::RIGHTANGLER, (rand() < RAND_MAX/2)));
+			all->addThing(new RightAngler(Globals::RIGHTANGLER, IRandom::roll(2)));
 		}
 	}
 	globals->loadingScreen(loadstarttime);
@@ -357,7 +358,7 @@ void World::load_level(int l) {
 		all->addThing(new Barricade());
 	}
 	for(n=0; n < (int)(monster_quantity * num_lasers); n++) {
-		if (rand() > RAND_MAX/2)
+		if (IRandom::roll(2))
 			all->addThing(new Laser(Globals::LASERVERT, true));
 		else
 			all->addThing(new Laser(Globals::LASERHORIZ, false));

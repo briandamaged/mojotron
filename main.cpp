@@ -27,6 +27,7 @@
 #include "InputState.hh"
 #include "ConfigFile.hh"
 #include "PlayerStats.hh"
+#include "IRandom.hh"
 #include <iostream>
 
 extern World* worldobj;
@@ -160,7 +161,7 @@ class MojoApp : Application {
 		globals->fullscreen = fullscreen;
 		globals->verbosity = verbosity;
 
-		srand((int)SDL_GetTicks());
+		IRandom::init();
 
 		bool play;
 		if (recorddemo)
