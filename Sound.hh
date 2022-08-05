@@ -41,6 +41,7 @@ public:
 	static void setSFX(bool on);
 	static void setMusic(bool on);
 	static bool sound;
+	static bool demo;
 	static bool music;
 
 	/* makes a Sound instance and keeps it to itself in 
@@ -52,7 +53,7 @@ public:
 	static void playSound(std::string name, float pan=0);
 	static void playMusic(musindex number);
 	static void stopMusic();
-	
+
 private:
 	static Sound* soundobj;
 

@@ -26,6 +26,7 @@ using namespace std;
 
 Sound* Sound::soundobj = NULL;
 bool Sound::sound = false;
+bool Sound::demo = false;
 bool Sound::music = false;
 
 Sound::Sound(string resfile) {
@@ -124,7 +125,7 @@ void Sound::deinitAudio() {
 }
 
 void Sound::playSound(string resname, float pan) {
-	if (sound) {
+	if (sound && !demo) {
 		// Figure out which variant of the sound effect to play
 		int variants = soundobj->sfx.count(resname);
 		int number = (int)(IRandom::roll(variants));

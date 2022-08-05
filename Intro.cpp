@@ -261,6 +261,7 @@ bool Intro::show() {
 	restarttime = introstarttime;
 	prevtime = introstarttime;
 
+	Sound::demo = true;
 	Menu m(Menu::MAIN);
 	do {
 		int currenttime = SDL_GetTicks();
@@ -317,14 +318,20 @@ bool Intro::show() {
 				else
 					demoworld->setDemo(demo->startpos);
 			}
-			if (!(m.type == Menu::OPTIONS || m.type == Menu::CONTROLS))
+			if (!(m.type == Menu::OPTIONS || m.type == Menu::CONTROLS)) {
+				Sound::demo = true;
 				demoBg();
+			}
+			else {
+				Sound::demo = false;
+			}
 
 			Menu::menustatus ret = m.run(delta);
 			if (ret == Menu::STARTGAME) {
 				delete demoworld;
 				demoworld = NULL;
 				worldobj = NULL;
+				Sound::demo = false;
 				return true;
 			}
 			else if (ret == Menu::EXIT) {
@@ -333,6 +340,7 @@ bool Intro::show() {
 						cout << i.first << "," << i.second << endl;
 					}
 				}
+				Sound::demo = false;
 				return false;
 			}
 		}
