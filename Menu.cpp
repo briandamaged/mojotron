@@ -287,6 +287,7 @@ void KeysSlot::draw(int* xpos, int* ypos, bool selected) {
 		*ypos += 2*LINESPACE;	// empty line after last section
 
 		globals->spr[player]->draw((*xpos - NAMEWIDTH)<<8, (*ypos - 10)<<8, 0, false);
+		globals->spr[Globals::MONKEYARMONE + player]->draw((*xpos - NAMEWIDTH)<<8, (*ypos - 10)<<8, 3, false);
 		char sectiontitle[20];
 		sprintf(sectiontitle, "Player %d Keys:", player+1);
 		globals->smallfont->print_right(*xpos, *ypos, sectiontitle);
