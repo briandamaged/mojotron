@@ -84,7 +84,7 @@ void IntroBubble::act(int timer) {
 const std::string IntroRobot::typesurface[3] = { "Surfaces/aolcd", "Surfaces/cjt", "Surfaces/ghost" };
 
 IntroRobot::IntroRobot(int x1, int y1, int t) : IntroThing(x1, y1, 0, CL_Surface(typesurface[t], globals->manager)), type(t), lastact(-1) {
-	double angle = ((float)IRandom::roll(RAND_MAX) / RAND_MAX) * 2.0 * std::numbers::pi;
+	double angle = ((float)IRandom::roll(RAND_MAX) / RAND_MAX) * 2.0 * M_PI;
 	x = (XWINSIZE >> 9) + (x / 2) * std::cos(angle) - anim.get_width() / 2;
 	y = (YWINSIZE >> 9) + (y / 2) * std::sin(angle) - anim.get_height() / 2;
 	hasorientation = (bool)globals->loadInt(typesurface[t] + "flip");

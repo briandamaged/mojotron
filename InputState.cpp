@@ -49,7 +49,7 @@ void InputAxisPair::get_pos(int &x, int &y)
 	if (joy) {
 		int xval = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)xaxis);
 		int yval = SDL_GameControllerGetAxis(joy, (SDL_GameControllerAxis)yaxis);
-		int angle = (int(atan2(yval, xval) * 180 / std::numbers::pi) + 360) % 360;
+		int angle = (int(atan2(yval, xval) * 180 / M_PI) + 360) % 360;
 		if ((angle <= 60 || angle >= 300) && (xval > 3200))
 			x = 1;
 		else if ((angle >= 120 && angle <= 240) && (xval < -3200))
