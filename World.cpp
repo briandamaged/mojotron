@@ -75,6 +75,8 @@ World::World(bool demo) {
 	maxdelta = globals->loadInt("Constants/maxdelta");
 	mindelta = globals->loadInt("Constants/mindelta");
 	startaccellength = globals->loadInt("Constants/startaccelerationlength");
+	state = PLAYING;
+	oldstate = PLAYING;
 }
 
 World::~World() {
@@ -621,15 +623,8 @@ int World::run(bool recorddemo) {
 	Demo demo = Demo();
 	globals->unfade();
 
-	cltime = SDL_GetTicks();	// don't get the time directly, use this
-	oldtime = SDL_GetTicks();
-	inittime = oldtime;
-	startaccel = 0.0f;
-	
-	levelage = timesinceready = 0;
+	startRun();
 	unsigned long framenum = 0;
-	
-	delay = 0;
 	
 	if 	(lev_name == "") state = ENDGAME;
 	else 	gameDelay(	globals->loadInt("Constants/readypause"),
@@ -750,6 +745,17 @@ int World::run(bool recorddemo) {
 		}
 	}
 	return 0;	// never reached, see state = EXIT
+}
+
+void World::startRun() {
+	cltime = SDL_GetTicks();	// don't get the time directly, use this
+	oldtime = SDL_GetTicks();
+	inittime = oldtime;
+	startaccel = 0.0f;
+
+	levelage = timesinceready = 0;
+
+	delay = 0;
 }
 
 void World::playing() {

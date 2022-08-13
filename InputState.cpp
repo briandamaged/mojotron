@@ -76,7 +76,7 @@ void InputAxisPair::set_controller(SDL_GameController *j, int xa, int ya)
 	yaxis = ya;
 }
 
-int DemoAxisPair::moveinput[DEMOMOVEINPUT][3] = {{1000, 1, 0}, {2000, 1, 1}, {7000, -1, 0}, {9000, 0, -1}, {15000, 1, 0}, {500000, 0, 1}};
+int DemoAxisPair::moveinput[DEMOMOVEINPUT][3] = {{1500, 1, 0}, {2500, 1, 1}, {7000, -1, 0}, {9500, 0, -1}, {15000, 1, 0}, {500000, 0, 1}};
 int DemoAxisPair::fireinput[DEMOFIREINPUT][3] = {{900, 1, 0}, {1000, 1, 1}, {1100, 0, 1}, {1900, 1, 1}, {2000, 0, 1}, {2100, -1, 1}, {4000, -1, 0}, {12000, 1, 0}, {500000, -1, 0}};
 
 DemoAxisPair::DemoAxisPair(bool m) : move(m) {

@@ -103,7 +103,7 @@ void MiscDisplay::drawWonGame() {
 
 void MiscDisplay::drawClock(int xorigin, int yorigin) {
 	int time = worldobj->getWarpRemaining();
-	char timestr[4];
+	char timestr[30];
 	if (time > -1)	sprintf(timestr, ":%d", time);
 	else		sprintf(timestr, " - ");
 	globals->largefont->print_left(xorigin + 32, yorigin, timestr);
@@ -111,14 +111,14 @@ void MiscDisplay::drawClock(int xorigin, int yorigin) {
 }
 
 void MiscDisplay::drawLevel(int xorigin, int yorigin) {
-	char levstr[3];
+	char levstr[30];
 	sprintf(levstr, "%d", worldobj->num_lev);
 	globals->largefont->print_left(xorigin + 32, yorigin, levstr);
 	levelicon->put_screen(xorigin, yorigin);
 }
 
 void MiscDisplay::drawLives(int xorigin, int yorigin) {
-	char livstr[4];
+	char livstr[30];
 	sprintf(livstr, "x%d", worldobj->lives);
 	globals->largefont->print_left(xorigin + 32, yorigin, livstr);
 	livesicon->put_screen(xorigin, yorigin);

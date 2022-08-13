@@ -70,9 +70,9 @@ class MojoApp : Application {
 	}
 	
 	int main(int argc, char** argv) {
-		bool demotest, recorddemo;
+		bool recorddemo;
 		bool fullscreen, sound, music, cmdlineoptsset;
-		demotest = recorddemo = false;
+		recorddemo = false;
 		fullscreen = sound = music = cmdlineoptsset = false;
 		std::string resourcefile = "robotwar.xml";
 		std::string demofile = "demo";

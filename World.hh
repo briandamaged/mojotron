@@ -68,6 +68,7 @@ public:
 	World(bool demo = false);
 	~World();
 	int run(bool recorddemo); // here lies the game loop
+	void startRun();
 	void playing();
 	void highlightFruit();
 

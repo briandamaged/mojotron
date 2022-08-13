@@ -298,6 +298,7 @@ bool Intro::show() {
 				demoworld = new World(true);
 				worldobj = demoworld;
 				demoworld->load_level(0);
+				demoworld->startRun();
 				if (demo->record) {
 					demoworld->captureDemo(demo->currentpos);
 				}
@@ -310,7 +311,7 @@ bool Intro::show() {
 				demoworld->state = World::PLAYING;
 				demoworld->lives = globals->loadInt("PlayerSpecs/startlives");
 				demotime = 0;
-				demoworld->levelage = 0;
+				demoworld->startRun();
 				if (demo->record) {
 					demo->updateDemotime(demotime);
 					demoworld->captureDemo(demo->currentpos);
