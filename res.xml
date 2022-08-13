@@ -831,6 +831,7 @@
 	<surface name="ball" value="graphics/largersaw.pcx" x="0" y="0" width="28" height="28" tcol="0" array="4x1" />
 	<surface name="obstacle" value="graphics/mushroom.pcx" x="0" y="0" width="32" height="32" tcol="0" array="4x4" />
 	<surface name="asteroid" value="graphics/eyeball.pcx" x="0" y="0" width="32" height="32" tcol="16" array="8x3" />
+	<integer name="asteroidtimeperframe" value="1" />
 	<surface name="sniper" value="graphics/bunny.pcx" x="0" y="0" width="32" height="32" tcol="0" array="5x2" />
 	<integer name="sniperflip" value="1" />
 	<surface name="fastsniper" value="graphics/bunny.pcx" x="0" y="0" width="32" height="32" tcol="0" array="1x2" />

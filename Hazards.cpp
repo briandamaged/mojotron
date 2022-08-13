@@ -223,6 +223,7 @@ Asteroid::Asteroid() : Thing(Globals::ASTEROID) {
 	wobbleamplitude = globals->loadInt("MonsterSpecs/Asteroid/wobbleamplitude");
 	wobblespeed = globals->loadInt("MonsterSpecs/Asteroid/wobblespeed");
 	animframe = 0;
+	frame = animframe + (spr->getFrames()/3) * size;
 }
 
 Asteroid::Asteroid(int _xpos, int _ypos, int _size, int _xdir, int _wobblestart) 
@@ -238,6 +239,7 @@ Asteroid::Asteroid(int _xpos, int _ypos, int _size, int _xdir, int _wobblestart)
 	wobblespeed = globals->loadInt("MonsterSpecs/Asteroid/wobblespeed");
 	animframe = 0;
 	recoiltimer = 1000;
+	frame = animframe + (spr->getFrames()/3) * size;
 }
 
 void Asteroid::move(int delta) {
@@ -249,12 +251,17 @@ void Asteroid::move(int delta) {
 	 }
 	
 	if (circletime > 2*M_PI) circletime = 0;
-	
-	if (animframe < (int)(spr->getFrames()/3)-1)
-		animframe++;
-	else
-		animframe = 0;
-	
+
+	frameremainder += delta;
+	int timeperframe = getTimePerFrame();
+	if (frameremainder > timeperframe) {
+		frameremainder = frameremainder % timeperframe;
+		if (animframe < (int)(spr->getFrames()/3)-1)
+			animframe++;
+		else
+			animframe = 0;
+	}
+
 	frame = animframe + (spr->getFrames()/3) * size;
 
 	if (health <= 0) {

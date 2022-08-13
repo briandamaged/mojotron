@@ -142,6 +142,13 @@ Modified to add black outline
 License: CC-BY 3.0, OGA-BY 3.0
 https://opengameart.org/content/scifi-creature-tileset-mini-32x32-scifi-creature-icons
 
+## spyot.png
+Created by Dennis Payne
+License: CC-BY 3.0
+Inspired by Animated "Spy" bot / security bot
+Created by Shozuki
+https://opengameart.org/content/animated-spy-bot-security-bot
+
 ## tank1.png
 Scifi creature tileset (mini 32x32 scifi creature icons)
 Created by Stephen Challener (Redshrike), hosted by OpenGameArt.org
