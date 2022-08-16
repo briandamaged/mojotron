@@ -50,12 +50,6 @@ Demo::Demo(std::string filename) {
 	maxdemotime = -1;
 	snaptime = 0;
 	starttime = 0;
-	r = g = b = 0;
-	for (int ii=0; ii < MAX_OBJS; ii++) {
-		// to cause crash if an unfilled index is used
-		spr[ii] = -1;
-	}
-	obj = -1;
 
 	sur_key = globals->loadSurface("Surfaces/key");
 	sur_spacekey = globals->loadSurface("Surfaces/spacekey");
@@ -78,18 +72,6 @@ Demo::Demo(std::string filename) {
 Demo::~Demo() {
 }
 
-void Demo::writeSnapshot(int time) {
-	snaptime = time;
-
-	// redirect me. :)
-	cout << "Time:" << snaptime << " ";
-	cout << worldobj->serialiseBG();
-	cout << worldobj->playerlist[0]->in->serialiseKeys();
-	cout << endl;
-
-	worldobj->serialiseAll();
-}
-
 bool Demo::readPosition(std::string record) {
 	int x, y;
 	int status = sscanf(record.c_str(), "%d,%d\n", &x, &y);
@@ -98,24 +80,6 @@ bool Demo::readPosition(std::string record) {
 	}
 
 	return (status == 2);
-}
-
-void Demo::drawThing() {
-	globals->spr[(spr[obj])]->draw(
-		(x[obj])<<8, (y[obj])<<8, 
-		frame[obj], (bool)(faceleft[obj]));
-}
-
-void Demo::drawWorld() {
-	SDL_SetRenderDrawColor(game_renderer, 0, 0, 0, 255);
-	SDL_RenderClear(game_renderer);
-	SDL_Rect rec;
-	SDL_SetRenderDrawColor(game_renderer, ((float)r/100) * 255, ((float)g/100) * 255, ((float)b/100) * 255, 255);
-	rec.x = 0;
-	rec.y = 0;
-	rec.w = XWINSIZE>>8;
-	rec.h = (YWINSIZE>>8)+PAD;
-	SDL_RenderFillRect(game_renderer, &rec);
 }
 
 void Demo::drawAxisPair(int player, bool moveaxispair,

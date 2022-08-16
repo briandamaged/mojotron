@@ -64,12 +64,10 @@ private:
 
 	// look these up by effect name, e.g. "explode"
 	std::multimap<std::string, Mix_Chunk*> sfx;
-/*	std::map<std::string, CL_SoundBuffer_Session> playing;*/
 	std::map<std::string, bool> polyphony;
 	std::string playing[NUM_CHANNELS];
 
 	Mix_Music* mus[MUSEND];
-//	CL_ResourceManager* sndmanager;
 };
 
 #endif

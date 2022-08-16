@@ -67,7 +67,7 @@ public:
 	PlayerStats* getStats(int player);
 	World(bool demo = false);
 	~World();
-	int run(bool recorddemo); // here lies the game loop
+	int run(); // here lies the game loop
 	void startRun();
 	void playing();
 	void highlightFruit();

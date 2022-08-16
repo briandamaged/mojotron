@@ -86,7 +86,6 @@ public:
 	// for when a new use key is being chosen
 	bool choosingkey;	// which player is choosing a use key?
 	std::string msgline;
-//	CL_InputBuffer buffer;
 	int keyidpicked;
 
 private:

@@ -59,8 +59,6 @@ Sound::Sound(string resfile) {
 			initPolyphony(resname, name, sndmanager);
 
 		sfx.insert(pair<string, Mix_Chunk *>(name, sb));
-/*		playing.insert(pair<string, CL_SoundBuffer_Session>
-			(name, sb.prepare()));*/
 		first++;
 	}
 
@@ -151,16 +149,6 @@ void Sound::playSound(string resname, float pan) {
 		int ch = Mix_PlayChannel(-1, sb, 0);
 		if (ch >= 0 && ch < NUM_CHANNELS)
 			soundobj->playing[ch] = resname;
-/*		try {
-			CL_SoundBuffer_Session s = sb.play();
-			s.set_pan(pan);
-
-			// soundbuffer sessions are only 8 bytes, it's not
-			// that expensive to throw them around by value.
-			(*soundobj->playing.find(resname)).second = s;
-		} catch(CL_Error err) {
-			cout << err.message.c_str() << endl;
-		}*/
 	}
 }
 

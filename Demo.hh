@@ -24,15 +24,8 @@
 
 class Demo {
 private:
-	// current snapshot details
-	int r, g, b;
-	int x[MAX_OBJS], y[MAX_OBJS], spr[MAX_OBJS];
-	int frame[MAX_OBJS], faceleft[MAX_OBJS];
-	int obj;	// current object to draw
-
 	int starttime, snaptime;
 
-	void drawThing();	// draws obj
 	bool readPosition(std::string record);
 
 	CL_Surface* sur_key;
@@ -45,9 +38,6 @@ public:
 	Demo(std::string filename);	// for playback
 	~Demo();
 
-	void writeSnapshot(int time);
-
-	void drawWorld();
 	void drawAxisPair(int player, bool moveaxispair, 
 			int xaxis, int yaxis, int xpos, int ypos);
 	void drawBonus(int player, int xpos=100, int ypos=300);

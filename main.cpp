@@ -177,7 +177,7 @@ class MojoApp : Application {
 				int level; level = 1;
 				do {
 					worldobj->load_level(level);
-					level = worldobj->run(recorddemo);
+					level = worldobj->run();
 				} while(level != 0);
 		
 				if (globals->verbosity > 0)	

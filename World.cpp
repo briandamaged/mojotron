@@ -619,7 +619,7 @@ void World::updateDisplay() {
  ************/
 
 // sends back the number of the next level, or 0 if quit or ran out of lives
-int World::run(bool recorddemo) {
+int World::run() {
 	Demo demo = Demo();
 	globals->unfade();
 
@@ -785,8 +785,6 @@ void World::playing() {
 		x->move(delta);
 	}
 	all->clearDeadStuff();
-
-//	if (recorddemo)	demo.writeSnapshot(timesinceready);
 
 	// Check for collisions, and call event methods
 	makeLists();
