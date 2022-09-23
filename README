@@ -6,24 +6,6 @@ Current Developer: dulsi@identicalsoftware.com
 
 Original Author: craigtimpany@w3.to
 
-Installation (Linux, Binary)
-============================
-To unpack a tar.gz file, type:
-$ tar -xzf name_of_archive.tar.gz
-(or use a graphical archive tool like WinZip, GnoZip, etc.)
-
-Mojotron packages will unpack themselves into a new subdirectory off the 
-current directory named 'mojotron'.
-
-Then, simply unpack it somewhere tidy, change to it's directory, and run
-the executable:
-$ cd mojotron
-$ ./mojotron
-
-If you run into any trouble, please let me know, I want to make installation
-as straight-forward as possible.
-
-
 Installation (Source)
 =====================
 To compile mojotron you'll need SDL2, SDL2_image, SDL2_mixer and expat
@@ -33,24 +15,20 @@ Compilation on Linux should just be a case of unpacking the source tarball
 and typing 'make'.
 
 For Windows, there is a Makefile_mingw which will compile it under the mingw
-crosscompiler.
+crosscompiler. You can build it directly under Windows but you will need to
+modify the makefiles to do so.
 
 
-Installation (Windows)
+Installation (Binaries)
 ======================
-Unzip the zip archive. Then go into the mojotron folder, and run
-mojotron.exe.
+Binaries are available at https://dulsi.itch.io/mojotron-robot-wars for
+Windows and Linux. Unzip the zip archive. Run mojotron.
 
 
 Status
 ======
-The game is being polished for a 1.0 release. If you find any bugs, please
-tell the mailing list.
-
-Known problems:
-Sound effects and music still need work.
-
-Ideas and patches are very welcome.
+The Mojotron: Robot Wars conversion is not complete. Ideas and patches are very
+welcome.
 
 
 Command-line options
@@ -66,6 +44,7 @@ Show the game filling the whole screen, rather than the default window.
 
 -f <filename>
 Specify a custom resource file, for alternate graphics or game constants.
+The original graphics are available by using "-f res.xml" at the command line.
 
 -v
 Prints verbose messages to standard out.
