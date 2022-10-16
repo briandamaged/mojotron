@@ -712,8 +712,14 @@ int World::run() {
 				break;
 			}
 
+			case WARPING: {
+				int newtime = SDL_GetTicks() - cltime;
+				for(int i=0; i < num_players; i++) {
+					playerlist[i]->warp(newtime - statetime);
+				}
+			}
+
 			case READY:
-			case WARPING:
 			case HELPING:
 			case DELAY: {
 			}

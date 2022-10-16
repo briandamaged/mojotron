@@ -39,8 +39,13 @@ public:
 	Bonus* inventory[MAXINV]; // index 0 is the top one shown to screen.
 	Fruit::flavour taken[3];
 	Sprite *arm;
+	Sprite *warp1;
+	Sprite *warp1arm;
+	Sprite *warp2;
+	Sprite *warp2arm;
 	
 	void move(int delta);
+	void warp(int delta);
 	int getSpeed();
 	void speedUp(int incs);
 	void startPos();
@@ -57,10 +62,13 @@ public:
 	int reloadtime, firepower;
 	int xdir, ydir; // direction facing
 	int xaim, yaim;	// direction firing
+	bool warping;
+	int warpxpos, warpypos;
 
 	private:
 	int remainder;
 	int usedelay;
+	int warpdistance;
 	bool forcefieldflicker;
 
 	int momentum;

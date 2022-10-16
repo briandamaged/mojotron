@@ -139,7 +139,11 @@ void Globals::loadSprites() {
 		"Surfaces/bonus/slow",
 		"Surfaces/bonus/droid",
 		"Surfaces/bonus/machinegun",
-		"Surfaces/bonus/crate"
+		"Surfaces/bonus/crate",
+		"Surfaces/playerwarp1",
+		"Surfaces/playerwarp1arm",
+		"Surfaces/playerwarp2",
+		"Surfaces/playerwarp2arm"
 	};
 	
 	for(int ii=0; ii < Globals::SPREND; ii++) {

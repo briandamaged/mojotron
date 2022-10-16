@@ -952,6 +952,16 @@
 	<integer name="player2timeperframe" value="120" />
 	<surface name="player2arm" value="robotwar/cybermonkeyarm2.png" x="0" y="0" width="32" height="32" tcol="22" array="5x2" />
 	<integer name="player2armflip" value="1" />
+	<surface name="playerwarp1" value="robotwar/cybermonkey_warp1.png" x="0" y="0" width="32" height="32" tcol="22" array="8x2" />
+	<integer name="playerwarp1flip" value="1" />
+	<integer name="playerwarp1timeperframe" value="120" />
+	<surface name="playerwarp1arm" value="robotwar/cybermonkeyarm_warp1.png" x="0" y="0" width="32" height="32" tcol="22" array="5x2" />
+	<integer name="playerwarp1armflip" value="1" />
+	<surface name="playerwarp2" value="robotwar/cybermonkey_warp2.png" x="0" y="0" width="32" height="32" tcol="22" array="8x2" />
+	<integer name="playerwarp2flip" value="1" />
+	<integer name="playerwarp2timeperframe" value="120" />
+	<surface name="playerwarp2arm" value="robotwar/cybermonkeyarm_warp2.png" x="0" y="0" width="32" height="32" tcol="22" array="5x2" />
+	<integer name="playerwarp2armflip" value="1" />
 	<surface name="heart" value="graphics/heart.pcx" x="0" y="0" width="32" height="32" tcol="0" />
 	<surface name="bullet" value="graphics/bullet.pcx" x="0" y="0" width="32" height="32" tcol="0" array="9x1" />
 	<surface name="pellet" value="graphics/pellet.pcx" x="0" y="0" width="7" height="7" tcol="0" />
@@ -1303,6 +1313,7 @@
 	<integer name="bullettimeout" value="3000" />
 	<integer name="firepower" value="100" />		// bang per bullet
 	<integer name="kickpower" value="120" />	// how far a box gets nudged
+	<integer name="warpdistance" value="32" />
 
 	<integer name="startlives" value="5" />
 </section>

@@ -34,6 +34,10 @@ extern Globals* globals;
 Player::Player(int _playernumber, bool demo) : Thing((Globals::sprindex)_playernumber) {
 	playernumber = _playernumber;
 	arm = globals->spr[Globals::MONKEYARMONE + _playernumber];
+	warp1 = globals->spr[Globals::MONKEYWARP1];
+	warp1arm = globals->spr[Globals::MONKEYARMWARP1];
+	warp2 = globals->spr[Globals::MONKEYWARP2];
+	warp2arm = globals->spr[Globals::MONKEYARMWARP2];
 
 	if (demo)
 		in = InputState::democontrols;
@@ -59,6 +63,7 @@ Player::Player(int _playernumber, bool demo) : Thing((Globals::sprindex)_playern
 	speed = globals->loadInt("PlayerSpecs/playerspeed");
 	reloadtime = globals->loadInt("PlayerSpecs/reloadtime");
 	firepower = globals->loadInt("PlayerSpecs/firepower");
+	warpdistance = globals->loadInt("PlayerSpecs/warpdistance");
 
 	machinegunon = rearfireon = invincible = threewayon = mineson = reflectingon = flamingon = false;
 	startPos();
@@ -86,6 +91,7 @@ void Player::startPos() {
 
 	/* an attempt to have players start from different places 
 	//xpos = (playernumber+1)*10000 + ARENAWIDTH/2;*/
+	warping = false;
 }
 
 int Player::getSpeed() {
@@ -257,7 +263,6 @@ void Player::addToFruit(Fruit::flavour newfruit) {
 }
 
 void Player::draw() {
-	Thing::draw();
 	int armframe = 0;
 	if (xaim != 0)
 	{
@@ -272,6 +277,41 @@ void Player::draw() {
 		armframe = 3;
 	else if (yaim > 0)
 		armframe = 4;
+
+	if (warping) {
+		int warp1xpos = xpos - (warpdistance << 8);
+		if (warp1xpos < warpxpos)
+			warp1xpos = warpxpos;
+		if (worldobj->monster_size) {
+			warp1->draw(warp1xpos, ypos-zpos, frame, false, worldobj->monster_size, worldobj->monster_size);
+		} else {
+			// ypos-zpos because low numbers are high on the screen.
+			warp1->draw(warp1xpos, ypos-zpos, frame, false);
+		}
+		if (worldobj->monster_size) {
+			warp1arm->draw(warp1xpos, ypos-zpos, armframe, false, worldobj->monster_size, worldobj->monster_size);
+		} else {
+			warp1arm->draw(warp1xpos, ypos, armframe, false);
+		}
+		int warp2xpos = xpos - 2 * (warpdistance << 8);
+		if (warp2xpos < warpxpos)
+			warp2xpos = warpxpos;
+		if (warp2xpos != warp1xpos) {
+			if (worldobj->monster_size) {
+				warp2->draw(warp2xpos, ypos-zpos, frame, false, worldobj->monster_size, worldobj->monster_size);
+			} else {
+				// ypos-zpos because low numbers are high on the screen.
+				warp2->draw(warp2xpos, ypos-zpos, frame, false);
+			}
+			if (worldobj->monster_size) {
+				warp2arm->draw(warp2xpos, ypos-zpos, armframe, false, worldobj->monster_size, worldobj->monster_size);
+			} else {
+				warp2arm->draw(warp2xpos, ypos, armframe, false);
+			}
+		}
+	}
+
+	Thing::draw();
 	if (worldobj->monster_size) {
 		arm->draw(xpos, ypos-zpos, armframe, facingleft, worldobj->monster_size, worldobj->monster_size);
 	} else {
@@ -372,4 +412,39 @@ void Player::move(int delta) {
 	ypos += (iny*getSpeed()*delta);
 	
 	keepInArena();
+} 
+
+void Player::warp(int delta) {
+	if (warp1->anim.is_null())
+		return;
+	if (!warping) {
+		warping = true;
+		warpxpos = xpos;
+		warpypos = ypos;
+	}
+
+	Thing::move(delta);
+
+	int inx(1), iny(0), finx(1), finy(0);
+
+	if (inx || iny) {
+		// if move keys are pressed, face in a new direction
+		xposdir = inx;	yposdir = iny;
+	}
+
+	if (finx || finy) {
+		// if aim keys are pressed, set a new firing direction
+		xaim = finx;	yaim = finy;
+	}
+
+	if (xaim)
+		// face in the direction we're firing
+		xposdir = xaim;
+
+	// finally, move the player
+	xpos += (inx*getSpeed()*2*delta);
+	ypos += (iny*getSpeed()*2*delta);
+	//keepInArena();
+	if (warpxpos + 2 * (warpdistance << 8) < xpos)
+		warpxpos = xpos - 2 * (warpdistance << 8);
 } 
