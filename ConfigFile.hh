@@ -20,29 +20,46 @@
 #define CONFIGFILE_HH
 
 #include <string>
+#include "IniFile.h"
 
-struct Config {
+class Statistics {
+public:
+	Statistics();
+
+	int totaltime;
+	int hits, misses, fired, kills;
+	int deaths, powerups, xlives, fruit;
+	int levels, warps;
+};
+
+class Config {
+public:
+	void updateCurrentSettings();
+
 	bool fullscreen, sound, music;
 	int skilllevel, highscore;
 	std::string movegroup[2];	// one for each player
 	std::string aimgroup[2];
 	int usekey[2];
+	Statistics overall;
+	Statistics best;
+
+	static Config config;
+
+private:
+	Config();
 };
 
 class ConfigFile {
 public:
 	ConfigFile();
-	void saveSettings(Config newconf);
+	void saveSettings();
 	~ConfigFile();
-
-	Config getDefaultSettings();
-	Config getFileSettings() { return config; }
-	// requires globals and inputstate to have been initialised
-	Config getCurrentSettings(); 
 
 private:
 	std::string getFilename();
-	Config config;
+	void getStatistics(IniFile &iniFile, const std::string &prefix, Statistics &stats);
+	void saveStatistics(IniFile &iniFile, const std::string &prefix, Statistics &stats);
 };
 
 #endif

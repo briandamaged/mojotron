@@ -63,7 +63,7 @@ public:
 	int xdir, ydir; // direction facing
 	int xaim, yaim;	// direction firing
 	bool warping;
-	int warpxpos, warpypos;
+	int warpxpos;
 
 	private:
 	int remainder;

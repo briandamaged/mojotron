@@ -140,7 +140,7 @@ InputState* InputState::democontrols = NULL;
 std::string* InputState::keygroups = NULL;
 int InputState::numkeygroups = 0;
 
-void InputState::initControls(Config conf) {
+void InputState::initControls(const Config &conf) {
 	readGroups();
 
 	for (int i=0; i < 2; i++) {

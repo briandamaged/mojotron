@@ -26,54 +26,122 @@ extern Globals* globals;
 int PlayerStats::highscore = 0;
 
 PlayerStats::PlayerStats(Player* _owner) {
-	fruit = xlives = kills = deaths = powerups = 
-	levels = warps = totaltime = hits = misses = fired = 0;
-
 	owner = _owner;
 	number = owner->playernumber + 1;
 }
 
 PlayerStats::~PlayerStats() {
-	// delete[] out segfaults (?)
-	//delete out;
 }
 
 void PlayerStats::hit() {
-	hits++; //what about flamethrower
-	fired++;
+	current.hits++; //what about flamethrower
+	current.fired++;
+	if (number == 1)
+	{
+		Config::config.overall.hits++;
+		Config::config.overall.fired++;
+		if (Config::config.best.hits < current.hits)
+			Config::config.best.hits = current.hits;
+		if (Config::config.best.fired < current.fired)
+			Config::config.best.fired = current.fired;
+	}
 }
 
 void PlayerStats::missed() {
-	misses++;
-	fired++;
+	current.misses++;
+	current.fired++;
+	if (number == 1)
+	{
+		Config::config.overall.misses++;
+		Config::config.overall.fired++;
+		if (Config::config.best.misses < current.misses)
+			Config::config.best.misses = current.misses;
+		if (Config::config.best.fired < current.fired)
+			Config::config.best.fired = current.fired;
+	}
 }
 
 void PlayerStats::died() {
-	deaths++;
+	current.deaths++;
+	if (number == 1)
+	{
+		Config::config.overall.deaths++;
+		if (Config::config.best.deaths < current.deaths)
+			Config::config.best.deaths = current.deaths;
+	}
 }
 
 void PlayerStats::tookPowerup() {
-	powerups++;
+	current.powerups++;
+	if (number == 1)
+	{
+		Config::config.overall.powerups++;
+		if (Config::config.best.powerups < current.powerups)
+			Config::config.best.powerups = current.powerups;
+	}
 }
 
 void PlayerStats::tookXlife() {
-	xlives++;
+	current.xlives++;
+	if (number == 1)
+	{
+		Config::config.overall.xlives++;
+		if (Config::config.best.xlives < current.xlives)
+			Config::config.best.xlives = current.xlives;
+	}
 }
 
 void PlayerStats::tookFruit() {
-	fruit++;
+	current.fruit++;
+	if (number == 1)
+	{
+		Config::config.overall.fruit++;
+		if (Config::config.best.fruit < current.fruit)
+			Config::config.best.fruit = current.fruit;
+	}
 }
 
 void PlayerStats::kill() {
-	kills++;
+	current.kills++;
+	if (number == 1)
+	{
+		Config::config.overall.kills++;
+		if (Config::config.best.kills < current.kills)
+			Config::config.best.kills = current.kills;
+	}
 }
 
 void PlayerStats::wonLevel(int timeended, int timerequired) {
-	levels++;
-	totaltime += timeended;
+	current.levels++;
+	current.totaltime += timeended;
+	if (number == 1)
+	{
+		Config::config.overall.levels++;
+		Config::config.overall.totaltime += timeended;
+		if (Config::config.best.levels < current.levels)
+			Config::config.best.levels = current.levels;
+		if (Config::config.best.totaltime < current.totaltime)
+			Config::config.best.totaltime = current.totaltime;
+	}
 	if (timeended < timerequired) {
 		int warpfactor = ((timerequired - timeended)/5)+1;
-		warps += warpfactor;
+		current.warps += warpfactor;
+		if (number == 1)
+		{
+			Config::config.overall.warps += warpfactor;
+			if (Config::config.best.warps < current.warps)
+				Config::config.best.warps = current.warps;
+		}
+	}
+}
+
+void PlayerStats::lostLevel(int timeended) {
+	current.totaltime += timeended;
+	if (number == 1)
+	{
+		Config::config.overall.totaltime++;
+		if (Config::config.best.totaltime < current.totaltime)
+			Config::config.best.totaltime = current.totaltime;
 	}
 }
 
@@ -82,11 +150,11 @@ int PlayerStats::calcScore() {
 	//int killrate = 100 * kills / (totaltime + 1);
 	//int score = levelon/2 + killrate/50 + powerups/10;
 	
-	int score =	kills + 
-			5*fruit +
-			10*powerups +
-			20*xlives +
-			50*warps;
+	int score =	current.kills +
+			5*current.fruit +
+			10*current.powerups +
+			20*current.xlives +
+			50*current.warps;
 
 	//cout << kills << " kills, " << fruit << " fruit, " << powerups << " powerups, " << xlives << " extra lives, " << warps << " warped." << endl;
 	enterScore(score);
@@ -119,24 +187,3 @@ std::string PlayerStats::rating() {
 	sprintf(outc, "You have been awarded:\n%s", prize.c_str());
 	return std::string(outc);
 }
-
-/*
-std::string PlayerStats::report() {
-	int accuracy = 100 * hits / (fired+1);
-	int levelon = 1 + levels + warps*(globals->loadInt("Constants/levelskip")-1);
-	int avtime = totaltime / (levels+1);
-	int killrate = 100 * kills / (totaltime + 1);
-
-	char outc[1024];
-	sprintf(outc, "%s\n\n\n
-		You died on level %d, after losing %d lives,\n 
-		having completed %d levels and warping %d times.\n\n
-		It took an average of %d seconds to clear a level.\n
-		You've been shooting with %d percent accuracy.\n
-		You've killed at %d.%d monsters per second.\n
-		Total game time: %d minutes, %d seconds.\n", 
-		(rating()).c_str(), levelon, deaths, levels, warps, avtime, 
-		accuracy, killrate/100, killrate%100, totaltime/60, totaltime%60);
-	return std::string(outc);
-}
-*/

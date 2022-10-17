@@ -40,7 +40,6 @@ Application *Application::app;
 class MojoApp : Application {
 	private:
 		ConfigFile* configf;
-		Config conf;
 		SDL_Window *game_window;
 		std::unique_ptr<Demo> demo;
 		std::unique_ptr<Intro> intro;
@@ -54,7 +53,8 @@ class MojoApp : Application {
 	void quit() {
 		if (worldobj) delete worldobj;
 
-		configf->saveSettings(configf->getCurrentSettings());
+		Config::config.updateCurrentSettings();
+		configf->saveSettings();
 		delete configf;
 		configf = NULL;
 
@@ -123,16 +123,15 @@ class MojoApp : Application {
 		}
 
 		configf = new ConfigFile();
-		conf = configf->getFileSettings();
 
 		if (!cmdlineoptsset) {
-			fullscreen = conf.fullscreen;
-			music = conf.music;
-			sound = conf.sound;
+			fullscreen = Config::config.fullscreen;
+			music = Config::config.music;
+			sound = Config::config.sound;
 		}
 		Sound::setMusic(music);
 		Sound::setSFX(sound);
-		PlayerStats::enterScore(conf.highscore);
+		PlayerStats::enterScore(Config::config.highscore);
 
 		game_window = SDL_CreateWindow(get_title(),
 			SDL_WINDOWPOS_UNDEFINED,
@@ -156,8 +155,8 @@ class MojoApp : Application {
 		globals = new Globals(resourcefile);
 		globals->loadSprites();
 		SkillLevel::initAll();
-		SkillLevel::setSkill(conf.skilllevel);
-		InputState::initControls(conf);
+		SkillLevel::setSkill(Config::config.skilllevel);
+		InputState::initControls(Config::config);
 		globals->fullscreen = fullscreen;
 		globals->verbosity = verbosity;
 

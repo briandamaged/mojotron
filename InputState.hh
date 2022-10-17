@@ -98,7 +98,7 @@ public:
 	static InputState* democontrols;
 	static std::string* keygroups;
 	static int numkeygroups;
-	static void initControls(Config c);
+	static void initControls(const Config &c);
 	static void deinitControls();
 	static void readGroups();
 

@@ -20,6 +20,7 @@
 #define PLAYERSTATS_HH
 
 #include <string>
+#include "ConfigFile.hh"
 
 class Player;
 
@@ -36,6 +37,7 @@ public:
 	void tookXlife();
 	void tookFruit();
 	void wonLevel(int timeended, int timerequired);
+	void lostLevel(int timeended);
 
 	int calcScore();
 	static void enterScore(int score)
@@ -46,15 +48,11 @@ public:
 	std::string score();
 	std::string report();
 	std::string rating();
-	int totaltime;
 
 private:
-	int hits, misses, fired, kills;
-	int deaths, powerups, xlives, fruit;
-	int levels, warps;
+	Statistics current;
 	int number;
 	Player* owner;
-	//std::string out;
 	
 	static int highscore;
 };

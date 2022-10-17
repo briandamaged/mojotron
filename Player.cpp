@@ -123,7 +123,7 @@ void Player::hurt(int injury, int xdir, int ydir) {
 				InputState::anyKeyPress();
 				worldobj->gameDelay(	globals->loadInt("Constants/deathpause"), 
 							World::DELAY, World::GAMEOVER);
-				stats->totaltime += worldobj->getLevelAge()/1000;
+				stats->lostLevel(worldobj->getLevelAge()/1000);
 			} else {
 				Sound::playSound("die");
 				worldobj->gameDelay(	globals->loadInt("Constants/deathpause"), 
@@ -420,7 +420,6 @@ void Player::warp(int delta) {
 	if (!warping) {
 		warping = true;
 		warpxpos = xpos;
-		warpypos = ypos;
 	}
 
 	Thing::move(delta);
