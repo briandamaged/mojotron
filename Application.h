@@ -28,7 +28,9 @@ public:
 	Application() { app = this; }
 
 	virtual void quit() = 0;
-	
+
+	int game_id = -1;
+
 	static Application *getApplication() { return app; }
 };
 

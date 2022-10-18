@@ -30,6 +30,10 @@
 #include "IRandom.hh"
 #include <iostream>
 
+#ifdef HAVE_GAMERZILLA
+#include <gamerzilla.h>
+#endif
+
 extern World* worldobj;
 extern Globals* globals;
 
@@ -121,6 +125,11 @@ class MojoApp : Application {
 			std::cout << "Failed - SDL_Init" << std::endl;
 			exit(0);
 		}
+
+#ifdef HAVE_GAMERZILLA
+		GamerzillaStart(false, (ConfigFile::getUserPath() + "/").c_str());
+		game_id = GamerzillaSetGameFromFile("./gamerzilla/mojotron.game", "./");
+#endif
 
 		configf = new ConfigFile();
 

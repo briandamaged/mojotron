@@ -17,8 +17,13 @@
 */
 
 #include <stdio.h>
+#include "Application.h"
 #include "PlayerStats.hh"
 #include "Player.hh"
+
+#ifdef HAVE_GAMERZILLA
+#include <gamerzilla.h>
+#endif
 
 using namespace std;
 extern Globals* globals;
@@ -36,8 +41,7 @@ PlayerStats::~PlayerStats() {
 void PlayerStats::hit() {
 	current.hits++; //what about flamethrower
 	current.fired++;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.hits++;
 		Config::config.overall.fired++;
 		if (Config::config.best.hits < current.hits)
@@ -50,8 +54,7 @@ void PlayerStats::hit() {
 void PlayerStats::missed() {
 	current.misses++;
 	current.fired++;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.misses++;
 		Config::config.overall.fired++;
 		if (Config::config.best.misses < current.misses)
@@ -63,8 +66,7 @@ void PlayerStats::missed() {
 
 void PlayerStats::died() {
 	current.deaths++;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.deaths++;
 		if (Config::config.best.deaths < current.deaths)
 			Config::config.best.deaths = current.deaths;
@@ -73,8 +75,7 @@ void PlayerStats::died() {
 
 void PlayerStats::tookPowerup() {
 	current.powerups++;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.powerups++;
 		if (Config::config.best.powerups < current.powerups)
 			Config::config.best.powerups = current.powerups;
@@ -83,8 +84,7 @@ void PlayerStats::tookPowerup() {
 
 void PlayerStats::tookXlife() {
 	current.xlives++;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.xlives++;
 		if (Config::config.best.xlives < current.xlives)
 			Config::config.best.xlives = current.xlives;
@@ -93,8 +93,7 @@ void PlayerStats::tookXlife() {
 
 void PlayerStats::tookFruit() {
 	current.fruit++;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.fruit++;
 		if (Config::config.best.fruit < current.fruit)
 			Config::config.best.fruit = current.fruit;
@@ -103,8 +102,7 @@ void PlayerStats::tookFruit() {
 
 void PlayerStats::kill() {
 	current.kills++;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.kills++;
 		if (Config::config.best.kills < current.kills)
 			Config::config.best.kills = current.kills;
@@ -114,8 +112,7 @@ void PlayerStats::kill() {
 void PlayerStats::wonLevel(int timeended, int timerequired) {
 	current.levels++;
 	current.totaltime += timeended;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.levels++;
 		Config::config.overall.totaltime += timeended;
 		if (Config::config.best.levels < current.levels)
@@ -126,19 +123,21 @@ void PlayerStats::wonLevel(int timeended, int timerequired) {
 	if (timeended < timerequired) {
 		int warpfactor = ((timerequired - timeended)/5)+1;
 		current.warps += warpfactor;
-		if (number == 1)
-		{
+		if (number == 1) {
 			Config::config.overall.warps += warpfactor;
-			if (Config::config.best.warps < current.warps)
+			if (Config::config.best.warps < current.warps) {
+#ifdef HAVE_GAMERZILLA
+				GamerzillaSetTrophyStat(Application::getApplication()->game_id, "First Warp", 1);
+#endif
 				Config::config.best.warps = current.warps;
+			}
 		}
 	}
 }
 
 void PlayerStats::lostLevel(int timeended) {
 	current.totaltime += timeended;
-	if (number == 1)
-	{
+	if (number == 1) {
 		Config::config.overall.totaltime++;
 		if (Config::config.best.totaltime < current.totaltime)
 			Config::config.best.totaltime = current.totaltime;

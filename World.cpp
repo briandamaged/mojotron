@@ -20,6 +20,7 @@
 #include <cstdio>
 #include <iostream>
 #include <sstream>
+#include "Application.h"
 #include "World.hh"
 #include "Thing.hh"
 #include "Player.hh"
@@ -35,6 +36,10 @@
 #include "Demo.hh"
 #include "Menu.hh"
 #include "IRandom.hh"
+
+#ifdef HAVE_GAMERZILLA
+#include <gamerzilla.h>
+#endif
 
 using namespace std;
 World* worldobj;
@@ -626,7 +631,12 @@ int World::run() {
 	startRun();
 	unsigned long framenum = 0;
 	
-	if 	(lev_name == "") state = ENDGAME;
+	if 	(lev_name == "") {
+		state = ENDGAME;
+#ifdef HAVE_GAMERZILLA
+		GamerzillaSetTrophy(Application::getApplication()->game_id, "Win");
+#endif
+	}
 	else 	gameDelay(	globals->loadInt("Constants/readypause"),
 				READY, PLAYING );
 	

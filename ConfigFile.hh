@@ -56,6 +56,8 @@ public:
 	void saveSettings();
 	~ConfigFile();
 
+	static std::string getUserPath();
+
 private:
 	std::string getFilename();
 	void getStatistics(IniFile &iniFile, const std::string &prefix, Statistics &stats);

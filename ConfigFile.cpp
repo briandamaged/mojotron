@@ -78,9 +78,10 @@ Config::Config() {
 	usekey[1] = 79;
 }
 
-string ConfigFile::getFilename() {
+std::string ConfigFile::getUserPath() {
 #ifdef WIN32
-	return "mojotron.ini";
+	std::filesystem::create_directories("save");
+	return "save";
 #else
 	string result;
 	char* env;
@@ -94,8 +95,13 @@ string ConfigFile::getFilename() {
 	}
 	result += "/mojotron";
 	std::filesystem::create_directories(result);
-	return result + "/config";
+	return result;
 #endif
+}
+
+string ConfigFile::getFilename() {
+	std::string result = getUserPath();
+	return result + "/config";
 }
 
 ConfigFile::ConfigFile() {

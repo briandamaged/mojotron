@@ -1,0 +1,22 @@
+{
+	"shortname": "mojotron",
+	"name": "Mojotron: Robot Wars",
+	"image": "gamerzilla/mojotron.png",
+	"version": "1",
+	"trophy": [
+		{
+			"trophy_name": "Win",
+			"trophy_desc": "Mojo has escaped to the forest.",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/win.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "First Warp",
+			"trophy_desc": "Kill all enemies in time to warp.",
+			"max_progress": "1",
+			"trueimage": "gamerzilla/warp.png",
+			"falseimage": "gamerzilla/locked.png"
+		}
+	]
+}
